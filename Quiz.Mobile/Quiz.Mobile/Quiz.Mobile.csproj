@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\" />
+    <None Remove="Helpers\" />
+    <None Remove="Helpers\Icons\" />
+    <None Remove="Resources\Fonts\CustomFont.ttf" />
+    <None Remove="CommunityToolkit\" />
+    <None Remove="CommunityToolkit\Commands\" />
+    <None Remove="CommunityToolkit\Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Helpers\Icons\" />
+    <Folder Include="CommunityToolkit\" />
+    <Folder Include="CommunityToolkit\Commands\" />
+    <Folder Include="CommunityToolkit\Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\RegistrationPage.xaml.cs">
+      <DependentUpon>RegistrationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\CustomFont.ttf" />
+  </ItemGroup>
+</Project>
