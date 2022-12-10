@@ -15,7 +15,7 @@ namespace Quiz.Mobile.Views
         public LoginPage()
         {
             InitializeComponent();
-            this.BindingContext = new LoginViewModel();
+            //this.BindingContext = new LoginViewModel();
         }
 
         //jeśli już użytkownik jest już zalogowany
@@ -34,7 +34,7 @@ namespace Quiz.Mobile.Views
         {
             // dzięki relative path, wciśnięcie klawisza wstecz
             // powoduje wyjście z aplikacji
-            //await Shell.Current.GoToAsync($"//{nameof(CoffeeEquipmentPage)}");
+            //await Shell.Current.GoToAsync($"//{nameof(AnimationPage)}");
         }
 
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)

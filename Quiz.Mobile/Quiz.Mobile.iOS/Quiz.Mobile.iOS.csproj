@@ -122,6 +122,9 @@
     <BundleResource Include="Resources\xamarin_logo%402x.png" />
     <BundleResource Include="Resources\xamarin_logo%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <BundleResource Include="Images\idea.png" />
+    <BundleResource Include="Images\learning.png" />
+    <BundleResource Include="Images\win.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -141,5 +144,8 @@
       <Project>{463F95B3-558E-4B5F-9974-AA1DCBB3DE3B}</Project>
       <Name>Quiz.Mobile</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
   </ItemGroup>
 </Project>

@@ -3,9 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"      
              mc:Ignorable="d"
              x:Class="Quiz.Mobile.Views.LoginPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding 
+                Dark={StaticResource WindowBackgroundColorDark}, 
+                Light={StaticResource WindowBackgroundColor}}"
+             >
+
+    <ContentPage.BindingContext>
+        <viewmodels:LoginViewModel />
+    </ContentPage.BindingContext>
+
     <ContentPage.Content>
          <StackLayout Padding="40" VerticalOptions="Center"
                      HorizontalOptions="FillAndExpand">
@@ -13,7 +23,9 @@
             <Entry Placeholder="Username"/>
             <Label Text="Password:"/>
             <Entry IsPassword="True" Placeholder="Password"/>
-            <Button Text="Login" Clicked="Button_Clicked"/>
+            <Button Text="Login"
+                    Command="{Binding LoginCommand}"/>
+                    <!--Clicked="Button_Clicked"-->
             <Label Text="Register" HorizontalOptions="Center">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>

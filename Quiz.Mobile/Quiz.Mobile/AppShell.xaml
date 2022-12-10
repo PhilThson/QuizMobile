@@ -2,6 +2,7 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:Quiz.Mobile.Views"
+       xmlns:fontAwesome="clr-namespace:Quiz.Mobile.Helpers.Icons"
        Title="Quiz.Mobile"
        x:Class="Quiz.Mobile.AppShell">
 
@@ -91,6 +92,17 @@
     </FlyoutItem>
     <FlyoutItem Title="Browse" Icon="icon_feed.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Animation">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FAB"
+                             Color="{AppThemeBinding 
+                                    Dark=White, 
+                                    Light={StaticResource SystemGray5Dark}}"
+                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.Spinner}"/>
+        </FlyoutItem.Icon>
+        <ShellContent Title="Animation" Route="AnimationPage" ContentTemplate="{DataTemplate local:AnimationPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Settings">

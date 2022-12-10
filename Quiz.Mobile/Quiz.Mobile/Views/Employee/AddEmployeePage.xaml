@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Employee.AddEmployeePage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    Title="{Binding Title}"
+    x:DataType="viewmodels:AddEmployeeViewModel"
+    Shell.PresentationMode="Animated">
+    <!--Modal - pojawienie sie strony od dołu na całej powierzchni, zamiast jako kolejnej strony
+        Animated - pojawienie się 'wewnątrz' np. zakładki -->
+    <!--BackgroundColor="{AppThemeBinding
+                    Dark={StaticResource WindowBackgroundColorDark}, 
+                    Light={StaticResource WindowBackgroundColor}}"-->
+
+    <ContentPage.BindingContext>
+        <viewmodels:AddEmployeeViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <Label Text="Imię:"/>
+                   <!--Style="{StaticResource LabelMedium}"/-->
+            <Entry Text="{Binding Imie}" />
+            <Label Text="Roaster:"/>
+                   <!--Style="{StaticResource LabelMedium}" /-->
+            <Entry Text="{Binding Nazwisko}" />
+
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center" />
+
+            <Button
+                Padding="20,0"
+                Command="{Binding SaveAndCloseCommand}"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsNotBusy}"
+                Text="Save"
+                VerticalOptions="EndAndExpand"/>
+                <!--Style="{StaticResource ButtonOutline}"/-->
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
+

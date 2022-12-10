@@ -4,6 +4,18 @@ using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using Xamarin.Forms;
+using Android.Widget;
+using AndroidX.Core.View;
+using Java.Interop;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
+using Quiz.Mobile.Interfaces;
+
+
+//wstrzykiwanie zależności
+[assembly: Dependency(typeof(Quiz.Mobile.Droid.Environment))]
+[assembly: Dependency(typeof(Quiz.Mobile.Droid.Toaster))]
 
 namespace Quiz.Mobile.Droid
 {
@@ -23,6 +35,39 @@ namespace Quiz.Mobile.Droid
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    public class Environment : IEnvironment
+    {
+        public async Task SetStatusBarColorAsync(System.Drawing.Color color, bool darkStatusBarTint)
+        {
+            if (Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Lollipop)
+                return;
+
+            var activity = Platform.CurrentActivity;
+            var window = activity.Window;
+
+            //this may not be necessary(but may be fore older than M)
+            window.AddFlags(Android.Views.WindowManagerFlags.DrawsSystemBarBackgrounds);
+            window.ClearFlags(Android.Views.WindowManagerFlags.TranslucentStatus);
+
+
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.M)
+            {
+                await Task.Delay(50);
+                WindowCompat.GetInsetsController(window, window.DecorView).AppearanceLightStatusBars = darkStatusBarTint;
+            }
+
+            window.SetStatusBarColor(color.ToPlatformColor());
+        }
+    }
+
+    public class Toaster : IToast
+    {
+        public void MakeToast(string message)
+        {
+            Toast.MakeText(Platform.AppContext, message, ToastLength.Long).Show();
         }
     }
 }
