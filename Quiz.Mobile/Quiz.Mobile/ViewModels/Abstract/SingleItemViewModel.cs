@@ -8,11 +8,18 @@ using Xamarin.Forms;
 namespace Quiz.Mobile.ViewModels.Abstract
 {
 	public abstract class SingleItemViewModel<T> : BaseViewModel
+        where T : class
 	{
         #region Pola, właściwości, komendy
-        public T Item { get; set; }
-        public IAsyncCommand SaveAndCloseCommand;
-        public IAsyncCommand NavigateBackCommand;
+        private T _Item;
+        public T Item
+        {
+            get => _Item;
+            set => SetProperty(ref _Item, value);
+        }
+
+        public AsyncCommand SaveAndCloseCommand { get; set; }
+        public AsyncCommand NavigateBackCommand { get; set; }
         #endregion
 
         #region Konstruktor
@@ -28,7 +35,7 @@ namespace Quiz.Mobile.ViewModels.Abstract
         #endregion
 
         #region Metody
-        private async Task NavigateBack()
+        protected async Task NavigateBack()
         {
             await Shell.Current.GoToAsync("..");
         }

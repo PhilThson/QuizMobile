@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Quiz.Mobile.ViewModels;
 using Quiz.Mobile.Views;
+using Quiz.Mobile.Views.Employee;
 using Xamarin.Forms;
 
 namespace Quiz.Mobile
@@ -13,6 +14,7 @@ namespace Quiz.Mobile
             InitializeComponent();
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+            Routing.RegisterRoute(nameof(EmployeeDetailsPage), typeof(EmployeeDetailsPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

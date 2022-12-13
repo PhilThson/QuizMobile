@@ -14,12 +14,12 @@ namespace Quiz.Mobile.ViewModels
 
         public AddEmployeeViewModel()
         {
-            base.Title = "Szczegóły pracownika";
+            base.Title = "Dodawanie pracownika";
             _employeeService = DependencyService.Get<IEmployeeService>();
         }
 
         #region Właściwości pracownika
-        public string Imie
+        public string FirstName
         {
             get => Item.FirstName;
             set
@@ -33,7 +33,7 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
-        public string Nazwisko
+        public string LastName
         {
             get => Item.LastName;
             set
@@ -45,11 +45,23 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
+        public string PersonalNumber
+        {
+            get => Item.PersonalNumber;
+            set
+            {
+                if (value != Item.PersonalNumber)
+                {
+                    Item.PersonalNumber = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         protected override async Task SaveAndClose()
         {
-            throw new NotImplementedException();
+            await base.NavigateBack();
         }
     }
 }

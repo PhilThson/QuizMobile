@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Input;
 using Quiz.Mobile.Models;
 using Xamarin.Forms;
+using Quiz.Mobile.Services;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -11,6 +12,7 @@ namespace Quiz.Mobile.ViewModels
     {
         private string text;
         private string description;
+        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
 
         public NewItemViewModel()
         {

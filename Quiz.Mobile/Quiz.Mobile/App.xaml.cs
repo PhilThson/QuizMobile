@@ -6,6 +6,7 @@ using Quiz.Mobile.Views;
 using Quiz.Mobile.Interfaces;
 using Quiz.Mobile.Helpers;
 using Xamarin.Essentials;
+using System.Net.Http;
 
 namespace Quiz.Mobile
 {
@@ -15,7 +16,6 @@ namespace Quiz.Mobile
         {
             InitializeComponent();
 
-            DependencyService.RegisterSingleton<IQuizApiSettings>(new QuizApiSettings());
             DependencyService.Register<MockDataStore>();
             DependencyService.Register<IEmployeeService, EmployeeService>();
 

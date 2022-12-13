@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
+using Quiz.Mobile.Services;
 using Xamarin.Forms;
 
 using Quiz.Mobile.Models;
@@ -13,6 +13,7 @@ namespace Quiz.Mobile.ViewModels
     public class ItemsViewModel : BaseViewModel
     {
         private Item _selectedItem;
+        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
 
         public ObservableCollection<Item> Items { get; }
         public Command LoadItemsCommand { get; }

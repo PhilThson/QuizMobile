@@ -3,11 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\" />
@@ -30,6 +32,9 @@
     <None Remove="Shared\" />
     <None Remove="Shared\ViewModels\" />
     <None Remove="Shared\DTOs\" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="CommunityToolkit\Converters\" />
+    <None Remove="CommunityToolkit\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -47,6 +52,8 @@
     <Folder Include="Shared\" />
     <Folder Include="Shared\ViewModels\" />
     <Folder Include="Shared\DTOs\" />
+    <Folder Include="CommunityToolkit\Converters\" />
+    <Folder Include="CommunityToolkit\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\RegistrationPage.xaml.cs">

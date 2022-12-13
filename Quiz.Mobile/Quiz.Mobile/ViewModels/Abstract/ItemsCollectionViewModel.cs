@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Quiz.Mobile.CommunityToolkit;
 using Quiz.Mobile.CommunityToolkit.Commands;
 using Quiz.Mobile.CommunityToolkit.Interfaces;
+using System.Diagnostics;
 
 namespace Quiz.Mobile.ViewModels.Abstract
 {
@@ -21,7 +22,6 @@ namespace Quiz.Mobile.ViewModels.Abstract
             RefreshCommand = new AsyncCommand(Refresh);
             AddCommand = new AsyncCommand(Add);
             RemoveCommand = new AsyncCommand<object>(Remove);
-
         }
         #endregion
 
@@ -31,7 +31,7 @@ namespace Quiz.Mobile.ViewModels.Abstract
             get
             {
                 if (_List == null)
-                    Load();
+                    Load().SafeFireAndForget(ex => Debug.WriteLine(ex.Message));
                 return _List;
             }
             //SetProperty sprawdzi czy wartość się nie zmieniła, dokona walidacji,
@@ -44,7 +44,7 @@ namespace Quiz.Mobile.ViewModels.Abstract
         protected abstract Task Refresh();
         protected abstract Task Add();
         protected abstract Task Remove(object id);
-        protected abstract void Load();
+        protected abstract Task Load();
         #endregion
     }
 }

@@ -3,12 +3,14 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Quiz.Mobile.Models;
 using Xamarin.Forms;
+using Quiz.Mobile.Services;
 
 namespace Quiz.Mobile.ViewModels
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public class ItemDetailViewModel : BaseViewModel
     {
+        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
         private string itemId;
         private string text;
         private string description;

@@ -21,10 +21,10 @@
         <StackLayout Padding="20">
             <Label Text="Imię:"/>
                    <!--Style="{StaticResource LabelMedium}"/-->
-            <Entry Text="{Binding Imie}" />
-            <Label Text="Roaster:"/>
+            <Entry Text="{Binding FirstName}" />
+            <Label Text="Nazwisko:"/>
                    <!--Style="{StaticResource LabelMedium}" /-->
-            <Entry Text="{Binding Nazwisko}" />
+            <Entry Text="{Binding LastName}" />
 
             <ActivityIndicator
                 HorizontalOptions="Center"

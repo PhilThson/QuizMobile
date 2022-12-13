@@ -14,8 +14,6 @@ namespace Quiz.Mobile.ViewModels
     //klasa bazowego ViewModelu z biblioteki CommunityToolkit
     public abstract class BaseViewModel : ObservableObject
     {
-        //public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
         string? title = string.Empty;
 
         /// <summary>
