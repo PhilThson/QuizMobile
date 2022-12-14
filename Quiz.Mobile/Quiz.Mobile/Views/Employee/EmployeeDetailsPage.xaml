@@ -14,17 +14,19 @@
 
     <ContentPage.Content>
         <StackLayout Padding="20">
-            <Label Text="{Binding Item.FirstName, StringFormat='Imię: {0}'}"/>
-            <!--Style="{StaticResource LabelMedium}"/-->
-            <Label Text="{Binding Item.LastName, StringFormat='Nazwisko: {0}'}"/>
-            <!--Style="{StaticResource LabelMedium}" /-->
-            <Label HorizontalOptions="StartAndExpand" Text="{Binding Item.PersonalNumber,
-                StringFormat='PESEL: {0}'}"/>
-            <Label HorizontalOptions="StartAndExpand" Text="{Binding Item.Email,
-                StringFormat='E-mail: {0}'}"/>
+            <Label Text="{Binding Item.FirstName, StringFormat='Imię: {0}'}"
+                   HorizontalOptions="Center"
+                   Style="{StaticResource LabelMedium}"/>
+            <Label Text="{Binding Item.LastName, StringFormat='Nazwisko: {0}'}"
+                   HorizontalOptions="Center"
+                   Style="{StaticResource LabelMedium}"/>
+            <Label HorizontalOptions="StartAndExpand"
+                   Text="{Binding Item.PersonalNumber, StringFormat='PESEL: {0}'}"/>
+            <Label HorizontalOptions="StartAndExpand"
+                   Text="{Binding Item.Email, StringFormat='E-mail: {0}'}"/>
 
-            <Button Command="{Binding NavigateBackCommand}" Text="Zamknij"/>
-            <!--Style="{StaticResource ButtonOutline}"/-->
+            <Button Command="{Binding NavigateBackCommand}" Text="Zamknij"
+                    Style="{StaticResource ButtonOutline}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -48,7 +48,7 @@
     <Color x:Key="SystemGray5Dark">#2C2C2E</Color>
     <Color x:Key="SystemGray6Dark">#1C1C1E</Color>
 
-    <Style x:Key="CoffeeListView" TargetType="ListView">
+    <Style x:Key="BaseListView" TargetType="ListView">
         <Setter Property="HasUnevenRows" Value="True"/>
         <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="SeparatorVisibility" Value="None"/>
@@ -57,7 +57,7 @@
     </Style>
 
     <!--można ustalić wartość w zależności od platformy!-->
-    <Style x:Key="CoffeeCard" TargetType="Frame">
+    <Style x:Key="BaseCard" TargetType="Frame">
         <Setter Property="HasShadow"
                         Value="{OnPlatform Android=true, iOS=false, Default=true}"/>
         <Setter Property="CornerRadius" Value="20"/>

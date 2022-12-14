@@ -19,12 +19,57 @@
 
     <ContentPage.Content>
         <StackLayout Padding="20">
-            <Label Text="Imię:"/>
-                   <!--Style="{StaticResource LabelMedium}"/-->
+            <Label Text="Imię:"
+                   Style="{StaticResource LabelMedium}"/>
             <Entry Text="{Binding FirstName}" />
-            <Label Text="Nazwisko:"/>
-                   <!--Style="{StaticResource LabelMedium}" /-->
+            <Label Text="Nazwisko:"
+                   Style="{StaticResource LabelMedium}"/>
             <Entry Text="{Binding LastName}" />
+            <Label Text="Pesel:"
+                   Style="{StaticResource LabelMedium}"/>
+            <Entry Text="{Binding PersonalNumber}" />
+            <Label Text="Data urodzenia:"
+                   Style="{StaticResource LabelMedium}"/>
+            <DatePicker Date="{Binding DateOfBirth}" />
+            <Label Text="Wynagrodzenie brutto:"
+                   Style="{StaticResource LabelMedium}"/>
+            <Entry Text="{Binding Salary}"
+                   Keyboard="Numeric"/>
+            <Label Text="Adres e-mail:"
+                   Style="{StaticResource LabelMedium}"/>
+            <Entry Text="{Binding Email}"/>
+            <Label Text="Numer telefonu:"
+                   Style="{StaticResource LabelMedium}"/>
+            <Entry Text="{Binding Salary}"
+                   Keyboard="Numeric"/>
+            <Label Text="Etat:"
+                   Style="{StaticResource LabelMedium}"/>
+            <Picker Title="Etat"
+                    ItemsSource="{Binding Jobs}"
+                    SelectedItem="{Binding Job}"
+                    ItemDisplayBinding="{Binding Name}"
+                    />
+            <Label Text="Stanowisko:"
+                   Style="{StaticResource LabelMedium}"/>
+            <Picker Title="Stanowisko"
+                    ItemsSource="{Binding Positions}"
+                    SelectedItem="{Binding Position}"
+                    ItemDisplayBinding="{Binding Name}"
+                    >
+                <Picker.Items>
+
+
+                </Picker.Items>
+
+            </Picker>
+
+            <Label Text="Data zatrudnienia:"
+                   Style="{StaticResource LabelMedium}"/>
+            <DatePicker Date="{Binding DateOfEmployment}"/>
+            <!--MinimumDate=
+            MaximumDate=
+            Format="D"-->
+
 
             <ActivityIndicator
                 HorizontalOptions="Center"
@@ -32,14 +77,24 @@
                 IsVisible="{Binding IsBusy}"
                 VerticalOptions="Center" />
 
-            <Button
-                Padding="20,0"
-                Command="{Binding SaveAndCloseCommand}"
-                HorizontalOptions="Center"
-                IsEnabled="{Binding IsNotBusy}"
-                Text="Save"
-                VerticalOptions="EndAndExpand"/>
-                <!--Style="{StaticResource ButtonOutline}"/-->
+            <StackLayout Orientation="Horizontal">
+                <Button
+                    Padding="20,0"
+                    Command="{Binding SaveAndCloseCommand}"
+                    HorizontalOptions="Center"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Text="Zapisz"
+                    VerticalOptions="EndAndExpand"
+                    Style="{StaticResource ButtonOutline}"/>
+                <Button
+                    Padding="20,0"
+                    Command="{Binding NavigateBackCommand}"
+                    HorizontalOptions="Center"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Text="Powrót"
+                    VerticalOptions="CenterAndExpand"
+                    Style="{StaticResource ButtonOutline}"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

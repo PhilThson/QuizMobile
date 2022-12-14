@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Quiz.Mobile.Services;
 using Quiz.Mobile.Helpers;
 using System.Net.Http.Headers;
+using Quiz.Mobile.Shared.DTOs;
 
 namespace Quiz.Mobile.Services
 {
@@ -41,13 +42,7 @@ namespace Quiz.Mobile.Services
 
         public async Task<List<EmployeeViewModel>> GetAllEmployees()
         {
-            var response = await Client.GetAsync(QuizApiSettings.Employees);
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException(content);
-            }
-            return JsonConvert.DeserializeObject<List<EmployeeViewModel>>(content);
+            return await GetAllItems<EmployeeViewModel>(QuizApiSettings.Employees);
         }
 
         public async Task<EmployeeViewModel> GetEmployeeById(int id)
@@ -70,6 +65,27 @@ namespace Quiz.Mobile.Services
         public async Task RemoveEmployee(int employeeId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<JobDto>> GetAllJobs()
+        {
+            return await GetAllItems<JobDto>(QuizApiSettings.Jobs);
+        }
+
+        public async Task<List<PositionDto>> GetAllPositions()
+        {
+            return await GetAllItems<PositionDto>(QuizApiSettings.Positions);
+        }
+
+        private async Task<List<T>> GetAllItems<T>(string endpoint)
+        {
+            var response = await Client.GetAsync(endpoint);
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(content);
+            }
+            return JsonConvert.DeserializeObject<List<T>>(content);
         }
     }
 }

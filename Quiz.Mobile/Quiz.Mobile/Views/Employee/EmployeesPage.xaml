@@ -37,7 +37,7 @@
             IsPullToRefreshEnabled="True"
             IsRefreshing="{Binding IsBusy, Mode=OneWay}"
             RefreshCommand="{Binding RefreshCommand}"
-            Style="{StaticResource CoffeeListView}"
+            Style="{StaticResource BaseListView}"
             SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
         >
         <!--SelectedItem="{Binding SelectedCoffee, Mode=TwoWay}"-->
@@ -68,7 +68,7 @@
                     </ViewCell.ContextActions>
 
                     <Grid Padding="10">
-                        <Frame Style="{StaticResource CoffeeCard}">
+                        <Frame Style="{StaticResource BaseCard}">
                             <StackLayout>
                                 <StackLayout>
                                     <Label Text="{Binding FirstName}"

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Quiz.Mobile.Shared.DTOs;
 using Quiz.Mobile.Shared.ViewModels;
 
 namespace Quiz.Mobile.Interfaces
@@ -11,6 +12,9 @@ namespace Quiz.Mobile.Interfaces
 		Task<EmployeeViewModel> GetEmployeeById(int id);
 		Task RemoveEmployee(int employeeId);
 		Task AddEmployee(EmployeeViewModel employee);
-	}
+
+		Task<List<JobDto>> GetAllJobs();
+        Task<List<PositionDto>> GetAllPositions();
+    }
 }
 
