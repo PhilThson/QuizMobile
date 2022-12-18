@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Quiz.Mobile.CommunityToolkit.Commands;
 using Quiz.Mobile.CommunityToolkit;
 using Xamarin.Forms;
-using System.Windows.Input;
+using Xamarin.CommunityToolkit.Extensions;
 using Quiz.Mobile.Interfaces;
 using Quiz.Mobile.ViewModels.Abstract;
 using Quiz.Mobile.Views.Employee;
 using Quiz.Mobile.Shared.ViewModels;
-using System.Collections.Generic;
+using System.Net.Http;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -19,9 +19,8 @@ namespace Quiz.Mobile.ViewModels
         public EmployeesViewModel()
         {
             base.Title = "Wszyscy pracownicy";
-
+            //List = new ObservableRangeCollection<EmployeeViewModel>();
             SelectedCommand = new AsyncCommand<object>(Selected);
-
             _employeeService = DependencyService.Get<IEmployeeService>(DependencyFetchTarget.GlobalInstance);
         }
 
@@ -40,27 +39,29 @@ namespace Quiz.Mobile.ViewModels
 
         protected async override Task Refresh()
         {
-            IsBusy = true;
-
-            await Task.Delay(1000);
-
-            List.Clear();
-
-            var employees = await _employeeService.GetAllEmployees();
-
-            List.AddRange(employees);
-
-            IsBusy = false;
-
-            DependencyService.Get<IToast>()?.MakeToast("Refreshed");
+            try
+            {
+                IsBusy = true;
+                await Task.Delay(1000);
+                List.Clear();
+                var employees = await _employeeService.GetAllEmployees();
+                List.AddRange(employees);
+                IsBusy = false;
+                await Application.Current.MainPage.DisplayToastAsync("Odświeżono");
+            }
+            catch (Exception e)
+            {
+                IsBusy = false;
+                await Application.Current.MainPage.DisplayToastAsync("Nie udało się " +
+                    $" pobrać pracowników. Odpowiedź serwera: '{e.Message}'", 5000);
+            }
         }
 
-        private EmployeeViewModel selectedEmployee;
-        //odwzorowanie zdarzenia ItemSelected z CodeBehindu
+        private EmployeeViewModel _SelectedEmployee;
         public EmployeeViewModel SelectedEmployee
         {
-            get => selectedEmployee;
-            set => SetProperty(ref selectedEmployee, value);
+            get => _SelectedEmployee;
+            set => SetProperty(ref _SelectedEmployee, value);
         }
 
         public AsyncCommand<object> SelectedCommand { get; }
@@ -74,7 +75,7 @@ namespace Quiz.Mobile.ViewModels
                 return;
 
             var route = $"{nameof(EmployeeDetailsPage)}?EmployeeId={employee.Id}";
-            await AppShell.Current.GoToAsync(route);
+            await Shell.Current.GoToAsync(route);
 
             SelectedEmployee = null;
         }

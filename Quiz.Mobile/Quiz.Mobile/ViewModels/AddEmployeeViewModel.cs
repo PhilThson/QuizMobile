@@ -1,28 +1,32 @@
 ﻿using System;
 using Quiz.Mobile.ViewModels.Abstract;
-using Quiz.Mobile.Shared;
-using Quiz.Mobile.Shared.ViewModels;
 using Quiz.Mobile.Interfaces;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Quiz.Mobile.Shared.DTOs;
 using Quiz.Mobile.CommunityToolkit;
 using System.Diagnostics;
+using System.Net.Http;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace Quiz.Mobile.ViewModels
 {
-    public class AddEmployeeViewModel : SingleItemViewModel<EmployeeViewModel>
+    public class AddEmployeeViewModel : SingleItemViewModel<CreateEmployeeDto>
     {
         private readonly IEmployeeService _employeeService;
 
         public AddEmployeeViewModel()
         {
             base.Title = "Dodawanie pracownika";
-            Item = new EmployeeViewModel()
+            Item = new CreateEmployeeDto()
             {
-                DateOfEmployment = DateTime.Now
+                DateOfBirth = DateTime.Now.Date.AddYears(-20),
+                DateOfEmployment = DateTime.Now.Date
             };
             _employeeService = DependencyService.Get<IEmployeeService>();
+
+            this.PropertyChanged +=
+                (_, __) => SaveAndCloseCommand.RaiseCanExecuteChanged();
         }
 
         #region Właściwości pracownika
@@ -62,6 +66,13 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
+        private bool _IsPersonalNumberValid = false;
+        public bool IsPersonalNumberValid
+        {
+            get => _IsPersonalNumberValid;
+            set => SetProperty(ref _IsPersonalNumberValid, value);
+        }
+
         public DateTime? DateOfBirth
         {
             get => Item.DateOfBirth;
@@ -86,6 +97,13 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
+        private bool _IsSalaryValid = false;
+        public bool IsSalaryValid
+        {
+            get => _IsSalaryValid;
+            set => SetProperty(ref _IsSalaryValid, value);
+        }
+
         public string? Email
         {
             get => Item.Email;
@@ -98,31 +116,50 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
-        public JobDto Job
+        private bool _IsEmailValid = false;
+        public bool IsEmailValid
         {
-            get => Item.Job;
+            get => _IsEmailValid;
+            set => SetProperty(ref _IsEmailValid, value);
+        }
+
+        public string? PhoneNumber
+        {
+            get => Item.PhoneNumber;
             set
             {
-                if (value != Item.Job)
+                if (value != Item.PhoneNumber)
                 {
-                    Item.Job = value;
+                    Item.PhoneNumber = value;
                     OnPropertyChanged();
                 }
             }
         }
-        public PositionDto Position
+        public byte? JobId
         {
-            get => Item.Position;
+            get => Item.JobId;
             set
             {
-                if (value != Item.Position)
+                if (value != Item.JobId)
                 {
-                    Item.Position = value;
+                    Item.JobId = value;
                     OnPropertyChanged();
                 }
             }
         }
-        public DateTime DateOfEmployment
+        public byte? PositionId
+        {
+            get => Item.PositionId;
+            set
+            {
+                if (value != Item.PositionId)
+                {
+                    Item.PositionId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public DateTime? DateOfEmployment
         {
             get => Item.DateOfEmployment;
             set
@@ -141,7 +178,10 @@ namespace Quiz.Mobile.ViewModels
             get
             {
                 if (_Jobs == null)
-                    LoadJobs().SafeFireAndForget(ex => Debug.WriteLine(ex.Message));
+                    LoadJobs().SafeFireAndForget(ex =>
+                    {
+                        Debug.WriteLine(ex.Message);
+                    });
                 return _Jobs;
             }
             set => SetProperty(ref _Jobs, value);
@@ -153,17 +193,39 @@ namespace Quiz.Mobile.ViewModels
             get
             {
                 if (_Postions == null)
-                    LoadPositions().SafeFireAndForget(ex => Debug.WriteLine(ex.Message));
+                    LoadPositions().SafeFireAndForget(ex =>
+                    {
+                        Debug.WriteLine(ex.Message);
+                    });
                 return _Postions;
             }
             set => SetProperty(ref _Postions, value);
         }
         #endregion
 
+        #region Metody
+
         protected override async Task SaveAndClose()
         {
-            await base.NavigateBack();
+            try
+            {
+                IsBusy = true;
+                await _employeeService.AddEmployee(Item);
+                IsBusy = false;
+                await Application.Current.MainPage.DisplayToastAsync("Poprawnie dodano " +
+                    "pracownika!");
+                await Task.Delay(2000);
+                await base.NavigateBack();
+            }
+            catch (HttpRequestException e)
+            {
+                IsBusy = false;
+                await Application.Current.MainPage.DisplayToastAsync("Nie udało się " +
+                    $"utworzyć pracownika. Odpowiedź serwera: '{e.Message}'", 5000);
+            }
         }
+
+        #endregion
 
         #region Pobieranie danych słownikowych
 
@@ -176,8 +238,8 @@ namespace Quiz.Mobile.ViewModels
             }
             catch (Exception e)
             {
-                DependencyService.Get<IToast>()?
-                    .MakeToast("Nie udało się pobrać etatów. " +
+                await Application.Current.MainPage.DisplayToastAsync(
+                    "Nie udało się pobrać etatów. " +
                     $"Odpowiedź serwera: {e.Message}");
             }
         }
@@ -190,11 +252,19 @@ namespace Quiz.Mobile.ViewModels
             }
             catch (Exception e)
             {
-                DependencyService.Get<IToast>()?
-                    .MakeToast("Nie udało się pobrać stanowisk. " +
+                await Application.Current.MainPage.DisplayToastAsync(
+                    "Nie udało się pobrać stanowisk. " +
                     $"Odpowiedź serwera: {e.Message}");
             }
         }
+
+        protected override bool CanSave(object arg) =>
+            !string.IsNullOrEmpty(FirstName) &&
+            !string.IsNullOrEmpty(LastName) &&
+            _IsPersonalNumberValid &&
+            _IsEmailValid &&
+            _IsSalaryValid &&
+            (DateOfEmployment != null);
 
         #endregion
     }

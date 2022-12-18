@@ -97,6 +97,8 @@ namespace Quiz.Mobile.ViewModels
                     $"Odpowiedź serwera: {e.Message}");
             }
         }
+
+        protected override bool CanSave(object arg) => true;
         #endregion
     }
 }

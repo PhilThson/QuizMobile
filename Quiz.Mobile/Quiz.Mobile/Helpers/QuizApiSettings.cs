@@ -13,6 +13,7 @@ namespace Quiz.Mobile.Helpers
         public static string Students { get; } = "uczniowie";
         public static string Jobs { get; set; } = "etaty";
         public static string Positions { get; set; } = "stanowiska";
+        public static string Branches { get; set; } = "oddzialy";
     }
 }
 

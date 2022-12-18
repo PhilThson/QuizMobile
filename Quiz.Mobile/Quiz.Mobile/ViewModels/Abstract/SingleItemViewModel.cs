@@ -25,13 +25,14 @@ namespace Quiz.Mobile.ViewModels.Abstract
         #region Konstruktor
         public SingleItemViewModel()
         {
-            SaveAndCloseCommand = new AsyncCommand(SaveAndClose);
+            SaveAndCloseCommand = new AsyncCommand(SaveAndClose, CanSave);
             NavigateBackCommand = new AsyncCommand(NavigateBack);
         }
         #endregion
 
         #region Deklaracje metod
         protected abstract Task SaveAndClose();
+        protected abstract bool CanSave(object arg);
         #endregion
 
         #region Metody

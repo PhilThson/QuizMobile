@@ -5,15 +5,14 @@ using System.Threading.Tasks;
 using Quiz.Mobile.Interfaces;
 using Quiz.Mobile.Shared.ViewModels;
 using Newtonsoft.Json;
-using Xamarin.Forms;
-using Quiz.Mobile.Services;
 using Quiz.Mobile.Helpers;
 using System.Net.Http.Headers;
 using Quiz.Mobile.Shared.DTOs;
+using System.Text;
 
 namespace Quiz.Mobile.Services
 {
-	public class EmployeeService : IEmployeeService
+    public class EmployeeService : IEmployeeService
 	{
         private HttpClient _client;
         protected HttpClient Client
@@ -51,15 +50,21 @@ namespace Quiz.Mobile.Services
             var response = await Client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
-            {
                 throw new HttpRequestException(content);
-            }
+
             return JsonConvert.DeserializeObject<EmployeeViewModel>(content);
         }
 
-        public async Task AddEmployee(EmployeeViewModel employee)
+        public async Task AddEmployee(CreateEmployeeDto employeeDto)
         {
-            throw new NotImplementedException();
+            var dataToSend = new StringContent(JsonConvert.SerializeObject(employeeDto),
+                Encoding.UTF8, "application/json");
+            var response = await Client.PostAsync(QuizApiSettings.Employees,
+                dataToSend);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException(content);
         }
 
         public async Task RemoveEmployee(int employeeId)
@@ -82,9 +87,8 @@ namespace Quiz.Mobile.Services
             var response = await Client.GetAsync(endpoint);
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
-            {
                 throw new HttpRequestException(content);
-            }
+
             return JsonConvert.DeserializeObject<List<T>>(content);
         }
     }

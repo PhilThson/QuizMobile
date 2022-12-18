@@ -98,11 +98,20 @@
 
     <Style x:Key="LabelMedium" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
         <Setter Property="FontSize" Value="Medium"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
     </Style>
 
     <!--Tworzenie stylu na podstawie inngeo-->
     <Style x:Key="LabelLarge" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
         <Setter Property="FontSize" Value="Large"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="BaseEntry" TargetType="Entry">
+        <Setter Property="FontSize" Value="Medium"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+                    Dark={StaticResource TextColorDark},
+                    Light={StaticResource TextColor}}"/>
     </Style>
 
     <!--Trzeba odwzorować backslash, który w code-behind można by podać w stringu-->

@@ -4,11 +4,13 @@ using Quiz.Mobile.CommunityToolkit;
 using Quiz.Mobile.CommunityToolkit.Commands;
 using Quiz.Mobile.CommunityToolkit.Interfaces;
 using System.Diagnostics;
+using Xamarin.Forms;
+using Quiz.Mobile.Interfaces;
 
 namespace Quiz.Mobile.ViewModels.Abstract
 {
-	public abstract class ItemsCollectionViewModel<T> : BaseViewModel
-	{
+    public abstract class ItemsCollectionViewModel<T> : BaseViewModel
+    {
         #region Pola i komendy
         private ObservableRangeCollection<T> _List;
         public IAsyncCommand RefreshCommand { get; }
@@ -18,7 +20,7 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         #region Konstruktor
         public ItemsCollectionViewModel()
-		{
+        {
             RefreshCommand = new AsyncCommand(Refresh);
             AddCommand = new AsyncCommand(Add);
             RemoveCommand = new AsyncCommand<object>(Remove);
@@ -31,7 +33,11 @@ namespace Quiz.Mobile.ViewModels.Abstract
             get
             {
                 if (_List == null)
-                    Load().SafeFireAndForget(ex => Debug.WriteLine(ex.Message));
+                    Load().SafeFireAndForget(ex =>
+                    {
+                        _List = new ObservableRangeCollection<T>();
+                        Console.WriteLine(ex.Message);
+                    });
                 return _List;
             }
             //SetProperty sprawdzi czy wartość się nie zmieniła, dokona walidacji,

@@ -4,9 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Quiz.Mobile.Views.Employee.AddEmployeePage"
     xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:behaviors="clr-namespace:Quiz.Mobile.Helpers.Behaviors"
     Title="{Binding Title}"
     x:DataType="viewmodels:AddEmployeeViewModel"
-    Shell.PresentationMode="Animated">
+    Shell.PresentationMode="Animated"
+    x:Name="AddEmployee">
     <!--Modal - pojawienie sie strony od dołu na całej powierzchni, zamiast jako kolejnej strony
         Animated - pojawienie się 'wewnątrz' np. zakładki -->
     <!--BackgroundColor="{AppThemeBinding
@@ -17,85 +19,101 @@
         <viewmodels:AddEmployeeViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.Content>
-        <StackLayout Padding="20">
-            <Label Text="Imię:"
-                   Style="{StaticResource LabelMedium}"/>
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+
+    </ContentPage.Resources>
+
+    <StackLayout Padding="20">
+        <ScrollView VerticalOptions="CenterAndExpand">
+            <Label Text="Imię:"/>
             <Entry Text="{Binding FirstName}" />
-            <Label Text="Nazwisko:"
-                   Style="{StaticResource LabelMedium}"/>
+
+            <Label Text="Nazwisko:"/>
             <Entry Text="{Binding LastName}" />
-            <Label Text="Pesel:"
-                   Style="{StaticResource LabelMedium}"/>
-            <Entry Text="{Binding PersonalNumber}" />
-            <Label Text="Data urodzenia:"
-                   Style="{StaticResource LabelMedium}"/>
-            <DatePicker Date="{Binding DateOfBirth}" />
-            <Label Text="Wynagrodzenie brutto:"
-                   Style="{StaticResource LabelMedium}"/>
-            <Entry Text="{Binding Salary}"
-                   Keyboard="Numeric"/>
-            <Label Text="Adres e-mail:"
-                   Style="{StaticResource LabelMedium}"/>
-            <Entry Text="{Binding Email}"/>
-            <Label Text="Numer telefonu:"
-                   Style="{StaticResource LabelMedium}"/>
-            <Entry Text="{Binding Salary}"
-                   Keyboard="Numeric"/>
-            <Label Text="Etat:"
-                   Style="{StaticResource LabelMedium}"/>
+
+            <Label Text="Pesel:"/>
+            <Entry Text="{Binding PersonalNumber}" Keyboard="Numeric">
+                <Entry.Behaviors>
+                    <behaviors:PersonalNumberValidatorBehavior
+                        IsValid="{Binding Source={x:Reference AddEmployee},
+                            Path=BindingContext.IsPersonalNumberValid}}"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Label Text="Data urodzenia:"/>
+            <DatePicker Date="{Binding DateOfBirth}"
+                        Format="dd-MM-yyyy"/>
+
+            <Label Text="Wynagrodzenie brutto:"/>
+            <Entry Text="{Binding Salary}" Keyboard="Numeric">
+                <Entry.Behaviors>
+                    <behaviors:SalaryValidatorBehavior
+                        IsValid="{Binding Source={x:Reference AddEmployee},
+                            Path=BindingContext.IsSalaryValid}"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Label Text="Adres e-mail:"/>
+            <Entry Text="{Binding Email}" Keyboard="Email">
+                <Entry.Behaviors>
+                    <behaviors:EmailValidatorBehavior
+                        IsValid="{Binding Source={x:Reference AddEmployee},
+                            Path=BindingContext.IsEmailValid}"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Label Text="Numer telefonu:"/>
+            <Entry Text="{Binding PhoneNumber}"
+                   Placeholder="000-000-000"
+                   Keyboard="Telephone"/>
+
+            <Label Text="Etat:"/>
             <Picker Title="Etat"
                     ItemsSource="{Binding Jobs}"
-                    SelectedItem="{Binding Job}"
+                    SelectedIndex="{Binding JobId}"
                     ItemDisplayBinding="{Binding Name}"
                     />
-            <Label Text="Stanowisko:"
-                   Style="{StaticResource LabelMedium}"/>
+
+            <Label Text="Stanowisko:"/>
             <Picker Title="Stanowisko"
                     ItemsSource="{Binding Positions}"
-                    SelectedItem="{Binding Position}"
+                    SelectedIndex="{Binding PositionId}"
                     ItemDisplayBinding="{Binding Name}"
-                    >
-                <Picker.Items>
+                    />
 
-
-                </Picker.Items>
-
-            </Picker>
-
-            <Label Text="Data zatrudnienia:"
-                   Style="{StaticResource LabelMedium}"/>
-            <DatePicker Date="{Binding DateOfEmployment}"/>
+            <Label Text="Data zatrudnienia:"/>
+            <DatePicker Date="{Binding DateOfEmployment}"
+                        Format="dd-MM-yyyy"/>
             <!--MinimumDate=
             MaximumDate=
             Format="D"-->
+        </ScrollView>
 
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
 
-            <ActivityIndicator
+        <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+            <Button
+                Padding="20,0"
+                Command="{Binding SaveAndCloseCommand}"
                 HorizontalOptions="Center"
-                IsRunning="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}"
-                VerticalOptions="Center" />
-
-            <StackLayout Orientation="Horizontal">
-                <Button
-                    Padding="20,0"
-                    Command="{Binding SaveAndCloseCommand}"
-                    HorizontalOptions="Center"
-                    IsEnabled="{Binding IsNotBusy}"
-                    Text="Zapisz"
-                    VerticalOptions="EndAndExpand"
-                    Style="{StaticResource ButtonOutline}"/>
-                <Button
-                    Padding="20,0"
-                    Command="{Binding NavigateBackCommand}"
-                    HorizontalOptions="Center"
-                    IsEnabled="{Binding IsNotBusy}"
-                    Text="Powrót"
-                    VerticalOptions="CenterAndExpand"
-                    Style="{StaticResource ButtonOutline}"/>
-            </StackLayout>
+                IsEnabled="{Binding IsNotBusy}"
+                Text="Zapisz"
+                VerticalOptions="EndAndExpand"
+                Style="{StaticResource ButtonOutline}"/>
+            <Button
+                Padding="20,0"
+                Command="{Binding NavigateBackCommand}"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsNotBusy}"
+                Text="Powrót"
+                VerticalOptions="CenterAndExpand"
+                Style="{StaticResource ButtonOutline}"/>
         </StackLayout>
-    </ContentPage.Content>
+    </StackLayout>
 </ContentPage>
 

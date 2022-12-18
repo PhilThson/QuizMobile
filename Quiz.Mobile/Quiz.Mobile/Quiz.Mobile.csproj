@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\" />
@@ -35,6 +36,8 @@
     <None Remove="Newtonsoft.Json" />
     <None Remove="CommunityToolkit\Converters\" />
     <None Remove="CommunityToolkit\Extensions\" />
+    <None Remove="Xamarin.CommunityToolkit" />
+    <None Remove="Helpers\Behaviors\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -54,6 +57,7 @@
     <Folder Include="Shared\DTOs\" />
     <Folder Include="CommunityToolkit\Converters\" />
     <Folder Include="CommunityToolkit\Extensions\" />
+    <Folder Include="Helpers\Behaviors\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\RegistrationPage.xaml.cs">

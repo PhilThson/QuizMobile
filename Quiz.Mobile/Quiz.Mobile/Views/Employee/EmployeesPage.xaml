@@ -90,10 +90,10 @@
         <ListView.Header>
             <StackLayout Orientation="Horizontal">
                 <Label
-                    Style="{StaticResource LabelLarge}"
-                    Text="Header"
-                    TextColor="Olive"
-                    BackgroundColor="Red"/>
+                    Style="{StaticResource LabelMedium}"
+                    Text="Wybierz pracownika, aby wyświetlić szczegóły"
+                    FontAttributes="Italic"
+                    />
             </StackLayout>
         </ListView.Header>
         <ListView.Footer>
@@ -101,8 +101,8 @@
                 <Button
                     Style="{StaticResource ButtonOutline}"
                     Text="Odśwież"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand"
                     Command="{Binding RefreshCommand}"
                     />
             </StackLayout>
