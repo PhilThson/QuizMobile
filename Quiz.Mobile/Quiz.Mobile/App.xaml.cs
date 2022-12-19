@@ -18,6 +18,7 @@ namespace Quiz.Mobile
 
             DependencyService.Register<MockDataStore>();
             DependencyService.Register<IEmployeeService, EmployeeService>();
+            DependencyService.Register<IStudentService, StudentService>();
 
             //nadpisanie motywu zgodnie z preferencjami
             TheTheme.SetTheme();

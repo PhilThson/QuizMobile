@@ -38,6 +38,8 @@
     <None Remove="CommunityToolkit\Extensions\" />
     <None Remove="Xamarin.CommunityToolkit" />
     <None Remove="Helpers\Behaviors\" />
+    <None Remove="Views\Base\" />
+    <None Remove="Resources\Fonts\materialdesignicons-webfont.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -58,6 +60,8 @@
     <Folder Include="CommunityToolkit\Converters\" />
     <Folder Include="CommunityToolkit\Extensions\" />
     <Folder Include="Helpers\Behaviors\" />
+    <Folder Include="Views\Student\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\RegistrationPage.xaml.cs">
@@ -76,5 +80,6 @@
     <EmbeddedResource Include="Resources\Fonts\fa-regular-400.ttf" />
     <EmbeddedResource Include="Resources\Fonts\fa-solid-900.ttf" />
     <EmbeddedResource Include="Resources\Fonts\Solid-900.otf" />
+    <EmbeddedResource Include="Resources\Fonts\materialdesignicons-webfont.ttf" />
   </ItemGroup>
 </Project>

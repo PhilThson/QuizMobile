@@ -7,8 +7,10 @@ using Quiz.Mobile.Interfaces;
 using UIKit;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.CommunityToolkit;
 
 [assembly: Dependency(typeof(Quiz.Mobile.iOS.Environment))]
+[assembly: Dependency(typeof(Quiz.Mobile.iOS.Toaster))]
 
 namespace Quiz.Mobile.iOS
 {
@@ -55,6 +57,38 @@ namespace Quiz.Mobile.iOS
             var style = darkStatusBarTint ? UIStatusBarStyle.DarkContent : UIStatusBarStyle.LightContent;
             UIApplication.SharedApplication.SetStatusBarStyle(style, false);
             Xamarin.Essentials.Platform.GetCurrentUIViewController()?.SetNeedsStatusBarAppearanceUpdate();
+        }
+    }
+
+    public class Toaster : IToast
+    {
+        const double LONG_DELAY = 3.5;
+        const double SHORT_DELAY = 2.0;
+
+        NSTimer alertDelay;
+        UIAlertController alert;
+
+        public void MakeToast(string message)
+        {
+            ShowAlert(message, LONG_DELAY);
+        }
+
+        void ShowAlert(string message, double seconds)
+        {
+            alertDelay = NSTimer.CreateScheduledTimer(seconds, (obj) =>
+            {
+                dismissMessage();
+            });
+            alert = UIAlertController.Create(null, message, UIAlertControllerStyle.Alert);
+            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alert, true, null);
+        }
+
+        void dismissMessage()
+        {
+            if (alert != null)
+                alert.DismissViewController(true, null);
+            if (alertDelay != null)
+                alertDelay.Dispose();
         }
     }
 }

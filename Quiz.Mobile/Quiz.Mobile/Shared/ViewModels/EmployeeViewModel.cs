@@ -1,15 +1,11 @@
 ﻿using System;
 using Quiz.Mobile.Shared.DTOs;
+using Quiz.Mobile.Models;
 
 namespace Quiz.Mobile.Shared.ViewModels
 {
-    public class EmployeeViewModel
+    public class EmployeeViewModel : Person
     {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime? DateOfBirth { get; set; }
-        public string PersonalNumber { get; set; }
         public decimal Salary { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }

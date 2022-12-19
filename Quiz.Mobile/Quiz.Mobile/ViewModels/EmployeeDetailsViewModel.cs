@@ -26,7 +26,7 @@ namespace Quiz.Mobile.ViewModels
                 if(value != _EmployeeId)
                 {
                     _EmployeeId = value;
-                    LoadEmployee().SafeFireAndForget(ex => Debug.WriteLine(ex.Message));
+                    LoadEmployee().SafeFireAndForget(ex => Debug.WriteLine(ex));
                 }
             }
         }

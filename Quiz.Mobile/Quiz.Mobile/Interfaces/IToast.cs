@@ -6,4 +6,3 @@ namespace Quiz.Mobile.Interfaces
         void MakeToast(string message);
     }
 }
-

@@ -193,10 +193,7 @@ namespace Quiz.Mobile.ViewModels
             get
             {
                 if (_Postions == null)
-                    LoadPositions().SafeFireAndForget(ex =>
-                    {
-                        Debug.WriteLine(ex.Message);
-                    });
+                    LoadPositions().SafeFireAndForget(ex => Debug.WriteLine(ex));
                 return _Postions;
             }
             set => SetProperty(ref _Postions, value);
@@ -212,16 +209,15 @@ namespace Quiz.Mobile.ViewModels
                 IsBusy = true;
                 await _employeeService.AddEmployee(Item);
                 IsBusy = false;
-                await Application.Current.MainPage.DisplayToastAsync("Poprawnie dodano " +
-                    "pracownika!");
+                DependencyService.Get<IToast>()?.MakeToast("Poprawnie dodano pracownika!");
                 await Task.Delay(2000);
                 await base.NavigateBack();
             }
             catch (HttpRequestException e)
             {
                 IsBusy = false;
-                await Application.Current.MainPage.DisplayToastAsync("Nie udało się " +
-                    $"utworzyć pracownika. Odpowiedź serwera: '{e.Message}'", 5000);
+                DependencyService.Get<IToast>()?.MakeToast(
+                    $"Nie udało się pobrać pracownika. Odpowiedź serwera: {e.Message}");
             }
         }
 
@@ -238,7 +234,7 @@ namespace Quiz.Mobile.ViewModels
             }
             catch (Exception e)
             {
-                await Application.Current.MainPage.DisplayToastAsync(
+                DependencyService.Get<IToast>()?.MakeToast(
                     "Nie udało się pobrać etatów. " +
                     $"Odpowiedź serwera: {e.Message}");
             }
@@ -252,7 +248,7 @@ namespace Quiz.Mobile.ViewModels
             }
             catch (Exception e)
             {
-                await Application.Current.MainPage.DisplayToastAsync(
+                DependencyService.Get<IToast>()?.MakeToast(
                     "Nie udało się pobrać stanowisk. " +
                     $"Odpowiedź serwera: {e.Message}");
             }

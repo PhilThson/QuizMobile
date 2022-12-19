@@ -12,3 +12,5 @@ using Xamarin.Forms.Xaml;
 [assembly: ExportFont("fa-regular-400.ttf", Alias = "FAS")]
 [assembly: ExportFont("fa-solid-900.ttf", Alias = "FAB")]
 [assembly: ExportFont("Solid-900.otf", Alias = "FS")]
+[assembly: ExportFont("materialdesignicons-webfont.ttf",
+    Alias = "MaterialDesignIcons")]

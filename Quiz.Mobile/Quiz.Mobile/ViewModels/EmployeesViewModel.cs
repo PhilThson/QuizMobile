@@ -19,7 +19,6 @@ namespace Quiz.Mobile.ViewModels
         public EmployeesViewModel()
         {
             base.Title = "Wszyscy pracownicy";
-            //List = new ObservableRangeCollection<EmployeeViewModel>();
             SelectedCommand = new AsyncCommand<object>(Selected);
             _employeeService = DependencyService.Get<IEmployeeService>(DependencyFetchTarget.GlobalInstance);
         }
@@ -47,13 +46,13 @@ namespace Quiz.Mobile.ViewModels
                 var employees = await _employeeService.GetAllEmployees();
                 List.AddRange(employees);
                 IsBusy = false;
-                await Application.Current.MainPage.DisplayToastAsync("Odświeżono");
+                DependencyService.Get<IToast>()?.MakeToast("Odświeżono");
             }
             catch (Exception e)
             {
                 IsBusy = false;
-                await Application.Current.MainPage.DisplayToastAsync("Nie udało się " +
-                    $" pobrać pracowników. Odpowiedź serwera: '{e.Message}'", 5000);
+                DependencyService.Get<IToast>()?.MakeToast(
+                    $"Nie udało się pobrać pracownika. Odpowiedź serwera: {e.Message}");
             }
         }
 

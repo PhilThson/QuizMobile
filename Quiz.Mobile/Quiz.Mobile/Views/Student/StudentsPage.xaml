@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Student.StudentsPage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels" 
+    xmlns:base="clr-namespace:Quiz.Mobile.Views.Base"
+    xmlns:model="clr-namespace:Quiz.Mobile.Shared.ViewModels"
+    xmlns:ctb="clr-namespace:Quiz.Mobile.CommunityToolkit.Behaviours"
+    xmlns:ctc="clr-namespace:Quiz.Mobile.CommunityToolkit.Converters"
+    xmlns:fonts="clr-namespace:Quiz.Mobile.Helpers.Icons"
+    x:DataType="viewmodels:StudentsViewModel"
+    Title="{Binding Title}"
+    x:Name="students"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    BackgroundColor="{AppThemeBinding 
+                    Dark={StaticResource WindowBackgroundColorDark}, 
+                    Light={StaticResource WindowBackgroundColor}}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:StudentsViewModel/>
+    </ContentPage.BindingContext>
+
+    <RefreshView
+        Command="{Binding RefreshCommand}"
+        IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+        >
+        <!--Style="{StaticResource BaseRefreshView}"-->
+
+        <CollectionView
+            BackgroundColor="Transparent"
+            ItemSizingStrategy="MeasureAllItems"
+            ItemsLayout="VerticalList"
+            ItemsSource="{Binding List}"
+            RemainingItemsThreshold="1"
+            SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
+            SelectionMode="Single"
+            >
+            <!--RemainingItemsThresholdReachedCommand="{Binding DelayLoadMoreCommand}"-->
+            <CollectionView.EmptyView>
+                <StackLayout Padding="12">
+                    <Label HorizontalOptions="Center" Text="Brak uczniów do wyświetlenia" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+            <!--<CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="{x:Null}">
+                    <StackLayout Padding="12">
+                        <Label Style="{StaticResource LabelMedium}" Text="{Binding Key}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>-->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView
+                        android:SwipeView.SwipeTransitionMode="Drag"
+                               BackgroundColor="{AppThemeBinding 
+                                Dark={StaticResource WindowBackgroundColorDark}, 
+                                Light={StaticResource WindowBackgroundColor}}">
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem
+                                    BackgroundColor="Orange"
+                                    Command="{Binding Source=
+                                        {RelativeSource AncestorType=
+                                            {x:Type viewmodels:StudentsViewModel}},
+                                                Path=FavoriteCommand}"
+                                    CommandParameter="{Binding .}"
+                                    Text="Favorite" />
+                                <SwipeItem
+                                    BackgroundColor="Red"
+                                    IsDestructive="True"
+                                    Text="Delete" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <!--Wykorzystanie wcześniej przygotowanego grida!-->
+                        <base:PersonCard/>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.Header>
+                <StackLayout Orientation="Horizontal">
+                    <Label
+                        HorizontalOptions="Center"
+                        Style="{StaticResource LabelMedium}"
+                        Text="Wszyscy uczniowie" />
+                </StackLayout>
+            </CollectionView.Header>
+            <CollectionView.Footer>
+                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                    <Button
+                        Style="{StaticResource ButtonOutline}"
+                        Text="Load More" />
+                        <!--Command="{Binding LoadMoreCommand}"-->
+                    <Button
+                        Style="{StaticResource ButtonOutline}"
+                        Text="Clear" />
+                        <!--Command="{Binding ClearCommand}"-->
+                </StackLayout>
+            </CollectionView.Footer>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

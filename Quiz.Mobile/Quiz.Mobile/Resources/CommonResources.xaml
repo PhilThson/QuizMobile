@@ -57,7 +57,7 @@
     </Style>
 
     <!--można ustalić wartość w zależności od platformy!-->
-    <Style x:Key="BaseCard" TargetType="Frame">
+    <Style x:Key="PersonCard" TargetType="Frame">
         <Setter Property="HasShadow"
                         Value="{OnPlatform Android=true, iOS=false, Default=true}"/>
         <Setter Property="CornerRadius" Value="20"/>

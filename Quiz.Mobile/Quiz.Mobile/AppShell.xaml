@@ -3,6 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:Quiz.Mobile.Views"
        xmlns:employee="clr-namespace:Quiz.Mobile.Views.Employee"
+       xmlns:student="clr-namespace:Quiz.Mobile.Views.Student"
        xmlns:fontAwesome="clr-namespace:Quiz.Mobile.Helpers.Icons"
        Title="Quiz.Mobile"
        x:Class="Quiz.Mobile.AppShell">
@@ -101,9 +102,20 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.MoneyBill}"/>
+                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.PersonSign}"/>
         </FlyoutItem.Icon>
         <ShellContent Title="Pracownicy" Route="EmployeesPage" ContentTemplate="{DataTemplate employee:EmployeesPage}"/>
+    </FlyoutItem>
+
+        <FlyoutItem Title="Uczniowie">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FAB"
+                             Color="{AppThemeBinding 
+                                    Dark=White, 
+                                    Light={StaticResource SystemGray5Dark}}"
+                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.GraduationCap}"/>
+        </FlyoutItem.Icon>
+        <ShellContent Title="Uczniowie" Route="StudentsPage" ContentTemplate="{DataTemplate student:StudentsPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Animation">

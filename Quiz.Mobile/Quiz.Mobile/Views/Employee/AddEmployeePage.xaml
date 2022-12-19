@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
+﻿<ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Quiz.Mobile.Views.Employee.AddEmployeePage"
@@ -8,7 +7,7 @@
     Title="{Binding Title}"
     x:DataType="viewmodels:AddEmployeeViewModel"
     Shell.PresentationMode="Animated"
-    x:Name="AddEmployee">
+    x:Name="addEmployee">
     <!--Modal - pojawienie sie strony od dołu na całej powierzchni, zamiast jako kolejnej strony
         Animated - pojawienie się 'wewnątrz' np. zakładki -->
     <!--BackgroundColor="{AppThemeBinding
@@ -21,73 +20,76 @@
 
     <ContentPage.Resources>
         <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
-
     </ContentPage.Resources>
 
     <StackLayout Padding="20">
-        <ScrollView VerticalOptions="CenterAndExpand">
-            <Label Text="Imię:"/>
-            <Entry Text="{Binding FirstName}" />
+        <!--Zgodnie z dokumentacją zagnieżdżony ScrollView w tym przypadku
+        musi mieć parametr VerticalOptions na FillAndExpand-->
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <Label Text="Imię:"/>
+                <Entry Text="{Binding FirstName}" />
 
-            <Label Text="Nazwisko:"/>
-            <Entry Text="{Binding LastName}" />
+                <Label Text="Nazwisko:"/>
+                <Entry Text="{Binding LastName}" />
 
-            <Label Text="Pesel:"/>
-            <Entry Text="{Binding PersonalNumber}" Keyboard="Numeric">
-                <Entry.Behaviors>
-                    <behaviors:PersonalNumberValidatorBehavior
-                        IsValid="{Binding Source={x:Reference AddEmployee},
+                <Label Text="Pesel:"/>
+                <Entry Text="{Binding PersonalNumber}" Keyboard="Numeric">
+                    <Entry.Behaviors>
+                        <behaviors:PersonalNumberValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addEmployee},
                             Path=BindingContext.IsPersonalNumberValid}}"/>
-                </Entry.Behaviors>
-            </Entry>
+                    </Entry.Behaviors>
+                </Entry>
 
-            <Label Text="Data urodzenia:"/>
-            <DatePicker Date="{Binding DateOfBirth}"
+                <Label Text="Data urodzenia:"/>
+                <DatePicker Date="{Binding DateOfBirth}"
                         Format="dd-MM-yyyy"/>
 
-            <Label Text="Wynagrodzenie brutto:"/>
-            <Entry Text="{Binding Salary}" Keyboard="Numeric">
-                <Entry.Behaviors>
-                    <behaviors:SalaryValidatorBehavior
-                        IsValid="{Binding Source={x:Reference AddEmployee},
-                            Path=BindingContext.IsSalaryValid}"/>
-                </Entry.Behaviors>
-            </Entry>
+                <Label Text="Wynagrodzenie brutto:"/>
+                <Entry Text="{Binding Salary}" Keyboard="Numeric">
+                    <Entry.Behaviors>
+                        <behaviors:SalaryValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addEmployee},
+                            Path=BindingContext.IsSalaryValid}}"/>
+                    </Entry.Behaviors>
+                </Entry>
 
-            <Label Text="Adres e-mail:"/>
-            <Entry Text="{Binding Email}" Keyboard="Email">
-                <Entry.Behaviors>
-                    <behaviors:EmailValidatorBehavior
-                        IsValid="{Binding Source={x:Reference AddEmployee},
-                            Path=BindingContext.IsEmailValid}"/>
-                </Entry.Behaviors>
-            </Entry>
+                <Label Text="Adres e-mail:"/>
+                <Entry Text="{Binding Email}" Keyboard="Email">
+                    <Entry.Behaviors>
+                        <behaviors:EmailValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addEmployee},
+                            Path=BindingContext.IsEmailValid}}"/>
+                    </Entry.Behaviors>
+                </Entry>
 
-            <Label Text="Numer telefonu:"/>
-            <Entry Text="{Binding PhoneNumber}"
+                <Label Text="Numer telefonu:"/>
+                <Entry Text="{Binding PhoneNumber}"
                    Placeholder="000-000-000"
                    Keyboard="Telephone"/>
 
-            <Label Text="Etat:"/>
-            <Picker Title="Etat"
+                <Label Text="Etat:"/>
+                <Picker Title="Etat"
                     ItemsSource="{Binding Jobs}"
                     SelectedIndex="{Binding JobId}"
                     ItemDisplayBinding="{Binding Name}"
                     />
 
-            <Label Text="Stanowisko:"/>
-            <Picker Title="Stanowisko"
+                <Label Text="Stanowisko:"/>
+                <Picker Title="Stanowisko"
                     ItemsSource="{Binding Positions}"
                     SelectedIndex="{Binding PositionId}"
                     ItemDisplayBinding="{Binding Name}"
                     />
 
-            <Label Text="Data zatrudnienia:"/>
-            <DatePicker Date="{Binding DateOfEmployment}"
+                <Label Text="Data zatrudnienia:"/>
+                <DatePicker Date="{Binding DateOfEmployment}"
                         Format="dd-MM-yyyy"/>
-            <!--MinimumDate=
+                <!--MinimumDate=
             MaximumDate=
             Format="D"-->
+            </StackLayout>
         </ScrollView>
 
         <ActivityIndicator
@@ -103,7 +105,7 @@
                 HorizontalOptions="Center"
                 IsEnabled="{Binding IsNotBusy}"
                 Text="Zapisz"
-                VerticalOptions="EndAndExpand"
+                VerticalOptions="CenterAndExpand"
                 Style="{StaticResource ButtonOutline}"/>
             <Button
                 Padding="20,0"
