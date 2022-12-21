@@ -8,7 +8,7 @@
     xmlns:model="clr-namespace:Quiz.Mobile.Shared.ViewModels"
     xmlns:ctb="clr-namespace:Quiz.Mobile.CommunityToolkit.Behaviours"
     xmlns:ctc="clr-namespace:Quiz.Mobile.CommunityToolkit.Converters"
-    xmlns:fonts="clr-namespace:Quiz.Mobile.Helpers.Icons"
+    xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
     x:DataType="viewmodels:StudentsViewModel"
     Title="{Binding Title}"
     x:Name="students"
@@ -21,11 +21,28 @@
         <viewmodels:StudentsViewModel/>
     </ContentPage.BindingContext>
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ctc:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Dodaj ucznia" 
+                     Command="{Binding AddCommand}" >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MaterialDesignIcons"
+                                 Glyph="{x:Static icons:MaterialDesignIconFont.Plus}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
     <RefreshView
         Command="{Binding RefreshCommand}"
         IsRefreshing="{Binding IsBusy, Mode=OneWay}"
         >
         <!--Style="{StaticResource BaseRefreshView}"-->
+        <!--SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"-->
 
         <CollectionView
             BackgroundColor="Transparent"
@@ -33,8 +50,12 @@
             ItemsLayout="VerticalList"
             ItemsSource="{Binding List}"
             RemainingItemsThreshold="1"
-            SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
             SelectionMode="Single"
+            SelectedItem="{Binding SelectedStudent}"
+            SelectionChangedCommand="{Binding SelectedCommand}"
+            SelectionChangedCommandParameter="{Binding SelectedItem,
+                Source={x:Reference collectionView}}"
+            x:Name="collectionView"
             >
             <!--RemainingItemsThresholdReachedCommand="{Binding DelayLoadMoreCommand}"-->
             <CollectionView.EmptyView>
@@ -42,13 +63,7 @@
                     <Label HorizontalOptions="Center" Text="Brak uczniów do wyświetlenia" />
                 </StackLayout>
             </CollectionView.EmptyView>
-            <!--<CollectionView.GroupHeaderTemplate>
-                <DataTemplate x:DataType="{x:Null}">
-                    <StackLayout Padding="12">
-                        <Label Style="{StaticResource LabelMedium}" Text="{Binding Key}" />
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>-->
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <SwipeView
@@ -64,16 +79,37 @@
                                         {RelativeSource AncestorType=
                                             {x:Type viewmodels:StudentsViewModel}},
                                                 Path=FavoriteCommand}"
-                                    CommandParameter="{Binding .}"
-                                    Text="Favorite" />
+                                    CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
+                                    Text="Favorite">
+                                    <SwipeItem.IconImageSource>
+                                        <FontImageSource FontFamily="MaterialDesignIcons"
+                                            Glyph="{x:Static icons:MaterialDesignIconFont.AccountStar}"
+                                            Color="White"/>
+                                    </SwipeItem.IconImageSource>
+                                </SwipeItem>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
                                 <SwipeItem
                                     BackgroundColor="Red"
                                     IsDestructive="True"
-                                    Text="Delete" />
+                                    Text="Usuń"
+                                    Command="{Binding Source={x:Reference collectionView},
+                                        Path=BindingContext.RemoveCommand}"
+                                    CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
+                                    >
+                                    <SwipeItem.IconImageSource>
+                                        <FontImageSource FontFamily="MaterialDesignIcons"
+                                            Glyph="{x:Static icons:MaterialDesignIconFont.AccountMinusOutline}"
+                                            Color="White"/>
+                                    </SwipeItem.IconImageSource>
+                                </SwipeItem>
                             </SwipeItems>
-                        </SwipeView.RightItems>
+                        </SwipeView.LeftItems>
                         <!--Wykorzystanie wcześniej przygotowanego grida!-->
                         <base:PersonCard/>
+
                     </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
@@ -81,8 +117,9 @@
                 <StackLayout Orientation="Horizontal">
                     <Label
                         HorizontalOptions="Center"
+                        FontAttributes="Italic"
                         Style="{StaticResource LabelMedium}"
-                        Text="Wszyscy uczniowie" />
+                        Text="Wybierz ucznia, aby wyświetlić szczegóły" />
                 </StackLayout>
             </CollectionView.Header>
             <CollectionView.Footer>
@@ -90,11 +127,11 @@
                     <Button
                         Style="{StaticResource ButtonOutline}"
                         Text="Load More" />
-                        <!--Command="{Binding LoadMoreCommand}"-->
+                    <!--Command="{Binding LoadMoreCommand}"-->
                     <Button
                         Style="{StaticResource ButtonOutline}"
                         Text="Clear" />
-                        <!--Command="{Binding ClearCommand}"-->
+                    <!--Command="{Binding ClearCommand}"-->
                 </StackLayout>
             </CollectionView.Footer>
         </CollectionView>

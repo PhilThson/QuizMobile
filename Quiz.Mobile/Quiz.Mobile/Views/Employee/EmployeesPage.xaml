@@ -4,12 +4,14 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:base="clr-namespace:Quiz.Mobile.Views.Base"
     xmlns:model="clr-namespace:Quiz.Mobile.Shared.ViewModels"
     xmlns:ctb="clr-namespace:Quiz.Mobile.CommunityToolkit.Behaviours"
     xmlns:ctc="clr-namespace:Quiz.Mobile.CommunityToolkit.Converters"
     xmlns:fonts="clr-namespace:Quiz.Mobile.Helpers.Icons"
     x:DataType="viewmodels:EmployeesViewModel"
     Title="{Binding Title}"
+    x:Name="employeesPage"
     BackgroundColor="{AppThemeBinding
         Dark={StaticResource WindowBackgroundColorDark},
         Light={StaticResource WindowBackgroundColor}}"
@@ -26,8 +28,8 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddCommand}"/>
-        <ToolbarItem Text="Logout"/>
+        <ToolbarItem Text="Dodaj pracownika"
+                     Command="{Binding AddCommand}"/>
     </ContentPage.ToolbarItems>
 
     <ListView
@@ -53,37 +55,16 @@
             <DataTemplate x:DataType="model:EmployeeViewModel">
                 <ViewCell>
                     <ViewCell.ContextActions>
-                        <!--Ze wzgledu na to że RemoveCommand jest zbindowane w ViewModelu,
-                        a nie w Coffee, to naley użyć Relative Path!
-                        dzieki temu można spojrzeć poza obecny BindingContext
-                        Domyślnie Binding ustawia Source na siebie,
-                        a Path na to co wpisze po Binding -->
                         <!--<MenuItem Text="Delete"
                                   Command="{Binding
-                                    Source={x:Reference InternetPage},
+                                    Source={x:Reference employeesPage},
                                     Path=BindingContext.RemoveCommand}"
                                   CommandParameter="{Binding .}"
                                   IsDestructive="True"
                                   />-->
                     </ViewCell.ContextActions>
-
-                    <Grid Padding="10">
-                        <Frame Style="{StaticResource BaseCard}">
-                            <StackLayout>
-                                <StackLayout>
-                                    <Label Text="{Binding FirstName}"
-                                           VerticalOptions="Center"
-                                           FontSize="40"/>
-                                    <Label VerticalOptions="Center"
-                                           FontSize="Large"
-                                           Text="{Binding LastName}"/>
-                                    <Label Text="{Binding PersonalNumber}"
-                                           VerticalOptions="Center"
-                                           FontSize="Small"/>
-                                </StackLayout>
-                            </StackLayout>
-                        </Frame>
-                    </Grid>
+                    <!--Wykorzystanie wcześniej przygotowanego grida!-->
+                    <base:PersonCard/>
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>

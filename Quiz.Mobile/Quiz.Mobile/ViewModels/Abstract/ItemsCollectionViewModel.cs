@@ -15,7 +15,8 @@ namespace Quiz.Mobile.ViewModels.Abstract
         private ObservableRangeCollection<T> _List;
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand AddCommand { get; }
-        public IAsyncCommand<object> RemoveCommand { get; }
+        public IAsyncCommand<T> RemoveCommand { get; }
+        public IAsyncCommand<T> SelectedCommand { get; }
         #endregion
 
         #region Konstruktor
@@ -23,7 +24,8 @@ namespace Quiz.Mobile.ViewModels.Abstract
         {
             RefreshCommand = new AsyncCommand(Refresh);
             AddCommand = new AsyncCommand(Add);
-            RemoveCommand = new AsyncCommand<object>(Remove);
+            RemoveCommand = new AsyncCommand<T>(Remove);
+            SelectedCommand = new AsyncCommand<T>(Selected);
         }
         #endregion
 
@@ -49,8 +51,9 @@ namespace Quiz.Mobile.ViewModels.Abstract
         #region Deklaracje wymaganych metod
         protected abstract Task Refresh();
         protected abstract Task Add();
-        protected abstract Task Remove(object id);
+        protected abstract Task Remove(T obj);
         protected abstract Task Load();
+        protected abstract Task Selected(T obj);
         #endregion
     }
 }

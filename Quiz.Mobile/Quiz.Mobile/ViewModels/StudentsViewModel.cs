@@ -17,22 +17,8 @@ namespace Quiz.Mobile.ViewModels
         public StudentsViewModel()
         {
             base.Title = "Wszyscy uczniowie";
-            SelectedCommand = new AsyncCommand<object>(Selected);
-            FavoriteCommand = new AsyncCommand<StudentViewModel>(Favorite);
+            FavoriteCommand = new AsyncCommand<object>(Favorite);
             _studentService = DependencyService.Get<IStudentService>(DependencyFetchTarget.GlobalInstance);
-        }
-
-        protected override async Task Add()
-        {
-            //var route = nameof(AddEmployeePage);
-            //await AppShell.Current.GoToAsync(route);
-        }
-
-        private async Task Remove(StudentViewModel student)
-        {
-            //teraz można odwołać się do metody z zarejestrowanego serwisu
-            await _studentService.RemoveStudent(student.Id);
-            await Refresh();
         }
 
         protected async override Task Refresh()
@@ -62,25 +48,32 @@ namespace Quiz.Mobile.ViewModels
             set => SetProperty(ref _SelectedStudent, value);
         }
 
-        public AsyncCommand<object> SelectedCommand { get; }
-
-        async Task Selected(object args)
+        protected override async Task Selected(StudentViewModel student)
         {
-            //przesłanie argumentu dzięki EventToCommand 
-            //oraz ItemSelectedEventArgsConverter
-            var student = args as StudentViewModel;
+            //var student = obj as StudentViewModel;
             if (student == null)
                 return;
 
             //var route = $"{nameof(StudentDetailsPage)}?StudentId={student.Id}";
             //await Shell.Current.GoToAsync(route);
-
-            SelectedStudent = null;
+            await Application.Current.MainPage.DisplayAlert(
+                "Wybrano:", $"{student.FirstName} {student.LastName}", "OK");
         }
 
-        protected override Task Remove(object id)
+        protected override async Task Add()
         {
-            throw new NotImplementedException();
+            //var route = nameof(AddEmployeePage);
+            //await AppShell.Current.GoToAsync(route);
+            await Application.Current.MainPage.DisplayAlert(
+                "Dodawanie", "", "OK");
+        }
+
+        protected override async Task Remove(StudentViewModel student)
+        {
+            //await _studentService.RemoveStudent(student.Id);
+            //await Refresh();
+            await Task.Delay(1000);
+            DependencyService.Get<IToast>()?.MakeToast("Usunięto!");
         }
 
         protected override async Task Load()
@@ -89,13 +82,13 @@ namespace Quiz.Mobile.ViewModels
             List = new ObservableRangeCollection<StudentViewModel>(students);
         }
 
-        public AsyncCommand<StudentViewModel> FavoriteCommand { get; }
+        public AsyncCommand<object> FavoriteCommand { get; }
 
-        async Task Favorite(StudentViewModel student)
+        protected async Task Favorite(object obj)
         {
-            if (student == null)
+            if (obj == null)
                 return;
-
+            var student = obj as StudentViewModel;
             await Application.Current.MainPage.DisplayAlert(
                 "Favorite", student.FirstName, "OK");
             //await AppShell.Current.GoToAsync(nameof(AddStudentPage));

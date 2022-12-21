@@ -19,7 +19,6 @@ namespace Quiz.Mobile.ViewModels
         public EmployeesViewModel()
         {
             base.Title = "Wszyscy pracownicy";
-            SelectedCommand = new AsyncCommand<object>(Selected);
             _employeeService = DependencyService.Get<IEmployeeService>(DependencyFetchTarget.GlobalInstance);
         }
 
@@ -27,13 +26,6 @@ namespace Quiz.Mobile.ViewModels
         {
             var route = nameof(AddEmployeePage);
             await AppShell.Current.GoToAsync(route);
-        }
-
-        private async Task Remove(EmployeeViewModel employee)
-        {
-            //teraz można odwołać się do metody z zarejestrowanego serwisu
-            await _employeeService.RemoveEmployee(employee.Id);
-            await Refresh();
         }
 
         protected async override Task Refresh()
@@ -63,13 +55,11 @@ namespace Quiz.Mobile.ViewModels
             set => SetProperty(ref _SelectedEmployee, value);
         }
 
-        public AsyncCommand<object> SelectedCommand { get; }
-
-        async Task Selected(object args)
+        protected override async Task Selected(EmployeeViewModel employee)
         {
             //przesłanie argumentu dzięki EventToCommand 
             //oraz ItemSelectedEventArgsConverter
-            var employee = args as EmployeeViewModel;
+            //var employee = obj as EmployeeViewModel;
             if (employee == null)
                 return;
 
@@ -79,9 +69,11 @@ namespace Quiz.Mobile.ViewModels
             SelectedEmployee = null;
         }
 
-        protected override Task Remove(object id)
+        protected override async Task Remove(EmployeeViewModel employee)
         {
-            throw new NotImplementedException();
+            //await _employeeService.RemoveEmployee(employee.Id);
+            //await Refresh();
+            await Task.Delay(1000);
         }
 
         protected override async Task Load()

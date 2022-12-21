@@ -3,15 +3,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Quiz.Mobile.Views.Base.PersonCard"
     xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
-    xmlns:models="clr-namespace:Quiz.Mobile.Shared.ViewModels"
-    x:DataType="models:StudentViewModel">
+    xmlns:models="clr-namespace:Quiz.Mobile.Models"
+    x:DataType="models:Person"
+    Padding="10">
     <Frame Style="{StaticResource PersonCard}">
         <StackLayout Orientation="Horizontal">
             <Image WidthRequest="66">
                 <Image.Source>
                     <FontImageSource FontFamily="MaterialDesignIcons"
                         Glyph="{x:Static icons:MaterialDesignIconFont.Account}"
-                        Color="Black" />
+                        Color="{AppThemeBinding
+                            Dark={StaticResource CardBackground},
+                            Light={StaticResource CardBackgroundDark}}"
+                        />
                 </Image.Source>
             </Image>
             <StackLayout VerticalOptions="Center">
