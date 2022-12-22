@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Student.StudentDetailsPage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    x:DataType="viewmodels:StudentDetailsViewModel"
+    Shell.PresentationMode="ModalAnimated"
+    Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:StudentDetailsViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <Label Text="{Binding Item.FirstName, StringFormat='Imię: {0}'}"
+                   HorizontalOptions="Center"
+                   Style="{StaticResource LabelMedium}"/>
+            <Label Text="{Binding Item.LastName, StringFormat='Nazwisko: {0}'}"
+                   HorizontalOptions="Center"
+                   Style="{StaticResource LabelMedium}"/>
+            <Label HorizontalOptions="StartAndExpand"
+                   Text="{Binding Item.PersonalNumber, StringFormat='PESEL: {0}'}"/>
+            <Label HorizontalOptions="StartAndExpand"
+                   Text="{Binding Item.Branch.Name, StringFormat='Nazwa dddziału: {0}'}"/>
+            <Label HorizontalOptions="StartAndExpand"
+                   Text="{Binding Item.Branch.Description, StringFormat='Opis dddziału: {0}'}"/>
+
+            <Button Command="{Binding NavigateBackCommand}" Text="Zamknij"
+                    Style="{StaticResource ButtonOutline}"/>
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>
+

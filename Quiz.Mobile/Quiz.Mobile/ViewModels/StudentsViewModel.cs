@@ -6,7 +6,7 @@ using Quiz.Mobile.CommunityToolkit.Commands;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using Quiz.Mobile.CommunityToolkit;
-
+using Quiz.Mobile.Views.Student;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -50,14 +50,11 @@ namespace Quiz.Mobile.ViewModels
 
         protected override async Task Selected(StudentViewModel student)
         {
-            //var student = obj as StudentViewModel;
             if (student == null)
                 return;
 
-            //var route = $"{nameof(StudentDetailsPage)}?StudentId={student.Id}";
-            //await Shell.Current.GoToAsync(route);
-            await Application.Current.MainPage.DisplayAlert(
-                "Wybrano:", $"{student.FirstName} {student.LastName}", "OK");
+            var route = $"{nameof(StudentDetailsPage)}?StudentId={student.Id}";
+            await Shell.Current.GoToAsync(route);
         }
 
         protected override async Task Add()

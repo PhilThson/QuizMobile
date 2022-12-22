@@ -9,62 +9,32 @@ using Quiz.Mobile.Helpers;
 using System.Net.Http.Headers;
 using Quiz.Mobile.Shared.DTOs;
 using System.Text;
+using Xamarin.Forms;
 
 namespace Quiz.Mobile.Services
 {
     public class EmployeeService : IEmployeeService
 	{
-        private HttpClient _client;
-        protected HttpClient Client
-        {
-            get
-            {
-                if (_client == null)
-                {
-                    var url = $"{QuizApiSettings.Host}{QuizApiSettings.MainController}/";
-                    _client = new HttpClient
-                    {
-                        BaseAddress = new Uri(url)
-                    };
-                    _client.DefaultRequestHeaders.Accept.Clear();
-                    _client.DefaultRequestHeaders.Accept.Add(
-                        new MediaTypeWithQualityHeaderValue("application/json"));
-                }
-                return _client;
-            }
-        }
+        private readonly IHttpClientService _client;
 
         public EmployeeService()
         {
-
+            _client = DependencyService.Get<IHttpClientService>(DependencyFetchTarget.GlobalInstance);
         }
 
         public async Task<List<EmployeeViewModel>> GetAllEmployees()
         {
-            return await GetAllItems<EmployeeViewModel>(QuizApiSettings.Employees);
+            return await _client.GetAllItems<EmployeeViewModel>();
         }
 
         public async Task<EmployeeViewModel> GetEmployeeById(int id)
         {
-            var url = $"{QuizApiSettings.Employees}/{id}";
-            var response = await Client.GetAsync(url);
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-                throw new HttpRequestException(content);
-
-            return JsonConvert.DeserializeObject<EmployeeViewModel>(content);
+            return await _client.GetItemById<EmployeeViewModel>(id);
         }
 
         public async Task AddEmployee(CreateEmployeeDto employeeDto)
         {
-            var dataToSend = new StringContent(JsonConvert.SerializeObject(employeeDto),
-                Encoding.UTF8, "application/json");
-            var response = await Client.PostAsync(QuizApiSettings.Employees,
-                dataToSend);
-            var content = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
-                throw new HttpRequestException(content);
+            await _client.AddItem<CreateEmployeeDto>(employeeDto);
         }
 
         public async Task RemoveEmployee(int employeeId)
@@ -74,22 +44,12 @@ namespace Quiz.Mobile.Services
 
         public async Task<List<JobDto>> GetAllJobs()
         {
-            return await GetAllItems<JobDto>(QuizApiSettings.Jobs);
+            return await _client.GetAllItems<JobDto>();
         }
 
         public async Task<List<PositionDto>> GetAllPositions()
         {
-            return await GetAllItems<PositionDto>(QuizApiSettings.Positions);
-        }
-
-        private async Task<List<T>> GetAllItems<T>(string endpoint)
-        {
-            var response = await Client.GetAsync(endpoint);
-            var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-                throw new HttpRequestException(content);
-
-            return JsonConvert.DeserializeObject<List<T>>(content);
+            return await _client.GetAllItems<PositionDto>();
         }
     }
 }

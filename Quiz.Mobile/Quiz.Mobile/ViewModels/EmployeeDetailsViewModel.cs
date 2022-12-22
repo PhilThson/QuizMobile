@@ -30,42 +30,6 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
-        public string FirstName
-        {
-            get => Item.FirstName;
-            set
-            {
-                if (value != Item.FirstName)
-                {
-                    Item.FirstName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string LastName
-        {
-            get => Item.LastName;
-            set
-            {
-                if (value != Item.LastName)
-                {
-                    Item.LastName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string PersonalNumber
-        {
-            get => Item.PersonalNumber;
-            set
-            {
-                if (value != Item.PersonalNumber)
-                {
-                    Item.PersonalNumber = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         #endregion
 
         #region Konstruktor

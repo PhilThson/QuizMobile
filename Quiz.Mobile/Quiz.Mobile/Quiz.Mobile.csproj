@@ -40,6 +40,7 @@
     <None Remove="Helpers\Behaviors\" />
     <None Remove="Views\Base\" />
     <None Remove="Resources\Fonts\materialdesignicons-webfont.ttf" />
+    <None Remove="Helpers\Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -62,6 +63,7 @@
     <Folder Include="Helpers\Behaviors\" />
     <Folder Include="Views\Student\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Helpers\Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\RegistrationPage.xaml.cs">
