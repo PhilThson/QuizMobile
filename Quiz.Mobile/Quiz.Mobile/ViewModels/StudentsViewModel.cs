@@ -59,10 +59,10 @@ namespace Quiz.Mobile.ViewModels
 
         protected override async Task Add()
         {
-            //var route = nameof(AddEmployeePage);
-            //await AppShell.Current.GoToAsync(route);
-            await Application.Current.MainPage.DisplayAlert(
-                "Dodawanie", "", "OK");
+            var route = nameof(AddStudentPage);
+            await AppShell.Current.GoToAsync(route);
+            //await Application.Current.MainPage.DisplayAlert(
+            //    "Dodawanie", "", "OK");
         }
 
         protected override async Task Remove(StudentViewModel student)

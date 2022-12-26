@@ -35,7 +35,6 @@
     <ListView
             CachingStrategy="RecycleElement"
             ItemsSource="{Binding List}"
-            RowHeight="100"
             IsPullToRefreshEnabled="True"
             IsRefreshing="{Binding IsBusy, Mode=OneWay}"
             RefreshCommand="{Binding RefreshCommand}"
@@ -54,15 +53,15 @@
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="model:EmployeeViewModel">
                 <ViewCell>
-                    <ViewCell.ContextActions>
-                        <!--<MenuItem Text="Delete"
+                    <!--<ViewCell.ContextActions>
+                        <MenuItem Text="Delete"
                                   Command="{Binding
                                     Source={x:Reference employeesPage},
                                     Path=BindingContext.RemoveCommand}"
                                   CommandParameter="{Binding .}"
                                   IsDestructive="True"
-                                  />-->
-                    </ViewCell.ContextActions>
+                                  />
+                    </ViewCell.ContextActions>-->
                     <!--Wykorzystanie wcześniej przygotowanego grida!-->
                     <base:PersonCard/>
                 </ViewCell>
@@ -78,7 +77,8 @@
             </StackLayout>
         </ListView.Header>
         <ListView.Footer>
-            <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand">
                 <Button
                     Style="{StaticResource ButtonOutline}"
                     Text="Odśwież"

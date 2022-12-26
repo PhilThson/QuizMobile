@@ -18,6 +18,7 @@ namespace Quiz.Mobile
             Routing.RegisterRoute(nameof(EmployeeDetailsPage), typeof(EmployeeDetailsPage));
             Routing.RegisterRoute(nameof(AddEmployeePage), typeof(AddEmployeePage));
             Routing.RegisterRoute(nameof(StudentDetailsPage), typeof(StudentDetailsPage));
+            Routing.RegisterRoute(nameof(AddStudentPage), typeof(AddStudentPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

@@ -217,7 +217,7 @@ namespace Quiz.Mobile.ViewModels
             {
                 IsBusy = false;
                 DependencyService.Get<IToast>()?.MakeToast(
-                    $"Nie udało się pobrać pracownika. Odpowiedź serwera: {e.Message}");
+                    $"Nie udało się dodać pracownika. Odpowiedź serwera: {e.Message}");
             }
         }
 

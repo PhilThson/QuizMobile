@@ -21,25 +21,24 @@ namespace Quiz.Mobile.Services
             _client = DependencyService.Get<IHttpClientService>(DependencyFetchTarget.GlobalInstance);
         }
 
-        public async Task<List<StudentViewModel>> GetAllStudents()
-        {
-            return await _client.GetAllItems<StudentViewModel>();
-        }
+        public async Task<List<StudentViewModel>> GetAllStudents() =>
+            await _client.GetAllItems<StudentViewModel>();
 
-        public async Task<StudentViewModel> GetStudentById(int id)
-        {
-            return await _client.GetItemById<StudentViewModel>(id);
-        }
+        public async Task<StudentViewModel> GetStudentById(int id) =>
+            await _client.GetItemById<StudentViewModel>(id);
 
-        public Task AddStudent(CreateStudentDto studentDto)
+        public async Task AddStudent(CreateStudentDto studentDto)
         {
-            throw new NotImplementedException();
+            await _client.AddItem<CreateStudentDto>(studentDto);
         }
 
         public Task RemoveStudent(int studentId)
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<BranchDto>> GetAllBranches() =>
+            await _client.GetAllItems<BranchDto>();
     }
 }
 

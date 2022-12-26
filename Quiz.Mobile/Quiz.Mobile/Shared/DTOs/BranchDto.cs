@@ -9,4 +9,3 @@ namespace Quiz.Mobile.Shared.DTOs
         public string Teacher { get; set; }
     }
 }
-

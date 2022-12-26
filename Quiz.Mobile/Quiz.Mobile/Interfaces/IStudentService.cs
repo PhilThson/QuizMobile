@@ -12,6 +12,7 @@ namespace Quiz.Mobile.Interfaces
         Task<StudentViewModel> GetStudentById(int id);
         Task RemoveStudent(int studentId);
         Task AddStudent(CreateStudentDto studentDto);
+        Task<List<BranchDto>> GetAllBranches();
     }
 }
 

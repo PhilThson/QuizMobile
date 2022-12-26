@@ -123,7 +123,8 @@
                 </StackLayout>
             </CollectionView.Header>
             <CollectionView.Footer>
-                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="CenterAndExpand" >
                     <Button
                         Style="{StaticResource ButtonOutline}"
                         Text="Load More" />

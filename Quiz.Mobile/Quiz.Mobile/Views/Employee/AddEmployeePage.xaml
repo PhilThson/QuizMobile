@@ -38,7 +38,7 @@
                     <Entry.Behaviors>
                         <behaviors:PersonalNumberValidatorBehavior
                         IsValid="{Binding Source={x:Reference addEmployee},
-                            Path=BindingContext.IsPersonalNumberValid}}"/>
+                            Path=BindingContext.IsPersonalNumberValid}"/>
                     </Entry.Behaviors>
                 </Entry>
 
@@ -51,7 +51,7 @@
                     <Entry.Behaviors>
                         <behaviors:SalaryValidatorBehavior
                         IsValid="{Binding Source={x:Reference addEmployee},
-                            Path=BindingContext.IsSalaryValid}}"/>
+                            Path=BindingContext.IsSalaryValid}"/>
                     </Entry.Behaviors>
                 </Entry>
 
@@ -60,7 +60,7 @@
                     <Entry.Behaviors>
                         <behaviors:EmailValidatorBehavior
                         IsValid="{Binding Source={x:Reference addEmployee},
-                            Path=BindingContext.IsEmailValid}}"/>
+                            Path=BindingContext.IsEmailValid}"/>
                     </Entry.Behaviors>
                 </Entry>
 

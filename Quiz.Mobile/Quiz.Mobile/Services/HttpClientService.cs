@@ -46,6 +46,8 @@ namespace Quiz.Mobile.Services
             endpoints.Add(typeof(CreateEmployeeDto), QuizApiSettings.Employees);
             endpoints.Add(typeof(JobDto), QuizApiSettings.Jobs);
             endpoints.Add(typeof(PositionDto), QuizApiSettings.Positions);
+            endpoints.Add(typeof(BranchDto), QuizApiSettings.Branches);
+            endpoints.Add(typeof(CreateStudentDto), QuizApiSettings.Students);
         }
 
         public async Task<List<T>> GetAllItems<T>()
