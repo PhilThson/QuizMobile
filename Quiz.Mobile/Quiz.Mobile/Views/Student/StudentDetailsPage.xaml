@@ -6,11 +6,19 @@
     xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
     x:DataType="viewmodels:StudentDetailsViewModel"
     Shell.PresentationMode="ModalAnimated"
-    Title="{Binding Title}">
+    Title="{Binding Title}"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
 
     <ContentPage.BindingContext>
         <viewmodels:StudentDetailsViewModel/>
     </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+    </ContentPage.Resources>
 
     <ContentPage.Content>
         <StackLayout Padding="20">

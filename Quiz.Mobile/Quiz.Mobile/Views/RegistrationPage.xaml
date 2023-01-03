@@ -5,7 +5,7 @@
     x:Class="Quiz.Mobile.Views.RegistrationPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Let's register!"
+            <Label Text="Zarejestruj!"
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand"
                    />

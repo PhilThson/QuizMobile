@@ -39,30 +39,26 @@
             IsRefreshing="{Binding IsBusy, Mode=OneWay}"
             RefreshCommand="{Binding RefreshCommand}"
             Style="{StaticResource BaseListView}"
-            SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
         >
-        <!--SelectedItem="{Binding SelectedCoffee, Mode=TwoWay}"-->
+            <!--SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"-->
         <ListView.Behaviors>
             <ctb:EventToCommandBehavior
                 EventName="ItemSelected"
                 Command="{Binding SelectedCommand}"
                 EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
-            <!--przekazanie parametru przy pomocy konwertera-->
         </ListView.Behaviors>
 
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="model:EmployeeViewModel">
                 <ViewCell>
                     <!--<ViewCell.ContextActions>
-                        <MenuItem Text="Delete"
-                                  Command="{Binding
-                                    Source={x:Reference employeesPage},
-                                    Path=BindingContext.RemoveCommand}"
+                        <MenuItem Text="Usuń"
+                                  Command="{Binding Source={x:Reference employeesPage},
+                                  Path=BindingContext.RemoveCommand}"
                                   CommandParameter="{Binding .}"
                                   IsDestructive="True"
                                   />
                     </ViewCell.ContextActions>-->
-                    <!--Wykorzystanie wcześniej przygotowanego grida!-->
                     <base:PersonCard/>
                 </ViewCell>
             </DataTemplate>
@@ -78,7 +74,7 @@
         </ListView.Header>
         <ListView.Footer>
             <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="CenterAndExpand">
+                         VerticalOptions="CenterAndExpand">
                 <Button
                     Style="{StaticResource ButtonOutline}"
                     Text="Odśwież"

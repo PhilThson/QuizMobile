@@ -6,7 +6,7 @@
     xmlns:models="clr-namespace:Quiz.Mobile.Models"
     x:DataType="models:Person"
     Padding="10">
-    <Frame Style="{StaticResource PersonCard}">
+    <Frame Style="{StaticResource BaseCard}">
         <StackLayout Orientation="Horizontal">
             <Image WidthRequest="66">
                 <Image.Source>

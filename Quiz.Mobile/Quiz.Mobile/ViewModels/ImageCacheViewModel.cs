@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Quiz.Mobile.ViewModels.Abstract;
 using Command = Xamarin.Forms.Command;
 
 namespace Quiz.Mobile.ViewModels

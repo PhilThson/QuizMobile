@@ -1,15 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using Quiz.Mobile.Models;
 
 namespace Quiz.Mobile.Shared.ViewModels
 {
-	public class DifficultyViewModel
+	public class DifficultyViewModel : DictionaryItem
 	{
-        public byte Id { get; set; }
-        [DisplayName("Nazwa")]
-        public string Name { get; set; }
-        [DisplayName("Opis")]
-        public string? Description { get; set; }
+
     }
 }
 

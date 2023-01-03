@@ -16,9 +16,6 @@ namespace Quiz.Mobile
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
-            DependencyService.Register<IEmployeeService, EmployeeService>();
-            DependencyService.Register<IStudentService, StudentService>();
             DependencyService.Register<IHttpClientService, HttpClientService>();
 
             //nadpisanie motywu zgodnie z preferencjami

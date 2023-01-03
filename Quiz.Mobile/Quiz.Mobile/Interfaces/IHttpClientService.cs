@@ -8,7 +8,7 @@ namespace Quiz.Mobile.Interfaces
 	{
         Task<List<T>> GetAllItems<T>();
         Task<T> GetItemById<T>(object id);
-        Task RemoveItemById(object id);
-        Task AddItem<T>(T item);
+        Task RemoveItemById<T>(object id);
+        Task AddItem<T>(T item, string dict = null);
     }
 }

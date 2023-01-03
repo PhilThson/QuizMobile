@@ -9,7 +9,7 @@ using Quiz.Mobile.Models;
 using Quiz.Mobile.Services;
 using Quiz.Mobile.CommunityToolkit;
 
-namespace Quiz.Mobile.ViewModels
+namespace Quiz.Mobile.ViewModels.Abstract
 {
     //klasa bazowego ViewModelu z biblioteki CommunityToolkit
     public abstract class BaseViewModel : ObservableObject

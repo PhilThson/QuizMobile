@@ -12,59 +12,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Resources\" />
-    <None Remove="Helpers\" />
-    <None Remove="Helpers\Icons\" />
-    <None Remove="Resources\Fonts\CustomFont.ttf" />
-    <None Remove="CommunityToolkit\" />
-    <None Remove="CommunityToolkit\Commands\" />
-    <None Remove="CommunityToolkit\Interfaces\" />
-    <None Remove="Interfaces\" />
-    <None Remove="Resources\Images\" />
-    <None Remove="Resources\Fonts\fa-brands-400.ttf" />
-    <None Remove="Resources\Fonts\fa-regular-400.ttf" />
-    <None Remove="Resources\Fonts\fa-solid-900.ttf" />
-    <None Remove="Resources\Fonts\Solid-900.otf" />
-    <None Remove="Views\Employee\" />
-    <None Remove="Views\Student\" />
-    <None Remove="ViewModels\Abstract\" />
-    <None Remove="CommunityToolkit\Behaviours\" />
-    <None Remove="Shared\" />
-    <None Remove="Shared\ViewModels\" />
-    <None Remove="Shared\DTOs\" />
-    <None Remove="Newtonsoft.Json" />
-    <None Remove="CommunityToolkit\Converters\" />
-    <None Remove="CommunityToolkit\Extensions\" />
-    <None Remove="Xamarin.CommunityToolkit" />
-    <None Remove="Helpers\Behaviors\" />
-    <None Remove="Views\Base\" />
-    <None Remove="Resources\Fonts\materialdesignicons-webfont.ttf" />
-    <None Remove="Helpers\Exceptions\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Helpers\Icons\" />
-    <Folder Include="CommunityToolkit\" />
-    <Folder Include="CommunityToolkit\Commands\" />
-    <Folder Include="CommunityToolkit\Interfaces\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Resources\Images\" />
-    <Folder Include="Views\Employee\" />
-    <Folder Include="Views\Student\" />
-    <Folder Include="ViewModels\Abstract\" />
-    <Folder Include="CommunityToolkit\Behaviours\" />
-    <Folder Include="Shared\" />
-    <Folder Include="Shared\ViewModels\" />
-    <Folder Include="Shared\DTOs\" />
-    <Folder Include="CommunityToolkit\Converters\" />
-    <Folder Include="CommunityToolkit\Extensions\" />
-    <Folder Include="Helpers\Behaviors\" />
-    <Folder Include="Views\Student\" />
-    <Folder Include="Views\Base\" />
-    <Folder Include="Helpers\Exceptions\" />
-  </ItemGroup>
+ 
   <ItemGroup>
     <Compile Update="Views\RegistrationPage.xaml.cs">
       <DependentUpon>RegistrationPage.xaml</DependentUpon>
@@ -83,5 +31,13 @@
     <EmbeddedResource Include="Resources\Fonts\fa-solid-900.ttf" />
     <EmbeddedResource Include="Resources\Fonts\Solid-900.otf" />
     <EmbeddedResource Include="Resources\Fonts\materialdesignicons-webfont.ttf" />
+    <EmbeddedResource Include="Resources\Images\school.png" />
+    <EmbeddedResource Include="Resources\Images\school_about.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\Dictionary\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Dictionary\" />
   </ItemGroup>
 </Project>

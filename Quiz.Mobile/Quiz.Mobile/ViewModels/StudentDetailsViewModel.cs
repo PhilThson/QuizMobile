@@ -13,7 +13,7 @@ namespace Quiz.Mobile.ViewModels
     public class StudentDetailsViewModel : SingleItemViewModel<StudentViewModel>
     {
         #region Prywatne pola
-        private readonly IStudentService _studentService;
+        private readonly IHttpClientService _client;
         #endregion
 
         #region Właściwości
@@ -37,7 +37,8 @@ namespace Quiz.Mobile.ViewModels
         {
             Item = new StudentViewModel();
             Title = "Szczegóły ucznia";
-            _studentService = DependencyService.Get<IStudentService>();
+            _client = DependencyService.Get<IHttpClientService>(
+                DependencyFetchTarget.GlobalInstance);
         }
         #endregion
 
@@ -52,7 +53,7 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 int.TryParse(_StudentId, out var id);
-                Item = await _studentService.GetStudentById(id);
+                Item = await _client.GetItemById<StudentViewModel>(id);
             }
             catch (Exception e)
             {

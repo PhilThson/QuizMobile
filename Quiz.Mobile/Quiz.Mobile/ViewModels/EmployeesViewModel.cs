@@ -14,12 +14,13 @@ namespace Quiz.Mobile.ViewModels
 {
     public class EmployeesViewModel : ItemsCollectionViewModel<EmployeeViewModel>
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IHttpClientService _client;
 
         public EmployeesViewModel()
         {
             base.Title = "Wszyscy pracownicy";
-            _employeeService = DependencyService.Get<IEmployeeService>(DependencyFetchTarget.GlobalInstance);
+            _client = DependencyService.Get<IHttpClientService>(
+                DependencyFetchTarget.GlobalInstance);
         }
 
         protected override async Task Add()
@@ -35,7 +36,7 @@ namespace Quiz.Mobile.ViewModels
                 IsBusy = true;
                 await Task.Delay(1000);
                 List.Clear();
-                var employees = await _employeeService.GetAllEmployees();
+                var employees = await _client.GetAllItems<EmployeeViewModel>();
                 List.AddRange(employees);
                 IsBusy = false;
                 DependencyService.Get<IToast>()?.MakeToast("Odświeżono");
@@ -44,7 +45,7 @@ namespace Quiz.Mobile.ViewModels
             {
                 IsBusy = false;
                 DependencyService.Get<IToast>()?.MakeToast(
-                    $"Nie udało się pobrać pracownika. Odpowiedź serwera: {e.Message}");
+                    $"Nie udało się pobrać pracowników. Odpowiedź serwera: {e.Message}");
             }
         }
 
@@ -59,7 +60,6 @@ namespace Quiz.Mobile.ViewModels
         {
             //przesłanie argumentu dzięki EventToCommand 
             //oraz ItemSelectedEventArgsConverter
-            //var employee = obj as EmployeeViewModel;
             if (employee == null)
                 return;
 
@@ -78,7 +78,7 @@ namespace Quiz.Mobile.ViewModels
 
         protected override async Task Load()
         {
-            var employees = await _employeeService.GetAllEmployees();
+            var employees = await _client.GetAllItems<EmployeeViewModel>();
             List = new ObservableRangeCollection<EmployeeViewModel>(employees);
         }
     }

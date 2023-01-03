@@ -18,4 +18,3 @@ namespace Quiz.Mobile.iOS
         }
     }
 }
-

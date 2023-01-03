@@ -1,15 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using Quiz.Mobile.Models;
 
 namespace Quiz.Mobile.Shared.ViewModels
 {
-	public class AreaViewModel
+	public class AreaViewModel : DictionaryItem
 	{
-        public byte Id { get; set; }
-        [DisplayName("Nazwa")]
-        public string Name { get; set; }
-        [DisplayName("Opis")]
-        public string? Description { get; set; }
         [DisplayName("Nazwa rozszerzona")]
         public string? ExtendedName { get; set; }
     }

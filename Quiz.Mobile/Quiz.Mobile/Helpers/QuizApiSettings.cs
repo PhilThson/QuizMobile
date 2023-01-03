@@ -14,6 +14,8 @@ namespace Quiz.Mobile.Helpers
         public static string Jobs { get; } = "etaty";
         public static string Positions { get; } = "stanowiska";
         public static string Branches { get; } = "oddzialy";
+        public static string Areas { get; } = "obszary";
+        public static string Difficulties { get; } = "skaleTrudnosci";
     }
 }
 

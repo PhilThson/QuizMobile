@@ -16,17 +16,22 @@
         <viewmodels:LoginViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+        <Style TargetType="Entry" BasedOn="{StaticResource BaseEntry}"/>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
          <StackLayout Padding="40" VerticalOptions="Center"
                      HorizontalOptions="FillAndExpand">
-            <Label Text="Username:"/>
-            <Entry Placeholder="Username"/>
-            <Label Text="Password:"/>
-            <Entry IsPassword="True" Placeholder="Password"/>
-            <Button Text="Login"
+            <Label Text="Nazwa użytkownika:"/>
+            <Entry Placeholder="Wprowadź nazwę użytkownika"/>
+            <Label Text="Hasło:"/>
+            <Entry IsPassword="True" Placeholder="Wprowadź hasło"/>
+            <Button Text="Zaloguj"
                     Command="{Binding LoginCommand}"/>
                     <!--Clicked="Button_Clicked"-->
-            <Label Text="Register" HorizontalOptions="Center">
+            <Label Text="Zarejestruj" HorizontalOptions="Center">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                 </Label.GestureRecognizers>

@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Quiz.Mobile.Interfaces;
 using Quiz.Mobile.CommunityToolkit;
+using Quiz.Mobile.CommunityToolkit.Interfaces;
+using Quiz.Mobile.CommunityToolkit.Commands;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -13,7 +16,8 @@ namespace Quiz.Mobile.ViewModels
     public class EmployeeDetailsViewModel : SingleItemViewModel<EmployeeViewModel>
     {
         #region Prywatne pola
-        private readonly IEmployeeService _employeeService;
+        private readonly IHttpClientService _client;
+        private IAsyncCommand<int> _RemoveCommand;
         #endregion
 
         #region Właściwości
@@ -37,14 +41,19 @@ namespace Quiz.Mobile.ViewModels
 		{
             Item = new EmployeeViewModel();
             Title = "Szczegóły pracownika";
-            _employeeService = DependencyService.Get<IEmployeeService>();
+            _client = DependencyService.Get<IHttpClientService>();
 		}
+        #endregion
+
+        #region Komendy
+        public IAsyncCommand<int> RemoveCommand =>
+            _RemoveCommand ??= new AsyncCommand<int>(RemoveEmployee);
         #endregion
 
         #region Metody
         protected override async Task SaveAndClose()
         {
-            await base.NavigateBack();
+            throw new NotImplementedException();
         }
 
         private async Task LoadEmployee()
@@ -52,7 +61,7 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 int.TryParse(_EmployeeId, out var id);
-                Item = await _employeeService.GetEmployeeById(id);
+                Item = await _client.GetItemById<EmployeeViewModel>(id);
             }
             catch (Exception e)
             {
@@ -63,6 +72,21 @@ namespace Quiz.Mobile.ViewModels
         }
 
         protected override bool CanSave(object arg) => true;
+
+        private async Task RemoveEmployee(int employeeId)
+        {
+            try
+            {
+                await _client.RemoveItemById<EmployeeViewModel>(employeeId);
+                await Application.Current.MainPage.DisplayAlert("Usunięto pracownika",
+                    "", "OK");
+            }
+            catch (HttpRequestException e)
+            {
+                await Application.Current.MainPage.DisplayAlert("Niepowodzenie",
+                    $"Nie udało się usunąć pracownika. '{e.Message}'", "OK");
+            }
+        }
         #endregion
     }
 }

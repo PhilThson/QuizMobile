@@ -41,15 +41,12 @@
         Command="{Binding RefreshCommand}"
         IsRefreshing="{Binding IsBusy, Mode=OneWay}"
         >
-        <!--Style="{StaticResource BaseRefreshView}"-->
-        <!--SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"-->
 
         <CollectionView
             BackgroundColor="Transparent"
             ItemSizingStrategy="MeasureAllItems"
             ItemsLayout="VerticalList"
             ItemsSource="{Binding List}"
-            RemainingItemsThreshold="1"
             SelectionMode="Single"
             SelectedItem="{Binding SelectedStudent}"
             SelectionChangedCommand="{Binding SelectedCommand}"
@@ -57,7 +54,8 @@
                 Source={x:Reference collectionView}}"
             x:Name="collectionView"
             >
-            <!--RemainingItemsThresholdReachedCommand="{Binding DelayLoadMoreCommand}"-->
+            <!--RemainingItemsThreshold="1"
+            RemainingItemsThresholdReachedCommand="{Binding DelayLoadMoreCommand}"-->
             <CollectionView.EmptyView>
                 <StackLayout Padding="12">
                     <Label HorizontalOptions="Center" Text="Brak uczniów do wyświetlenia" />
@@ -122,19 +120,19 @@
                         Text="Wybierz ucznia, aby wyświetlić szczegóły" />
                 </StackLayout>
             </CollectionView.Header>
-            <CollectionView.Footer>
+            <!--<CollectionView.Footer>
                 <StackLayout Orientation="Horizontal"
                              HorizontalOptions="CenterAndExpand" >
                     <Button
                         Style="{StaticResource ButtonOutline}"
+                        Command="{Binding LoadMoreCommand}"
                         Text="Load More" />
-                    <!--Command="{Binding LoadMoreCommand}"-->
                     <Button
                         Style="{StaticResource ButtonOutline}"
+                        Command="{Binding ClearCommand}"
                         Text="Clear" />
-                    <!--Command="{Binding ClearCommand}"-->
                 </StackLayout>
-            </CollectionView.Footer>
+            </CollectionView.Footer>-->
         </CollectionView>
     </RefreshView>
 </ContentPage>

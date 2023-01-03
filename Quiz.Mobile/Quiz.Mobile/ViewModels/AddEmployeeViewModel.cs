@@ -8,12 +8,13 @@ using Quiz.Mobile.CommunityToolkit;
 using System.Diagnostics;
 using System.Net.Http;
 using Xamarin.CommunityToolkit.Extensions;
+using Quiz.Mobile.Helpers.Exceptions;
 
 namespace Quiz.Mobile.ViewModels
 {
     public class AddEmployeeViewModel : SingleItemViewModel<CreateEmployeeDto>
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IHttpClientService _client;
 
         public AddEmployeeViewModel()
         {
@@ -23,7 +24,7 @@ namespace Quiz.Mobile.ViewModels
                 DateOfBirth = DateTime.Now.Date.AddYears(-20),
                 DateOfEmployment = DateTime.Now.Date
             };
-            _employeeService = DependencyService.Get<IEmployeeService>();
+            _client = DependencyService.Get<IHttpClientService>();
 
             this.PropertyChanged +=
                 (_, __) => SaveAndCloseCommand.RaiseCanExecuteChanged();
@@ -207,7 +208,7 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 IsBusy = true;
-                await _employeeService.AddEmployee(Item);
+                await _client.AddItem<CreateEmployeeDto>(Item);
                 IsBusy = false;
                 DependencyService.Get<IToast>()?.MakeToast("Poprawnie dodano pracownika!");
                 await Task.Delay(2000);
@@ -216,8 +217,14 @@ namespace Quiz.Mobile.ViewModels
             catch (HttpRequestException e)
             {
                 IsBusy = false;
-                DependencyService.Get<IToast>()?.MakeToast(
-                    $"Nie udało się dodać pracownika. Odpowiedź serwera: {e.Message}");
+                await Application.Current.MainPage.DisplayAlert("Dodawanie pracownika",
+                    $"Nie udało się dodać pracownika. Odpowiedź serwera: {e.Message}", "OK");
+            }
+            catch (DataNotFoundException e)
+            {
+                IsBusy = false;
+                await Application.Current.MainPage.DisplayAlert(
+                    "Dodawanie", e.Message, "OK");
             }
         }
 
@@ -229,7 +236,7 @@ namespace Quiz.Mobile.ViewModels
         {
             try
             {
-                var jobs = await _employeeService.GetAllJobs();
+                var jobs = await _client.GetAllItems<JobDto>();
                 Jobs = new ObservableRangeCollection<JobDto>(jobs);
             }
             catch (Exception e)
@@ -243,7 +250,7 @@ namespace Quiz.Mobile.ViewModels
         {
             try
             {
-                var positions = await _employeeService.GetAllPositions();
+                var positions = await _client.GetAllItems<PositionDto>();
                 Positions = new ObservableRangeCollection<PositionDto>(positions);
             }
             catch (Exception e)

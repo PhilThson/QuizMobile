@@ -16,8 +16,8 @@ namespace Quiz.Mobile.Services
 {
     public class HttpClientService : IHttpClientService
     {
-        private readonly IDictionary<Type, string> endpoints =
-            new Dictionary<Type, string>();
+        #region Pola i właściwości
+        private readonly IDictionary<Type, string> endpoints;
 
         private HttpClient _client;
         protected HttpClient Client
@@ -38,22 +38,21 @@ namespace Quiz.Mobile.Services
                 return _client;
             }
         }
+        #endregion
 
+        #region Konstruktor
         public HttpClientService()
-		{
-            endpoints.Add(typeof(StudentViewModel), QuizApiSettings.Students);
-            endpoints.Add(typeof(EmployeeViewModel), QuizApiSettings.Employees);
-            endpoints.Add(typeof(CreateEmployeeDto), QuizApiSettings.Employees);
-            endpoints.Add(typeof(JobDto), QuizApiSettings.Jobs);
-            endpoints.Add(typeof(PositionDto), QuizApiSettings.Positions);
-            endpoints.Add(typeof(BranchDto), QuizApiSettings.Branches);
-            endpoints.Add(typeof(CreateStudentDto), QuizApiSettings.Students);
+        {
+            endpoints = GetEndpointsDictionary();
         }
+        #endregion
+
+        #region Metody
 
         public async Task<List<T>> GetAllItems<T>()
         {
             if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-                throw new DataNotFoundExceptions();
+                throw new DataNotFoundException();
 
             var response = await Client.GetAsync(endpoint);
             var content = await response.Content.ReadAsStringAsync();
@@ -66,7 +65,7 @@ namespace Quiz.Mobile.Services
         public async Task<T> GetItemById<T>(object id)
         {
             if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-                throw new DataNotFoundExceptions();
+                throw new DataNotFoundException();
 
             var url = $"{endpoint}/{id}";
             var response = await Client.GetAsync(url);
@@ -77,15 +76,31 @@ namespace Quiz.Mobile.Services
             return JsonConvert.DeserializeObject<T>(content);
         }
 
-        public Task RemoveItemById(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task AddItem<T>(T item)
+        public async Task RemoveItemById<T>(object id)
         {
             if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-                throw new DataNotFoundExceptions();
+                throw new DataNotFoundException();
+
+            var url = $"{endpoint}/{id}";
+            var response = await Client.DeleteAsync(url);
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                if (string.IsNullOrEmpty(content))
+                    content = response.ReasonPhrase;
+                throw new HttpRequestException(content);
+            }
+        }
+
+        public async Task AddItem<T>(T item, string dict = null)
+        {
+            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
+            {
+                if (!string.IsNullOrEmpty(dict))
+                    endpoint = dict;
+                else
+                    throw new DataNotFoundException();
+            }
 
             var dataToSend = new StringContent(JsonConvert.SerializeObject(item),
                 Encoding.UTF8, "application/json");
@@ -95,6 +110,25 @@ namespace Quiz.Mobile.Services
             if (!response.IsSuccessStatusCode)
                 throw new HttpRequestException(content);
         }
+
+        #region Metody prywatne
+
+        private Dictionary<Type, string> GetEndpointsDictionary() =>
+            new Dictionary<Type, string>
+            {
+                { typeof(EmployeeViewModel), QuizApiSettings.Employees },
+                { typeof(StudentViewModel), QuizApiSettings.Students },
+                { typeof(CreateEmployeeDto), QuizApiSettings.Employees },
+                { typeof(CreateStudentDto), QuizApiSettings.Students },
+                { typeof(JobDto), QuizApiSettings.Jobs },
+                { typeof(PositionDto), QuizApiSettings.Positions },
+                { typeof(BranchDto), QuizApiSettings.Branches },
+                { typeof(DifficultyViewModel), QuizApiSettings.Difficulties },
+                { typeof(AreaViewModel), QuizApiSettings.Areas }
+            };
+
+        #endregion
+
+        #endregion
     }
 }
-

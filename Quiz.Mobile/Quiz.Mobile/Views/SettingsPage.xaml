@@ -4,10 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Quiz.Mobile.Views.SettingsPage"
     xmlns:fontAwesome="clr-namespace:Quiz.Mobile.Helpers.Icons"
-    Title="Settings"
+    Title="Ustawienia"
     BackgroundColor="{AppThemeBinding 
-                        Dark={StaticResource WindowBackgroundColorDark}, 
-                        Light={StaticResource WindowBackgroundColor}}"
+        Dark={StaticResource WindowBackgroundColorDark}, 
+        Light={StaticResource WindowBackgroundColor}}"
     >
 
     <ContentPage.Resources>
@@ -103,8 +103,8 @@
                 <Label
                     Margin="0,12,0,0"
                     Style="{DynamicResource LabelMedium}"
-                    Text="THEME" />
-                <Frame Style="{DynamicResource CoffeeCard}">
+                    Text="Motyw" />
+                <Frame Style="{DynamicResource BaseCard}">
                     <Grid
                         ColumnDefinitions="*,Auto,Auto,Auto,*"
                         ColumnSpacing="10"
@@ -115,10 +115,10 @@
                             x:Name="RadioButtonSystem"
                             Grid.Column="1"
                             CheckedChanged="RadioButton_CheckedChanged"
-                            Value="System">
+                            Value="Systemowy">
                             <RadioButton.Content>
                                 <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                                    <Image Scale="0.75" Source="{FontImage FontFamily=FAS,
+                                    <Image Scale="0.75" Source="{FontImage FontFamily=FS,
                                         Glyph={x:Static fontAwesome:FontAwesomeIcons.UserCog}, Color=#323130}" />
                                     <Label
                                         FontSize="Small"
@@ -131,7 +131,7 @@
                             x:Name="RadioButtonLight"
                             Grid.Column="2"
                             CheckedChanged="RadioButton_CheckedChanged"
-                            Value="Light">
+                            Value="Jasny">
                             <RadioButton.Content>
                                 <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <Image Scale="0.75" Source="{FontImage FontFamily=FAS,
@@ -147,7 +147,7 @@
                             x:Name="RadioButtonDark"
                             Grid.Column="3"
                             CheckedChanged="RadioButton_CheckedChanged"
-                            Value="Dark">
+                            Value="Ciemny">
                             <RadioButton.Content>
                                 <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <Image Scale="0.75" Source="{FontImage FontFamily=FAS,

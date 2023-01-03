@@ -2,17 +2,17 @@
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Quiz.Mobile.ViewModels.Abstract;
 
 namespace Quiz.Mobile.ViewModels
 {
     public class AboutViewModel : BaseViewModel
     {
+        public string AboutImage => "school_about.png";
+
         public AboutViewModel()
         {
-            Title = "About";
-            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://aka.ms/xamarin-quickstart"));
+            base.Title = "O programie";
         }
-
-        public ICommand OpenWebCommand { get; }
     }
 }

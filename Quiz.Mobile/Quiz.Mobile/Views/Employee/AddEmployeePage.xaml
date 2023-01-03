@@ -7,12 +7,13 @@
     Title="{Binding Title}"
     x:DataType="viewmodels:AddEmployeeViewModel"
     Shell.PresentationMode="Animated"
-    x:Name="addEmployee">
+    x:Name="addEmployee"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
     <!--Modal - pojawienie sie strony od dołu na całej powierzchni, zamiast jako kolejnej strony
         Animated - pojawienie się 'wewnątrz' np. zakładki -->
-    <!--BackgroundColor="{AppThemeBinding
-                    Dark={StaticResource WindowBackgroundColorDark}, 
-                    Light={StaticResource WindowBackgroundColor}}"-->
 
     <ContentPage.BindingContext>
         <viewmodels:AddEmployeeViewModel />
@@ -20,6 +21,9 @@
 
     <ContentPage.Resources>
         <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+        <Style TargetType="Entry" BasedOn="{StaticResource BaseEntry}"/>
+        <Style TargetType="DatePicker" BasedOn="{StaticResource BaseDatePicker}"/>
+        <Style TargetType="Picker" BasedOn="{StaticResource BasePicker}"/>
     </ContentPage.Resources>
 
     <StackLayout Padding="20">
@@ -98,7 +102,8 @@
             IsVisible="{Binding IsBusy}"
             VerticalOptions="Center" />
 
-        <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="CenterAndExpand">
             <Button
                 Padding="20,0"
                 Command="{Binding SaveAndCloseCommand}"

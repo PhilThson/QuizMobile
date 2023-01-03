@@ -56,27 +56,42 @@
                         Value="{StaticResource SystemOrange}"/>
     </Style>
 
-    <!--można ustalić wartość w zależności od platformy!-->
-    <Style x:Key="PersonCard" TargetType="Frame">
+    <!--można ustalić wartość w zależności od platformy-->
+    <Style x:Key="BaseCard" TargetType="Frame">
         <Setter Property="HasShadow"
                         Value="{OnPlatform Android=true, iOS=false, Default=true}"/>
         <Setter Property="CornerRadius" Value="20"/>
         <Setter Property="BackgroundColor" Value="{AppThemeBinding
                     Dark={StaticResource CardBackgroundDark},
                     Light={StaticResource CardBackground}}"/>
+        <!--<Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                        Value="LightSkyBlue" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>-->
     </Style>
 
     <Style x:Key="ButtonOutline" TargetType="Button">
-        <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextColorDark},
-                    Light={StaticResource TextColor}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding
+                Dark={StaticResource TextColorDark},
+                Light={StaticResource TextColor}}" />
         <Setter Property="WidthRequest" Value="150" />
         <Setter Property="HeightRequest" Value="{OnPlatform iOS=30, Android=40}" />
         <Setter Property="FontSize" Value="Small" />
         <Setter Property="CornerRadius" Value="6" />
         <Setter Property="BorderWidth" Value="1" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="BorderColor" Value="{AppThemeBinding Dark={StaticResource TextColorDark},
-                    Light={StaticResource TextColor}}" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding
+                Dark={StaticResource TextColorDark},
+                Light={StaticResource TextColor}}" />
         <Setter Property="HorizontalOptions" Value="Center" />
     </Style>
 
@@ -113,6 +128,9 @@
                     Dark={StaticResource TextColorDark},
                     Light={StaticResource TextColor}}"/>
         <Setter Property="Margin" Value="2,0,2,10"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+                    Dark={StaticResource CardBackgroundDark},
+                    Light={StaticResource WindowBackgroundColor}}"/>
     </Style>
 
     <Style x:Key="BaseDatePicker" TargetType="DatePicker">
@@ -120,12 +138,22 @@
                     Dark={StaticResource TextColorDark},
                     Light={StaticResource TextColor}}"/>
         <Setter Property="Margin" Value="2,0,2,10"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+                    Dark={StaticResource CardBackgroundDark},
+                    Light={StaticResource WindowBackgroundColor}}"/>
+    </Style>
+
+    <Style x:Key="BasePicker" TargetType="Picker">
+        <Setter Property="TextColor" Value="{AppThemeBinding
+                    Dark={StaticResource TextColorDark},
+                    Light={StaticResource TextColor}}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+                    Dark={StaticResource CardBackgroundDark},
+                    Light={StaticResource WindowBackgroundColor}}"/>
     </Style>
 
     <!--Trzeba odwzorować backslash, który w code-behind można by podać w stringu-->
-    <x:String x:Key="IconCoffee3">&#xf0f4;</x:String>
-    <x:String x:Key="IconCoffee2">&#xf7b6;</x:String>
     <x:String x:Key="Rotate">&#xf2f1;</x:String>
+    <x:String x:Key="Gears">&#xf085;</x:String>
 
 </ResourceDictionary>
-

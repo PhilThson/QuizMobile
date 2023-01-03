@@ -7,26 +7,41 @@
     x:DataType="viewmodels:EmployeeDetailsViewModel"
     Shell.PresentationMode="ModalAnimated"
     Title="{Binding Title}"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
     >
     <ContentPage.BindingContext>
         <viewmodels:EmployeeDetailsViewModel/>
     </ContentPage.BindingContext>
 
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <StackLayout Padding="20">
             <Label Text="{Binding Item.FirstName, StringFormat='Imię: {0}'}"
-                   HorizontalOptions="Center"
-                   Style="{StaticResource LabelMedium}"/>
+                   HorizontalOptions="Center" Margin="0,5"/>
             <Label Text="{Binding Item.LastName, StringFormat='Nazwisko: {0}'}"
-                   HorizontalOptions="Center"
-                   Style="{StaticResource LabelMedium}"/>
+                   HorizontalOptions="Center" Margin="0,5"/>
             <Label HorizontalOptions="StartAndExpand"
-                   Text="{Binding Item.PersonalNumber, StringFormat='PESEL: {0}'}"/>
+                   Text="{Binding Item.PersonalNumber, StringFormat='PESEL: {0}'}"
+                   Margin="0,5"/>
             <Label HorizontalOptions="StartAndExpand"
-                   Text="{Binding Item.Email, StringFormat='E-mail: {0}'}"/>
+                   Text="{Binding Item.Email, StringFormat='E-mail: {0}'}"
+                   Margin="0,5"/>
 
-            <Button Command="{Binding NavigateBackCommand}" Text="Zamknij"
+            <Button Command="{Binding NavigateBackCommand}"
+                    Text="Zamknij"
+                    HorizontalOptions="CenterAndExpand"
                     Style="{StaticResource ButtonOutline}"/>
+            <Button Command="{Binding RemoveCommand}"
+                    CommandParameter="{Binding Item.Id}"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="Usuń"
+                    Style="{StaticResource ButtonOutline}"
+                    BackgroundColor="IndianRed"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

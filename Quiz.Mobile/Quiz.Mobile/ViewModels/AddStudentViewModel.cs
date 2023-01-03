@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Quiz.Mobile.CommunityToolkit;
 using System.Net.Http;
+using Quiz.Mobile.Helpers.Exceptions;
 
 namespace Quiz.Mobile.ViewModels
 {
 	public class AddStudentViewModel : SingleItemViewModel<CreateStudentDto>
     {
         #region Pola prywatne
-        private readonly IStudentService _studentService;
+        private readonly IHttpClientService _client;
         #endregion
 
         #region Konstruktor
@@ -24,7 +25,8 @@ namespace Quiz.Mobile.ViewModels
             {
                 DateOfBirth = DateTime.Now.Date.AddYears(-7)
             };
-			_studentService = DependencyService.Get<IStudentService>(DependencyFetchTarget.GlobalInstance);
+			_client = DependencyService.Get<IHttpClientService>(
+                DependencyFetchTarget.GlobalInstance);
             this.PropertyChanged +=
                 (_, __) => SaveAndCloseCommand.RaiseCanExecuteChanged();
         }
@@ -135,7 +137,7 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 IsBusy = true;
-                await _studentService.AddStudent(Item);
+                await _client.AddItem<CreateStudentDto>(Item);
                 IsBusy = false;
                 DependencyService.Get<IToast>()?.MakeToast("Poprawnie dodano ucznia!");
                 await Task.Delay(2000);
@@ -147,13 +149,19 @@ namespace Quiz.Mobile.ViewModels
                 DependencyService.Get<IToast>()?.MakeToast(
                     $"Nie udało się dodać ucznia. Odpowiedź serwera: {e.Message}");
             }
+            catch (DataNotFoundException e)
+            {
+                IsBusy = false;
+                await Application.Current.MainPage.DisplayAlert(
+                    "Dodawanie", e.Message, "OK");
+            }
         }
 
         private async Task LoadBranches()
         {
             try
             {
-                var branches = await _studentService.GetAllBranches();
+                var branches = await _client.GetAllItems<BranchDto>();
                 Branches = new ObservableRangeCollection<BranchDto>(branches);
             }
             catch (Exception e)

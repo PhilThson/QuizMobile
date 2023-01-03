@@ -12,13 +12,14 @@ namespace Quiz.Mobile.ViewModels
 {
     public class StudentsViewModel : ItemsCollectionViewModel<StudentViewModel>
     {
-        private readonly IStudentService _studentService;
+        private readonly IHttpClientService _client;
 
         public StudentsViewModel()
         {
             base.Title = "Wszyscy uczniowie";
             FavoriteCommand = new AsyncCommand<object>(Favorite);
-            _studentService = DependencyService.Get<IStudentService>(DependencyFetchTarget.GlobalInstance);
+            _client = DependencyService.Get<IHttpClientService>(
+                DependencyFetchTarget.GlobalInstance);
         }
 
         protected async override Task Refresh()
@@ -28,7 +29,7 @@ namespace Quiz.Mobile.ViewModels
                 IsBusy = true;
                 await Task.Delay(1000);
                 List.Clear();
-                var students = await _studentService.GetAllStudents();
+                var students = await _client.GetAllItems<StudentViewModel>();
                 List.AddRange(students);
                 IsBusy = false;
                 DependencyService.Get<IToast>()?.MakeToast("Odświeżono");
@@ -67,15 +68,15 @@ namespace Quiz.Mobile.ViewModels
 
         protected override async Task Remove(StudentViewModel student)
         {
-            //await _studentService.RemoveStudent(student.Id);
-            //await Refresh();
+            await _client.RemoveItemById<StudentViewModel>(student.Id);
+            await Refresh();
             await Task.Delay(1000);
             DependencyService.Get<IToast>()?.MakeToast("Usunięto!");
         }
 
         protected override async Task Load()
         {
-            var students = await _studentService.GetAllStudents();
+            var students = await _client.GetAllItems<StudentViewModel>();
             List = new ObservableRangeCollection<StudentViewModel>(students);
         }
 
