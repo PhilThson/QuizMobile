@@ -10,6 +10,7 @@
     xmlns:ctc="clr-namespace:Quiz.Mobile.CommunityToolkit.Converters"
     xmlns:fonts="clr-namespace:Quiz.Mobile.Helpers.Icons"
     x:DataType="viewmodels:EmployeesViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     Title="{Binding Title}"
     x:Name="employeesPage"
     BackgroundColor="{AppThemeBinding
@@ -23,7 +24,7 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <ctc:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -39,12 +40,12 @@
             IsRefreshing="{Binding IsBusy, Mode=OneWay}"
             RefreshCommand="{Binding RefreshCommand}"
             Style="{StaticResource BaseListView}"
+            SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
         >
-            <!--SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"-->
         <ListView.Behaviors>
-            <ctb:EventToCommandBehavior
+            <xct:EventToCommandBehavior
                 EventName="ItemSelected"
-                Command="{Binding SelectedCommand}"
+                Command="{Binding SelectedEmployeeCommand}"
                 EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
         </ListView.Behaviors>
 

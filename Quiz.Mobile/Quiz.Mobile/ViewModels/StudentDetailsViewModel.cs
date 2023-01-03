@@ -45,7 +45,7 @@ namespace Quiz.Mobile.ViewModels
         #region Metody
         protected override async Task SaveAndClose()
         {
-            await base.NavigateBack();
+            throw new NotImplementedException();
         }
 
         private async Task LoadStudent()

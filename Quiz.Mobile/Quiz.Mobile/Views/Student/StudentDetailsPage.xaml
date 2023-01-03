@@ -5,7 +5,7 @@
     x:Class="Quiz.Mobile.Views.Student.StudentDetailsPage"
     xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
     x:DataType="viewmodels:StudentDetailsViewModel"
-    Shell.PresentationMode="ModalAnimated"
+    Shell.PresentationMode="Animated"
     Title="{Binding Title}"
     BackgroundColor="{AppThemeBinding
         Dark={StaticResource WindowBackgroundColorDark},

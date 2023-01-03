@@ -209,22 +209,23 @@ namespace Quiz.Mobile.ViewModels
             {
                 IsBusy = true;
                 await _client.AddItem<CreateEmployeeDto>(Item);
-                IsBusy = false;
                 DependencyService.Get<IToast>()?.MakeToast("Poprawnie dodano pracownika!");
                 await Task.Delay(2000);
                 await base.NavigateBack();
             }
             catch (HttpRequestException e)
             {
-                IsBusy = false;
                 await Application.Current.MainPage.DisplayAlert("Dodawanie pracownika",
                     $"Nie udało się dodać pracownika. Odpowiedź serwera: {e.Message}", "OK");
             }
             catch (DataNotFoundException e)
             {
-                IsBusy = false;
                 await Application.Current.MainPage.DisplayAlert(
                     "Dodawanie", e.Message, "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

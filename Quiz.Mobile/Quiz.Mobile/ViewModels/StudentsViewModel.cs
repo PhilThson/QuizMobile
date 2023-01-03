@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using Quiz.Mobile.CommunityToolkit;
 using Quiz.Mobile.Views.Student;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -32,13 +33,14 @@ namespace Quiz.Mobile.ViewModels
                 var students = await _client.GetAllItems<StudentViewModel>();
                 List.AddRange(students);
                 IsBusy = false;
-                DependencyService.Get<IToast>()?.MakeToast("Odświeżono");
+                await Application.Current.MainPage.DisplayToastAsync("Odświeżono");
             }
             catch (Exception e)
             {
                 IsBusy = false;
-                DependencyService.Get<IToast>()?.MakeToast(
-                    $"Nie udało się pobrać uczniów. Odpowiedź serwera: {e.Message}");
+                await Application.Current.MainPage.DisplayToastAsync(
+                    $"Nie udało się pobrać uczniów. Odpowiedź serwera: {e.Message}",
+                    5000);
             }
         }
 
@@ -62,8 +64,6 @@ namespace Quiz.Mobile.ViewModels
         {
             var route = nameof(AddStudentPage);
             await AppShell.Current.GoToAsync(route);
-            //await Application.Current.MainPage.DisplayAlert(
-            //    "Dodawanie", "", "OK");
         }
 
         protected override async Task Remove(StudentViewModel student)
@@ -89,7 +89,6 @@ namespace Quiz.Mobile.ViewModels
             var student = obj as StudentViewModel;
             await Application.Current.MainPage.DisplayAlert(
                 "Favorite", student.FirstName, "OK");
-            //await AppShell.Current.GoToAsync(nameof(AddStudentPage));
         }
     }
 }

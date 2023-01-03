@@ -9,20 +9,45 @@ using Quiz.Mobile.ViewModels.Abstract;
 using Quiz.Mobile.Views.Employee;
 using Quiz.Mobile.Shared.ViewModels;
 using System.Net.Http;
+using Quiz.Mobile.CommunityToolkit.Interfaces;
 
 namespace Quiz.Mobile.ViewModels
 {
-    public class EmployeesViewModel : ItemsCollectionViewModel<EmployeeViewModel>
+    public class EmployeesViewModel : ItemsCollectionViewModel<EmployeeViewModel>,
+        IDisposable
     {
+        #region Pola prywatne
         private readonly IHttpClientService _client;
+        private IAsyncCommand<object> _SelectedEmployeeCommand;
+        private readonly IMediator _mediator;
+        #endregion
 
+        #region Konstruktor
         public EmployeesViewModel()
         {
             base.Title = "Wszyscy pracownicy";
             _client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
+            _mediator = Mediator.Instance;
+            _mediator.RequestEmployeesRefresh += OnRequestEmployeesRefresh;
         }
+        #endregion
 
+        #region Komendy
+        public IAsyncCommand<object> SelectedEmployeeCommand =>
+            _SelectedEmployeeCommand ??= new AsyncCommand<object>(EmployeeSelected);
+        #endregion
+
+        #region Właściwości
+        private EmployeeViewModel _SelectedEmployee;
+        public EmployeeViewModel SelectedEmployee
+        {
+            get => _SelectedEmployee;
+            set => SetProperty(ref _SelectedEmployee, value);
+        }
+        #endregion
+
+        #region Metody
         protected override async Task Add()
         {
             var route = nameof(AddEmployeePage);
@@ -44,36 +69,28 @@ namespace Quiz.Mobile.ViewModels
             catch (Exception e)
             {
                 IsBusy = false;
-                DependencyService.Get<IToast>()?.MakeToast(
-                    $"Nie udało się pobrać pracowników. Odpowiedź serwera: {e.Message}");
+                await Application.Current.MainPage.DisplayToastAsync(
+                    $"Nie udało się pobrać pracowników. Odpowiedź serwera: {e.Message}",
+                    5000);
             }
         }
 
-        private EmployeeViewModel _SelectedEmployee;
-        public EmployeeViewModel SelectedEmployee
-        {
-            get => _SelectedEmployee;
-            set => SetProperty(ref _SelectedEmployee, value);
-        }
-
+        //niewykorzystywane w przypadku ListView
         protected override async Task Selected(EmployeeViewModel employee)
         {
-            //przesłanie argumentu dzięki EventToCommand 
-            //oraz ItemSelectedEventArgsConverter
             if (employee == null)
                 return;
 
-            var route = $"{nameof(EmployeeDetailsPage)}?EmployeeId={employee.Id}";
+            var route = $"//{nameof(EmployeeDetailsPage)}?EmployeeId={employee.Id}";
             await Shell.Current.GoToAsync(route);
 
             SelectedEmployee = null;
         }
 
+        //Usuwanie w szczegółach pracownika
         protected override async Task Remove(EmployeeViewModel employee)
         {
-            //await _employeeService.RemoveEmployee(employee.Id);
-            //await Refresh();
-            await Task.Delay(1000);
+            throw new NotImplementedException();
         }
 
         protected override async Task Load()
@@ -81,6 +98,26 @@ namespace Quiz.Mobile.ViewModels
             var employees = await _client.GetAllItems<EmployeeViewModel>();
             List = new ObservableRangeCollection<EmployeeViewModel>(employees);
         }
+
+        private async Task EmployeeSelected(object obj)
+        {
+            var employee = obj as EmployeeViewModel;
+            if (employee == null)
+                return;
+            var route = $"{nameof(EmployeeDetailsPage)}?EmployeeId={employee.Id}";
+            await Shell.Current.GoToAsync(route);
+
+            SelectedEmployee = null;
+        }
+
+        public void OnRequestEmployeesRefresh() =>
+            this.Refresh().SafeFireAndForget(e => Console.WriteLine(e.Message));
+
+        public void Dispose()
+        {
+            _mediator.RequestEmployeesRefresh -= OnRequestEmployeesRefresh;
+        }
+        #endregion
     }
 }
 

@@ -7,6 +7,7 @@ using Quiz.Mobile.Interfaces;
 using Quiz.Mobile.Helpers;
 using Xamarin.Essentials;
 using System.Net.Http;
+using Quiz.Mobile.ViewModels.Abstract;
 
 namespace Quiz.Mobile
 {
@@ -17,6 +18,7 @@ namespace Quiz.Mobile
             InitializeComponent();
 
             DependencyService.Register<IHttpClientService, HttpClientService>();
+            //DependencyService.RegisterSingleton<IMediator, Mediator>();
 
             //nadpisanie motywu zgodnie z preferencjami
             TheTheme.SetTheme();

@@ -69,24 +69,6 @@
                                BackgroundColor="{AppThemeBinding 
                                 Dark={StaticResource WindowBackgroundColorDark}, 
                                 Light={StaticResource WindowBackgroundColor}}">
-                        <SwipeView.RightItems>
-                            <SwipeItems>
-                                <SwipeItem
-                                    BackgroundColor="Orange"
-                                    Command="{Binding Source=
-                                        {RelativeSource AncestorType=
-                                            {x:Type viewmodels:StudentsViewModel}},
-                                                Path=FavoriteCommand}"
-                                    CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
-                                    Text="Favorite">
-                                    <SwipeItem.IconImageSource>
-                                        <FontImageSource FontFamily="MaterialDesignIcons"
-                                            Glyph="{x:Static icons:MaterialDesignIconFont.AccountStar}"
-                                            Color="White"/>
-                                    </SwipeItem.IconImageSource>
-                                </SwipeItem>
-                            </SwipeItems>
-                        </SwipeView.RightItems>
                         <SwipeView.LeftItems>
                             <SwipeItems>
                                 <SwipeItem

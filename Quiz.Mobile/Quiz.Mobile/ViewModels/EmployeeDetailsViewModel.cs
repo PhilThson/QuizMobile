@@ -9,6 +9,8 @@ using Quiz.Mobile.CommunityToolkit.Interfaces;
 using Quiz.Mobile.CommunityToolkit.Commands;
 using System.Diagnostics;
 using System.Net.Http;
+using Quiz.Mobile.Views.Employee;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -75,16 +77,23 @@ namespace Quiz.Mobile.ViewModels
 
         private async Task RemoveEmployee(int employeeId)
         {
+            IsBusy = true;
             try
             {
                 await _client.RemoveItemById<EmployeeViewModel>(employeeId);
-                await Application.Current.MainPage.DisplayAlert("Usunięto pracownika",
-                    "", "OK");
+                await Application.Current.MainPage.DisplayToastAsync("Usunięto pracownika");
+                Mediator.Instance.RaiseRequestEmployeesRefresh();
+                await Task.Delay(400);
+                await base.NavigateBack();
             }
             catch (HttpRequestException e)
             {
                 await Application.Current.MainPage.DisplayAlert("Niepowodzenie",
                     $"Nie udało się usunąć pracownika. '{e.Message}'", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
         #endregion

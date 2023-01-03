@@ -5,7 +5,7 @@
     x:Class="Quiz.Mobile.Views.Employee.EmployeeDetailsPage"
     xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
     x:DataType="viewmodels:EmployeeDetailsViewModel"
-    Shell.PresentationMode="ModalAnimated"
+    Shell.PresentationMode="Animated"
     Title="{Binding Title}"
     BackgroundColor="{AppThemeBinding
         Dark={StaticResource WindowBackgroundColorDark},
@@ -22,7 +22,7 @@
     <ContentPage.Content>
         <StackLayout Padding="20">
             <Label Text="{Binding Item.FirstName, StringFormat='Imię: {0}'}"
-                   HorizontalOptions="Center" Margin="0,5"/>
+                   HorizontalOptions="Center" />
             <Label Text="{Binding Item.LastName, StringFormat='Nazwisko: {0}'}"
                    HorizontalOptions="Center" Margin="0,5"/>
             <Label HorizontalOptions="StartAndExpand"
@@ -31,6 +31,12 @@
             <Label HorizontalOptions="StartAndExpand"
                    Text="{Binding Item.Email, StringFormat='E-mail: {0}'}"
                    Margin="0,5"/>
+
+            <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    VerticalOptions="Center" />
 
             <Button Command="{Binding NavigateBackCommand}"
                     Text="Zamknij"

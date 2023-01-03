@@ -115,7 +115,7 @@
                             x:Name="RadioButtonSystem"
                             Grid.Column="1"
                             CheckedChanged="RadioButton_CheckedChanged"
-                            Value="Systemowy">
+                            Value="System">
                             <RadioButton.Content>
                                 <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <Image Scale="0.75" Source="{FontImage FontFamily=FS,
@@ -131,14 +131,14 @@
                             x:Name="RadioButtonLight"
                             Grid.Column="2"
                             CheckedChanged="RadioButton_CheckedChanged"
-                            Value="Jasny">
+                            Value="Light">
                             <RadioButton.Content>
                                 <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <Image Scale="0.75" Source="{FontImage FontFamily=FAS,
                                         Glyph={x:Static fontAwesome:FontAwesomeIcons.Sun}, Color=#323130}" />
                                     <Label
                                         FontSize="Small"
-                                        Text="Light"
+                                        Text="Jasny"
                                         TextColor="#323130" />
                                 </StackLayout>
                             </RadioButton.Content>
@@ -147,14 +147,14 @@
                             x:Name="RadioButtonDark"
                             Grid.Column="3"
                             CheckedChanged="RadioButton_CheckedChanged"
-                            Value="Ciemny">
+                            Value="Dark">
                             <RadioButton.Content>
                                 <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <Image Scale="0.75" Source="{FontImage FontFamily=FAS,
                                         Glyph={x:Static fontAwesome:FontAwesomeIcons.Moon}, Color=#323130}" />
                                     <Label
                                         FontSize="Small"
-                                        Text="Dark"
+                                        Text="Ciemny"
                                         TextColor="#323130" />
                                 </StackLayout>
                             </RadioButton.Content>

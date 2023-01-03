@@ -47,13 +47,13 @@ namespace Quiz.Mobile.Views
             //ustawienie motywu w zależności od zaznaczonego przycisku
             switch (val)
             {
-                case "Systemowy":
+                case "System":
                     Settings.Theme = 0;
                     break;
-                case "Jasny":
+                case "Light":
                     Settings.Theme = 1;
                     break;
-                case "Ciemny":
+                case "Dark":
                     Settings.Theme = 2;
                     break;
             }
