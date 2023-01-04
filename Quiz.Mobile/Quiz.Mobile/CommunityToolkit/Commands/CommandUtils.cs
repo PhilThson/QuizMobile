@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Quiz.Mobile.Helpers;
 
 namespace Quiz.Mobile.CommunityToolkit.Commands
 {

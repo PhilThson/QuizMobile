@@ -76,6 +76,20 @@ namespace Quiz.Mobile.Services
             return JsonConvert.DeserializeObject<T>(content);
         }
 
+        public async Task<T> GetItemByKey<T>(string key, string value)
+        {
+            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
+                throw new DataNotFoundException();
+
+            var url = $"{endpoint}?{key}={value}";
+            var response = await Client.GetAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException(content);
+
+            return JsonConvert.DeserializeObject<T>(content);
+        }
+
         public async Task RemoveItemById<T>(object id)
         {
             if (!endpoints.TryGetValue(typeof(T), out string endpoint))
@@ -117,14 +131,17 @@ namespace Quiz.Mobile.Services
             new Dictionary<Type, string>
             {
                 { typeof(EmployeeViewModel), QuizApiSettings.Employees },
-                { typeof(StudentViewModel), QuizApiSettings.Students },
                 { typeof(CreateEmployeeDto), QuizApiSettings.Employees },
+                { typeof(StudentViewModel), QuizApiSettings.Students },
                 { typeof(CreateStudentDto), QuizApiSettings.Students },
                 { typeof(JobDto), QuizApiSettings.Jobs },
                 { typeof(PositionDto), QuizApiSettings.Positions },
                 { typeof(BranchDto), QuizApiSettings.Branches },
                 { typeof(DifficultyViewModel), QuizApiSettings.Difficulties },
-                { typeof(AreaViewModel), QuizApiSettings.Areas }
+                { typeof(AreaViewModel), QuizApiSettings.Areas },
+                { typeof(RoleDto), QuizApiSettings.Roles },
+                { typeof(UserDto), QuizApiSettings.Users },
+                { typeof(CreateUserDto), QuizApiSettings.Users }
             };
 
         #endregion

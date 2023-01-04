@@ -32,7 +32,7 @@ namespace Quiz.Mobile.Helpers.Behaviors
         void HandleTextChanged(object sender, TextChangedEventArgs e)
         {
             IsValid = (Regex.IsMatch(e.NewTextValue, emailRegex, RegexOptions.IgnoreCase,
-                TimeSpan.FromMilliseconds(250)));
+                TimeSpan.FromMilliseconds(250)) && e.NewTextValue?.Length < 50);
             ((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
         }
 

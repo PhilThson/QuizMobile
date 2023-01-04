@@ -2,14 +2,97 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Quiz.Mobile.Views.RegistrationPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Zarejestruj!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand"
-                   />
+    x:Class="Quiz.Mobile.Views.RegistrationPage"
+    Shell.NavBarIsVisible="False"
+    xmlns:vm="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:behaviors="clr-namespace:Quiz.Mobile.Helpers.Behaviors"
+    xmlns:fonts="clr-namespace:Quiz.Mobile.Helpers.Icons"
+    x:DataType="vm:RegistrationViewModel"
+    x:Name="registrationPage"
+    BackgroundColor="{AppThemeBinding 
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
+
+    <ContentPage.BindingContext>
+        <vm:RegistrationViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+        <Style TargetType="Entry" BasedOn="{StaticResource BaseEntry}"/>
+        <Style TargetType="Picker" BasedOn="{StaticResource BasePicker}"/>
+    </ContentPage.Resources>
+
+    <Grid Padding="15" Margin="0,50">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <StackLayout Grid.Row="0">
+            <Label Text="Uzupełnij formularz w celu rejestracji"
+                   FontAttributes="Italic"
+                   VerticalOptions="Center"
+                   HorizontalOptions="CenterAndExpand"/>
+
+            <Label Text="Imię:"/>
+            <Entry Text="{Binding FirstName}" />
+
+            <Label Text="Nazwisko:"/>
+            <Entry Text="{Binding LastName}" />
+
+            <Label Text="Adres e-mail:"/>
+            <Entry Text="{Binding Email}" Keyboard="Email">
+                <Entry.Behaviors>
+                    <behaviors:EmailValidatorBehavior
+                        IsValid="{Binding Source={x:Reference registrationPage},
+                            Path=BindingContext.IsEmailValid}"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Label Text="Hasło:"/>
+            <Entry IsPassword="True"
+                   Text="{Binding Password}"/>
+
+            <Label Text="Powtórz hasło:"/>
+            <Entry IsPassword="True"
+                   Text="{Binding RepeatedPassword}"/>
+
+            <Label Text="Rola:"/>
+            <Picker Title="Wybierz rolę..."
+                    ItemsSource="{Binding Roles}"
+                    SelectedItem="{Binding SelectedRole}"
+                    ItemDisplayBinding="{Binding Name}"/>
         </StackLayout>
-    </ContentPage.Content>
+
+        <StackLayout Grid.Row="1"
+            Orientation="Horizontal"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            >
+            <Button
+                    Padding="20,0"
+                    Command="{Binding SaveAndCloseCommand}"
+                    HorizontalOptions="Center"
+                    IsEnabled="{Binding CanSaveProp}"
+                    Text="Zarejestruj się"
+                    VerticalOptions="CenterAndExpand"
+                    Style="{StaticResource ButtonOutline}"/>
+            <Button
+                    Padding="20,0"
+                    Command="{Binding NavigateBackCommand}"
+                    HorizontalOptions="Center"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Text="Powrót"
+                    VerticalOptions="CenterAndExpand"
+                    Style="{StaticResource ButtonOutline}"/>
+        </StackLayout>
+        <ActivityIndicator Grid.Row="0"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="{StaticResource Primary}"/>
+    </Grid>
 </ContentPage>
 

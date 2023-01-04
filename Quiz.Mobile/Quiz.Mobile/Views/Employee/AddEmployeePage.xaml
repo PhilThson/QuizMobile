@@ -108,7 +108,7 @@
                 Padding="20,0"
                 Command="{Binding SaveAndCloseCommand}"
                 HorizontalOptions="Center"
-                IsEnabled="{Binding IsNotBusy}"
+                IsEnabled="{Binding CanSaveProp}"
                 Text="Zapisz"
                 VerticalOptions="CenterAndExpand"
                 Style="{StaticResource ButtonOutline}"/>

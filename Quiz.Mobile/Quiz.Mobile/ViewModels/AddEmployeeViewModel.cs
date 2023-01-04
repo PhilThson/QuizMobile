@@ -199,6 +199,15 @@ namespace Quiz.Mobile.ViewModels
             }
             set => SetProperty(ref _Postions, value);
         }
+
+        public bool CanSaveProp =>
+            !string.IsNullOrEmpty(FirstName) &&
+            !string.IsNullOrEmpty(LastName) &&
+            _IsPersonalNumberValid &&
+            _IsEmailValid &&
+            _IsSalaryValid &&
+            (DateOfEmployment != null) &&
+            !IsBusy;
         #endregion
 
         #region Metody
@@ -262,13 +271,7 @@ namespace Quiz.Mobile.ViewModels
             }
         }
 
-        protected override bool CanSave(object arg) =>
-            !string.IsNullOrEmpty(FirstName) &&
-            !string.IsNullOrEmpty(LastName) &&
-            _IsPersonalNumberValid &&
-            _IsEmailValid &&
-            _IsSalaryValid &&
-            (DateOfEmployment != null);
+        protected override bool CanSave(object arg) => CanSaveProp;
 
         #endregion
     }

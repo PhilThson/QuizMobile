@@ -34,6 +34,9 @@ namespace Quiz.Mobile.ViewModels
         #endregion
 
         #region Komendy
+        //Osobna komenda dla kolekcji typu ListView ze względu na przyjmowany typ
+        //object - wynika to z podwójnego wywołania komendy, pierwszy raz z parametrem
+        //EmployeeViewModel, a drugi z eventem ItemSelectedChanged
         public IAsyncCommand<object> SelectedEmployeeCommand =>
             _SelectedEmployeeCommand ??= new AsyncCommand<object>(EmployeeSelected);
         #endregion
@@ -75,7 +78,9 @@ namespace Quiz.Mobile.ViewModels
             }
         }
 
-        //niewykorzystywane w przypadku ListView
+        //Niewykorzystywane w przypadku ListView -
+        //dla pracowników jest komenda SelectedEmployeeCommand
+        //oraz obsługa w metodzie EmployeeSelected
         protected override async Task Selected(EmployeeViewModel employee)
         {
             if (employee == null)
@@ -120,4 +125,3 @@ namespace Quiz.Mobile.ViewModels
         #endregion
     }
 }
-

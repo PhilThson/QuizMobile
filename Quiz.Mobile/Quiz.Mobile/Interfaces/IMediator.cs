@@ -7,6 +7,9 @@ namespace Quiz.Mobile.Interfaces
     {
         static IMediator Instance { get; }
 
+        /// <summary>
+        /// Zdarzenie do wysłania żądania odświeżenia widoku pracowników
+        /// </summary>
         event Action RequestEmployeesRefresh;
 
         void RaiseRequestEmployeesRefresh();

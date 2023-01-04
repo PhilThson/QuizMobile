@@ -18,6 +18,8 @@ namespace Quiz.Mobile
             InitializeComponent();
 
             DependencyService.Register<IHttpClientService, HttpClientService>();
+            //Druga koncepcja mediatora, ale z wykorzystaniem wstrzykiwania
+            //zależności zamiast singletona
             //DependencyService.RegisterSingleton<IMediator, Mediator>();
 
             //nadpisanie motywu zgodnie z preferencjami

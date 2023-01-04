@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Quiz.Mobile.Helpers
+namespace Quiz.Mobile.CommunityToolkit
 {
     public class InvalidCommandParameterException : Exception
     {

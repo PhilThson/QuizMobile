@@ -12,5 +12,16 @@ namespace Quiz.Mobile.Helpers.Exceptions
 		{
 		}
 	}
+
+	public class DataValidationException : Exception
+	{
+		public DataValidationException() : base("Niepoprawne dane wejściowe")
+		{
+		}
+
+		public DataValidationException(string message) : base(message)
+		{
+		}
+	}
 }
 

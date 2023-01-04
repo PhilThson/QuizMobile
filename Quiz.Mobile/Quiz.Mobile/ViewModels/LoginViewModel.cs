@@ -5,22 +5,110 @@ using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
 using Quiz.Mobile.ViewModels.Abstract;
+using Quiz.Mobile.Shared.DTOs;
+using System.Threading.Tasks;
+using Quiz.Mobile.CommunityToolkit.Interfaces;
+using Quiz.Mobile.CommunityToolkit.Commands;
+using Quiz.Mobile.Interfaces;
+using System.Net.Http;
+using Xamarin.CommunityToolkit.Extensions;
+using Quiz.Mobile.Helpers;
+using Quiz.Mobile.Helpers.Exceptions;
 
 namespace Quiz.Mobile.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        public Command LoginCommand { get; }
+        #region Pola prywatne
+        private IHttpClientService _client;
+        #endregion
 
+        #region Konstruktor
         public LoginViewModel()
         {
-            LoginCommand = new Command(OnLoginClicked);
+            _client = DependencyService.Get<IHttpClientService>(
+                DependencyFetchTarget.GlobalInstance);
+            this.PropertyChanged += (_, __) => LoginCommand.RaiseCanExecuteChanged();
+        }
+        #endregion
+
+        #region Właściwości
+
+        private string _Email;
+        public string Email
+        {
+            get => _Email;
+            set => SetProperty(ref _Email, value);
         }
 
-        private async void OnLoginClicked(object obj)
+        private string _Password;
+        public string Password
         {
-            await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+            get => _Password;
+            set => SetProperty(ref _Password, value);
         }
+
+        public bool CanLogin =>
+            !string.IsNullOrEmpty(Email) &&
+            !string.IsNullOrEmpty(Password) &&
+            !base.IsBusy;
+
+        private string ErrorMessage => "Wystąpił błąd podczas logowania.";
+
+        #endregion
+
+        #region Komendy
+        private IAsyncCommand _LoginCommand;
+        public IAsyncCommand LoginCommand => _LoginCommand ??=
+            new AsyncCommand(Login, (_) => CanLogin);
+
+        private IAsyncCommand _RegisterCommand;
+        public IAsyncCommand RegisterCommand => _RegisterCommand ??=
+            new AsyncCommand(Register);
+        #endregion
+
+        #region Metody
+
+        private async Task Register()
+        {
+            await Shell.Current.GoToAsync($"{nameof(RegistrationPage)}");
+        }
+
+        private async Task Login()
+        {
+            try
+            {
+                IsBusy = true;
+                var userDto = await _client.GetItemByKey<UserDto>(
+                    nameof(Email).ToLower(), _Email);
+
+                if (!SecurePasswordHasher.Verify(_Password, userDto.PasswordHash))
+                    throw new DataValidationException("Niepoprawne hasło.");
+
+                await Application.Current.MainPage.DisplayToastAsync("Zalogowano!");
+                await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+            }
+            catch (DataValidationException e)
+            {
+                await Application.Current.MainPage.DisplayToastAsync(e.Message, 5000);
+            }
+            catch (HttpRequestException e)
+            {
+                await Application.Current.MainPage.DisplayToastAsync(e.Message, 5000);
+            }
+            catch (Exception e)
+            {
+                await Application.Current.MainPage.DisplayToastAsync(
+                    $"{ErrorMessage} '{e.Message}'", 5000);
+            }
+            finally
+            {
+                IsBusy = false;
+                Email = string.Empty;
+                Password = string.Empty;
+            }
+        }
+
+        #endregion
     }
 }
-

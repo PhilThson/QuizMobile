@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Quiz.Mobile.Helpers;
 using Quiz.Mobile.CommunityToolkit.Interfaces;
 using Xamarin.Forms;
 
