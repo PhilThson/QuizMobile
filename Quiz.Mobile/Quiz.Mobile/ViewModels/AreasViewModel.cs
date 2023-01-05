@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using Quiz.Mobile.CommunityToolkit;
 using Quiz.Mobile.Views.Dictionary;
 using Quiz.Mobile.Helpers;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -14,6 +15,7 @@ namespace Quiz.Mobile.ViewModels
     {
         #region Pola prywatne
         private readonly IHttpClientService _client;
+        private readonly IMediator _mediator;
         #endregion
 
         #region Konstruktor
@@ -22,6 +24,10 @@ namespace Quiz.Mobile.ViewModels
             base.Title = "Obszary zestawu pytań";
             _client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
+            _mediator = IMediator.Instance;
+
+            _mediator.RequestDictionaryListRefresh += (dictionaryType) =>
+                OnRequestDictionaryListRefresh(dictionaryType);
         }
         #endregion
 
@@ -50,14 +56,14 @@ namespace Quiz.Mobile.ViewModels
                 var areas = await _client.GetAllItems<AreaViewModel>();
                 List.AddRange(areas);
                 IsBusy = false;
-                DependencyService.Get<IToast>()?.MakeToast("Odświeżono");
+                await Application.Current.MainPage.DisplayToastAsync("Odświeżono");
             }
             catch (Exception e)
             {
                 IsBusy = false;
-                DependencyService.Get<IToast>()?.MakeToast(
+                await Application.Current.MainPage.DisplayAlert("Obszary",
                     "Nie udało się pobrać obszarów zestawu pytań. " +
-                    $"Odpowiedź serwera: {e.Message}");
+                    $"Odpowiedź serwera: {e.Message}", "OK");
             }
         }
 
@@ -68,7 +74,7 @@ namespace Quiz.Mobile.ViewModels
                 IsBusy = true;
                 await _client.RemoveItemById<AreaViewModel>(obj.Id);
                 IsBusy = false;
-                await Application.Current.MainPage.DisplayAlert("Usunięto", "", "OK");
+                await Application.Current.MainPage.DisplayToastAsync("Usunięto");
             }
             catch (Exception e)
             {
@@ -81,6 +87,12 @@ namespace Quiz.Mobile.ViewModels
         protected override Task Selected(AreaViewModel obj)
         {
             throw new NotImplementedException();
+        }
+
+        private void OnRequestDictionaryListRefresh(string dictionaryType)
+        {
+            if (dictionaryType == QuizApiSettings.Areas)
+                Refresh().SafeFireAndForget(e => Console.WriteLine(e.Message));
         }
 
         #endregion

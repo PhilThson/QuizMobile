@@ -14,8 +14,12 @@ namespace Quiz.Mobile.ViewModels
 {
     public class AddEmployeeViewModel : SingleItemViewModel<CreateEmployeeDto>
     {
+        #region Pola prywatne
         private readonly IHttpClientService _client;
+        private readonly IMediator _mediator;
+        #endregion
 
+        #region Konstruktor
         public AddEmployeeViewModel()
         {
             base.Title = "Dodawanie pracownika";
@@ -24,11 +28,14 @@ namespace Quiz.Mobile.ViewModels
                 DateOfBirth = DateTime.Now.Date.AddYears(-20),
                 DateOfEmployment = DateTime.Now.Date
             };
+
             _client = DependencyService.Get<IHttpClientService>();
+            _mediator = IMediator.Instance;
 
             this.PropertyChanged +=
                 (_, __) => SaveAndCloseCommand.RaiseCanExecuteChanged();
         }
+        #endregion
 
         #region Właściwości pracownika
         public string FirstName
@@ -220,6 +227,7 @@ namespace Quiz.Mobile.ViewModels
                 await _client.AddItem<CreateEmployeeDto>(Item);
                 DependencyService.Get<IToast>()?.MakeToast("Poprawnie dodano pracownika!");
                 await Task.Delay(2000);
+                _mediator.RaiseRequestEmployeesRefresh();
                 await base.NavigateBack();
             }
             catch (HttpRequestException e)

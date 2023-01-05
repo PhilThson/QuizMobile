@@ -8,6 +8,7 @@ using Quiz.Mobile.CommunityToolkit;
 using System.Net.Http;
 using Quiz.Mobile.Views.Dictionary;
 using Quiz.Mobile.Helpers;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -15,6 +16,7 @@ namespace Quiz.Mobile.ViewModels
 	{
         #region Pola prywatne
         private readonly IHttpClientService _client;
+        private readonly IMediator _mediator;
         #endregion
 
         #region Konstruktor
@@ -23,7 +25,10 @@ namespace Quiz.Mobile.ViewModels
 			base.Title = "Skale trudności";
             _client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
-		}
+            _mediator = IMediator.Instance;
+            _mediator.RequestDictionaryListRefresh += (dictionaryType) =>
+                OnRequestDictionaryListRefresh(dictionaryType);
+        }
         #endregion
 
         #region Właściwości
@@ -61,11 +66,11 @@ namespace Quiz.Mobile.ViewModels
                 List.Clear();
                 var difficulties = await _client.GetAllItems<DifficultyViewModel>();
                 List.AddRange(difficulties);
-                DependencyService.Get<IToast>()?.MakeToast("Odświeżono");
+                await Application.Current.MainPage.DisplayToastAsync("Odświeżono");
             }
             catch (Exception e)
             {
-                DependencyService.Get<IToast>()?.MakeToast(
+                await Application.Current.MainPage.DisplayToastAsync(
                     $"Nie udało się pobrać skal trudności. Odpowiedź serwera: {e.Message}");
             }
             finally
@@ -81,7 +86,7 @@ namespace Quiz.Mobile.ViewModels
                 IsBusy = true;
                 await _client.RemoveItemById<DifficultyViewModel>(obj.Id);
                 IsBusy = false;
-                await Application.Current.MainPage.DisplayAlert("Usunięto", "", "OK");
+                await Application.Current.MainPage.DisplayToastAsync("Usunięto");
             }
             catch (Exception e)
             {
@@ -100,6 +105,13 @@ namespace Quiz.Mobile.ViewModels
                 $"{obj.Name}", "OK");
 
             SelectedDifficulty = null;
+        }
+
+
+        private void OnRequestDictionaryListRefresh(string dictionaryType)
+        {
+            if (dictionaryType == QuizApiSettings.Difficulties)
+                Refresh().SafeFireAndForget(e => Console.WriteLine(e.Message));
         }
 
         #endregion

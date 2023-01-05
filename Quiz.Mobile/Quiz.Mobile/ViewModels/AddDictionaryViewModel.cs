@@ -8,6 +8,7 @@ using Quiz.Mobile.Helpers.Exceptions;
 using Quiz.Mobile.Shared.ViewModels;
 using System.Net.Http;
 using Quiz.Mobile.Helpers;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -16,16 +17,21 @@ namespace Quiz.Mobile.ViewModels
     {
         #region Pola prywatne
         private readonly IHttpClientService _client;
+        private readonly IMediator _mediator;
         #endregion
 
         #region Konstruktor
         public AddDictionaryViewModel()
         {
+            base.Title = "Dodawanie danych słownikowych";
+
             _client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
-            base.Title = "Dodawanie danych słownikowych";
+            _mediator = IMediator.Instance;
+
             this.PropertyChanged +=
                 (_, __) => SaveAndCloseCommand.RaiseCanExecuteChanged();
+
         }
         #endregion
 
@@ -71,13 +77,11 @@ namespace Quiz.Mobile.ViewModels
 
         protected override bool CanSave(object arg)
         {
-            //if (Item != null)
             return
                 !string.IsNullOrEmpty(_Name) &&
+                !string.IsNullOrEmpty(_Description) &&
                 (_Name?.Length < 512) &&
                 (_Description?.Length <= 1024);
-
-            //return false;
         }
 
         protected override async Task SaveAndClose()
@@ -91,10 +95,10 @@ namespace Quiz.Mobile.ViewModels
                     Description = Description
                 };
                 await _client.AddItem<CreateDictionaryDto>(Item, ItemType);
-                IsBusy = false;
-                await Application.Current.MainPage.DisplayAlert(
-                    "Dodawanie", "Poprawnie zapisano dane.", "OK");
+                await Application.Current.MainPage.DisplayToastAsync(
+                    "Poprawnie zapisano dane.");
                 await Task.Delay(1000);
+                _mediator.RaiseRequestDictionaryListRefresh(ItemType);
                 await base.NavigateBack();
             }
             catch (HttpRequestException e)

@@ -12,6 +12,20 @@ namespace Quiz.Mobile.Interfaces
         /// </summary>
         event Action RequestEmployeesRefresh;
 
+        /// <summary>
+        /// Metoda do wywołania zdarzenia do zażądania odświeżenia widoku pracowników
+        /// </summary>
         void RaiseRequestEmployeesRefresh();
+
+        /// <summary>
+        /// Zdarzenie do wysłania żądania odświeżenia widoku listy słownikowej
+        /// </summary>
+        event Action<string> RequestDictionaryListRefresh;
+
+        /// <summary>
+        /// Metoda do wywołania zdarzenia do zażądania odświeżenia widoku określonego typu
+        /// </summary>
+        /// <param name="dictionaryType">Typ listy która ma zostać odświeżona.</param>
+        void RaiseRequestDictionaryListRefresh(string dictionaryType);
     }
 }
