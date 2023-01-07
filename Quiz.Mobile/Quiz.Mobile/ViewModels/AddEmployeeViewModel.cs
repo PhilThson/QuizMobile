@@ -213,7 +213,9 @@ namespace Quiz.Mobile.ViewModels
             _IsPersonalNumberValid &&
             _IsEmailValid &&
             _IsSalaryValid &&
-            (DateOfEmployment != null) &&
+            (DateOfEmployment.HasValue) &&
+            (DateOfBirth.HasValue) &&
+            (DateOfBirth < DateTime.Now.Date) &&
             !IsBusy;
         #endregion
 

@@ -27,11 +27,10 @@ namespace Quiz.Mobile.ViewModels
 
             _client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
-            _mediator = IMediator.Instance;
+            _mediator = Mediator.Instance;
 
             this.PropertyChanged +=
                 (_, __) => SaveAndCloseCommand.RaiseCanExecuteChanged();
-
         }
         #endregion
 
@@ -48,6 +47,7 @@ namespace Quiz.Mobile.ViewModels
                     base.Title = _ItemType switch
                     {
                         //obejście dla CS0150: A constant value is expected
+                        //bo normalnie nie można robić switch'a po zmiennych
                         var val when val == QuizApiSettings.Areas =>
                             "Dodawanie obszaru zestawu pytań",
                         var val when val == QuizApiSettings.Difficulties =>
@@ -75,14 +75,12 @@ namespace Quiz.Mobile.ViewModels
 
         #region Metody
 
-        protected override bool CanSave(object arg)
-        {
-            return
-                !string.IsNullOrEmpty(_Name) &&
-                !string.IsNullOrEmpty(_Description) &&
-                (_Name?.Length < 512) &&
-                (_Description?.Length <= 1024);
-        }
+        protected override bool CanSave(object arg) =>
+            !string.IsNullOrEmpty(_Name) &&
+            !string.IsNullOrEmpty(_Description) &&
+            (_Name?.Length < 512) &&
+            (_Description?.Length <= 1024) &&
+            IsNotBusy;
 
         protected override async Task SaveAndClose()
         {

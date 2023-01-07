@@ -12,7 +12,7 @@ namespace Quiz.Mobile.Shared.DTOs
         //[StringLength(50)]
         public string? LastName { get; set; }
         //[StringLength(256)]
-        public string? BirthCity { get; set; }
+        public string? PlaceOfBirth { get; set; }
         public DateTime? DateOfBirth { get; set; }
         //[Required]
         //[StringLength(11)]

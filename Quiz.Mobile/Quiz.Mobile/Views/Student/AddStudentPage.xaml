@@ -45,6 +45,12 @@
             <DatePicker Date="{Binding DateOfBirth}"
                         Format="dd-MM-yyyy" />
 
+            <Label Text="Miejsce urodzenia:"/>
+            <Entry Text="{Binding PlaceOfBirth}" />
+
+            <Label Text="Numer orzeczenia:"/>
+            <Entry Text="{Binding DisabilityCert}" />
+
             <Label Text="Oddział:"/>
             <Picker Title="Wybierz oddział"
                     ItemsSource="{Binding Branches}"

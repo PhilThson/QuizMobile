@@ -110,6 +110,8 @@ namespace Quiz.Mobile.ViewModels
             set => SetProperty(ref _Roles, value);
         }
 
+        //wykorzystanie właściwości do sprawdzania poprawności formularza
+        //bo do propertisa można się bindować na widoku
         public bool CanSaveProp =>
             !string.IsNullOrEmpty(FirstName) &&
             FirstName?.Length < 50 &&

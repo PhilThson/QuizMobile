@@ -25,7 +25,7 @@ namespace Quiz.Mobile.ViewModels
 			base.Title = "Skale trudności";
             _client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
-            _mediator = IMediator.Instance;
+            _mediator = Mediator.Instance;
             _mediator.RequestDictionaryListRefresh += (dictionaryType) =>
                 OnRequestDictionaryListRefresh(dictionaryType);
         }

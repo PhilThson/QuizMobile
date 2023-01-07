@@ -59,6 +59,32 @@ namespace Quiz.Mobile.ViewModels
             }
         }
 
+        public string DisabilityCert
+        {
+            get => Item.DisabilityCert;
+            set
+            {
+                if (value != Item.DisabilityCert)
+                {
+                    Item.DisabilityCert = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string PlaceOfBirth
+        {
+            get => Item.PlaceOfBirth;
+            set
+            {
+                if (value != Item.PlaceOfBirth)
+                {
+                    Item.PlaceOfBirth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public string PersonalNumber
         {
             get => Item.PersonalNumber;
@@ -122,15 +148,16 @@ namespace Quiz.Mobile.ViewModels
 
         #region Metody
 
-        protected override bool CanSave(object arg)
-        {
-            return
+        protected override bool CanSave(object arg) =>
             !string.IsNullOrEmpty(FirstName) &&
             !string.IsNullOrEmpty(LastName) &&
+            !string.IsNullOrEmpty(PlaceOfBirth) &&
+            !string.IsNullOrEmpty(DisabilityCert) &&
+            DisabilityCert.Length <= 15 && 
             _IsPersonalNumberValid &&
+            (DateOfBirth.HasValue) &&
             (DateOfBirth < DateTime.Now.Date) &&
             BranchId.HasValue;
-        }
 
         protected override async Task SaveAndClose()
         {
