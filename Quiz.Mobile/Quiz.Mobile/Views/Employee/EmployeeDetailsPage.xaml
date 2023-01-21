@@ -38,16 +38,23 @@
                     IsVisible="{Binding IsBusy}"
                     VerticalOptions="Center" />
 
-            <Button Command="{Binding NavigateBackCommand}"
-                    Text="Zamknij"
-                    HorizontalOptions="CenterAndExpand"
-                    Style="{StaticResource ButtonOutline}"/>
-            <Button Command="{Binding RemoveCommand}"
+            <StackLayout Orientation="Vertical"
+                         HorizontalOptions="CenterAndExpand">
+                <Button Text="Zamknij"
+                    Command="{Binding NavigateBackCommand}"
+                    Style="{StaticResource ButtonOutline}"
+                    />
+                <Button Text="Edytuj"
+                    Command="{Binding SaveAndCloseCommand}"
+                    Style="{StaticResource ButtonOutline}"
+                    BackgroundColor="{StaticResource SystemIndigoDark}"
+                    />
+                <Button Text="Usuń"
+                    Command="{Binding RemoveCommand}"
                     CommandParameter="{Binding Item.Id}"
-                    HorizontalOptions="CenterAndExpand"
-                    Text="Usuń"
                     Style="{StaticResource ButtonOutline}"
                     BackgroundColor="IndianRed"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

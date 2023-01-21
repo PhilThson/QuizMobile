@@ -9,9 +9,11 @@ using System.Diagnostics;
 using System.Net.Http;
 using Xamarin.CommunityToolkit.Extensions;
 using Quiz.Mobile.Helpers.Exceptions;
+using Quiz.Mobile.Shared.ViewModels;
 
 namespace Quiz.Mobile.ViewModels
 {
+    [QueryProperty(nameof(EmployeeId), nameof(EmployeeId))]
     public class AddEmployeeViewModel : SingleItemViewModel<CreateEmployeeDto>
     {
         #region Pola prywatne
@@ -207,6 +209,24 @@ namespace Quiz.Mobile.ViewModels
             set => SetProperty(ref _Postions, value);
         }
 
+        private int _EmployeeId;
+        public int EmployeeId
+        {
+            get => _EmployeeId;
+            set
+            {
+                if(value != _EmployeeId)
+                {
+                    _EmployeeId = value;
+                    Title = "Edycja pracownika";
+                    LoadEmployee(_EmployeeId).SafeFireAndForget(
+                        ex => Console.WriteLine(ex.Message));
+
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public bool CanSaveProp =>
             !string.IsNullOrEmpty(FirstName) &&
             !string.IsNullOrEmpty(LastName) &&
@@ -216,7 +236,8 @@ namespace Quiz.Mobile.ViewModels
             (DateOfEmployment.HasValue) &&
             (DateOfBirth.HasValue) &&
             (DateOfBirth < DateTime.Now.Date) &&
-            !IsBusy;
+            IsNotBusy;
+
         #endregion
 
         #region Metody
@@ -228,8 +249,8 @@ namespace Quiz.Mobile.ViewModels
                 IsBusy = true;
                 await _client.AddItem<CreateEmployeeDto>(Item);
                 DependencyService.Get<IToast>()?.MakeToast("Poprawnie dodano pracownika!");
-                await Task.Delay(2000);
                 _mediator.RaiseRequestEmployeesRefresh();
+                await Task.Delay(2000);
                 await base.NavigateBack();
             }
             catch (HttpRequestException e)
@@ -282,6 +303,25 @@ namespace Quiz.Mobile.ViewModels
         }
 
         protected override bool CanSave(object arg) => CanSaveProp;
+
+        private async Task LoadEmployee(int id)
+        {
+            try
+            {
+                var employeeFromDb = await _client.GetItemById<EmployeeViewModel>(id);
+                Item = (CreateEmployeeDto)employeeFromDb;
+                foreach (var prop in Item.GetType().GetProperties())
+                    OnPropertyChanged(prop.Name);
+            }
+            catch (Exception e)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Edycja",
+                    $"Nie udało się załadować pracownika. '{e.Message}'",
+                    "OK");
+                return;
+            }
+        }
 
         #endregion
     }

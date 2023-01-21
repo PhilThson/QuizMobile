@@ -23,5 +23,16 @@ namespace Quiz.Mobile.Helpers.Exceptions
 		{
 		}
 	}
+
+	public class ConversionException : Exception
+	{
+		public ConversionException() : base("Błąd konwersji danych")
+		{
+		}
+
+		public ConversionException(string message) : base(message)
+		{
+		}
+	}
 }
 

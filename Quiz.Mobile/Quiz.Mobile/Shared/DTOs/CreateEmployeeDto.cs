@@ -26,6 +26,8 @@ namespace Quiz.Mobile.Shared.DTOs
         {
             var createEmployee = new CreateEmployeeDto();
             createEmployee.CopyPropertiesExtension(employeeVM);
+            createEmployee.JobId = employeeVM.Job?.Id;
+            createEmployee.PositionId = employeeVM.Position?.Id;
             return createEmployee;
         }
     }

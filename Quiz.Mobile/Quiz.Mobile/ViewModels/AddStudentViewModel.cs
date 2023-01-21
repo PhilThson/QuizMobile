@@ -8,10 +8,13 @@ using System.Collections.ObjectModel;
 using Quiz.Mobile.CommunityToolkit;
 using System.Net.Http;
 using Quiz.Mobile.Helpers.Exceptions;
+using Quiz.Mobile.Helpers;
+using Quiz.Mobile.Shared.ViewModels;
 
 namespace Quiz.Mobile.ViewModels
 {
-	public class AddStudentViewModel : SingleItemViewModel<CreateStudentDto>
+    [QueryProperty(nameof(StudentId), nameof(StudentId))]
+    public class AddStudentViewModel : SingleItemViewModel<CreateStudentDto>
     {
         #region Pola prywatne
         private readonly IHttpClientService _client;
@@ -143,6 +146,25 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
+
+        private int _StudentId;
+        public int StudentId
+        {
+            get => _StudentId;
+            set
+            {
+                if(value != _StudentId)
+                {
+                    _StudentId = value;
+                    Title = "Edycja ucznia";
+                    LoadStudent(_StudentId).SafeFireAndForget(
+                        ex => Console.WriteLine(ex.Message));
+
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public bool IsValidForm => CanSave(null);
         #endregion
 
@@ -157,7 +179,8 @@ namespace Quiz.Mobile.ViewModels
             _IsPersonalNumberValid &&
             (DateOfBirth.HasValue) &&
             (DateOfBirth < DateTime.Now.Date) &&
-            BranchId.HasValue;
+            BranchId.HasValue &&
+            IsNotBusy;
 
         protected override async Task SaveAndClose()
         {
@@ -196,6 +219,25 @@ namespace Quiz.Mobile.ViewModels
                 DependencyService.Get<IToast>()?.MakeToast(
                     "Nie udało się pobrać oddziałów. " +
                     $"Odpowiedź serwera: {e.Message}");
+            }
+        }
+
+        private async Task LoadStudent(int id)
+        {
+            try
+            {
+                var studentFromDb = await _client.GetItemById<StudentViewModel>(id);
+                Item = (CreateStudentDto)studentFromDb;
+                foreach (var prop in Item.GetType().GetProperties())
+                    OnPropertyChanged(prop.Name);
+            }
+            catch (Exception e)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Edycja",
+                    $"Nie udało się załadować ucznia. '{e.Message}'",
+                    "OK");
+                return;
             }
         }
 

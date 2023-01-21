@@ -3,6 +3,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:converters="clr-namespace:Quiz.Mobile.Helpers.Converters"
     x:Class="Quiz.Mobile.Views.Dictionary.AddDictionaryPage"
     Title="{Binding Title}"
     x:DataType="vm:AddDictionaryViewModel"
@@ -12,11 +13,14 @@
         Light={StaticResource WindowBackgroundColor}}"
     >
 
-     <ContentPage.BindingContext>
+    <ContentPage.BindingContext>
         <vm:AddDictionaryViewModel/>
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ItemTypeToVisibilityConverter x:Key="itemTypeConverter" />
+        </ResourceDictionary>
         <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
         <Style TargetType="Entry" BasedOn="{StaticResource BaseEntry}"/>
     </ContentPage.Resources>
@@ -24,10 +28,16 @@
     <StackLayout>
         <StackLayout Padding="15">
             <Label Text="Nazwa:"/>
-            <Entry Text="{Binding Name}" />
+            <Entry Text="{Binding Name, Mode=TwoWay}" />
 
             <Label Text="Opis:"/>
-            <Entry Text="{Binding Description}" />
+            <Entry Text="{Binding Description, Mode=TwoWay}" />
+
+            <Label Text="Nazwa rozszerzona:" IsVisible="{Binding ItemType,
+                Converter={StaticResource itemTypeConverter}}"/>
+            <Entry Text="{Binding ExtendedName, Mode=TwoWay}"
+                   IsVisible="{Binding ItemType,
+                Converter={StaticResource itemTypeConverter}}"/>
         </StackLayout>
 
         <ActivityIndicator
@@ -42,7 +52,7 @@
                 Padding="20,0"
                 Command="{Binding SaveAndCloseCommand}"
                 HorizontalOptions="Center"
-                IsEnabled="{Binding IsNotBusy}"
+                IsEnabled="{Binding CanSaveProp}"
                 Text="Zapisz"
                 VerticalOptions="FillAndExpand"
                 Style="{StaticResource ButtonOutline}"/>

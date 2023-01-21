@@ -3,6 +3,7 @@ namespace Quiz.Mobile.Shared.DTOs
 {
 	public class CreatePersonDto
 	{
+        public int Id { get; set; }
         //[Required]
         //[StringLength(20)]
         public string? FirstName { get; set; }

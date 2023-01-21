@@ -11,5 +11,6 @@ namespace Quiz.Mobile.Interfaces
         Task<T> GetItemByKey<T>(string key, string value);
         Task RemoveItemById<T>(object id);
         Task AddItem<T>(T item, string dict = null);
+        Task UpdateItem<T>(T item, string dict = null);
     }
 }

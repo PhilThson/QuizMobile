@@ -33,7 +33,8 @@
             <Entry Text="{Binding LastName}" />
 
             <Label Text="Pesel:"/>
-            <Entry Text="{Binding PersonalNumber, Mode=TwoWay}" Keyboard="Numeric">
+            <Entry Text="{Binding PersonalNumber, Mode=TwoWay}"
+                   Keyboard="Numeric" MaxLength="11">
                 <Entry.Behaviors>
                     <behaviors:PersonalNumberValidatorBehavior
                         IsValid="{Binding Source={x:Reference addStudent},
@@ -72,7 +73,7 @@
                 Padding="20,0"
                 Command="{Binding SaveAndCloseCommand}"
                 HorizontalOptions="Center"
-                IsEnabled="{Binding IsNotBusy}"
+                IsEnabled="{Binding IsValidForm}"
                 Text="Zapisz"
                 VerticalOptions="FillAndExpand"
                 Style="{StaticResource ButtonOutline}"/>

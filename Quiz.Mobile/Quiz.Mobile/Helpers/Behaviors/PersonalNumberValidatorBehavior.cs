@@ -25,8 +25,9 @@ namespace Quiz.Mobile.Helpers.Behaviors
 
         void HandleTextChanged(object sender, TextChangedEventArgs e)
         {
-            //Sprawdzic czy text konwertuje sie na liczbe
-            IsValid = e.NewTextValue.Length == 9;
+            IsValid =
+                e.NewTextValue.Length == 11 &&
+                Regex.IsMatch(e.NewTextValue, @"^\d+$");
             ((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
         }
 

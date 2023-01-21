@@ -5,8 +5,6 @@
     x:Class="Quiz.Mobile.Views.Student.StudentsPage"
     xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels" 
     xmlns:base="clr-namespace:Quiz.Mobile.Views.Base"
-    xmlns:model="clr-namespace:Quiz.Mobile.Shared.ViewModels"
-    xmlns:ctb="clr-namespace:Quiz.Mobile.CommunityToolkit.Behaviours"
     xmlns:ctc="clr-namespace:Quiz.Mobile.CommunityToolkit.Converters"
     xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
     x:DataType="viewmodels:StudentsViewModel"

@@ -108,6 +108,8 @@ namespace Quiz.Mobile.Services
 
         public async Task AddItem<T>(T item, string dict = null)
         {
+            //Ze względu na wykorzystanie jednego Dto'sa do tworzenia
+            //Areas oraz Difficulties, to w parametrze jest przekazywany endpoint
             if (!endpoints.TryGetValue(typeof(T), out string endpoint))
             {
                 if (!string.IsNullOrEmpty(dict))
@@ -119,6 +121,25 @@ namespace Quiz.Mobile.Services
             var dataToSend = new StringContent(JsonConvert.SerializeObject(item),
                 Encoding.UTF8, "application/json");
             var response = await Client.PostAsync(endpoint, dataToSend);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException(content);
+        }
+
+        public async Task UpdateItem<T>(T item, string dict = null)
+        {
+            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
+            {
+                if (!string.IsNullOrEmpty(dict))
+                    endpoint = dict;
+                else
+                    throw new DataNotFoundException();
+            }
+
+            var dataToSend = new StringContent(JsonConvert.SerializeObject(item),
+                Encoding.UTF8, "application/json");
+            var response = await Client.PutAsync(endpoint, dataToSend);
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)

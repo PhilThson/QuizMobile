@@ -8,6 +8,8 @@ using Quiz.Mobile.CommunityToolkit;
 using Quiz.Mobile.Views.Dictionary;
 using Quiz.Mobile.Helpers;
 using Xamarin.CommunityToolkit.Extensions;
+using Quiz.Mobile.Views.Student;
+using Quiz.Mobile.Shared.DTOs;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -29,6 +31,16 @@ namespace Quiz.Mobile.ViewModels
             _mediator.RequestDictionaryListRefresh += (dictionaryType) =>
                 OnRequestDictionaryListRefresh(dictionaryType);
         }
+        #endregion
+
+        #region Właściwości
+        private AreaViewModel _SelectedArea;
+        public AreaViewModel SelectedArea
+        {
+            get => _SelectedArea;
+            set => SetProperty(ref _SelectedArea, value);
+        }
+
         #endregion
 
         #region Metody
@@ -84,9 +96,15 @@ namespace Quiz.Mobile.ViewModels
             }
         }
 
-        protected override Task Selected(AreaViewModel obj)
+        protected override async Task Selected(AreaViewModel area)
         {
-            throw new NotImplementedException();
+            if (area == null)
+                return;
+
+            var route = $"{nameof(AddDictionaryPage)}" +
+                $"?ItemType={QuizApiSettings.Areas}&ItemId={area.Id}";
+
+            await AppShell.Current.GoToAsync(route);
         }
 
         private void OnRequestDictionaryListRefresh(string dictionaryType)

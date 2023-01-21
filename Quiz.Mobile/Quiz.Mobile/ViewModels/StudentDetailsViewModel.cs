@@ -6,6 +6,9 @@ using Quiz.Mobile.Shared.ViewModels;
 using System.Threading.Tasks;
 using Quiz.Mobile.CommunityToolkit;
 using System.Diagnostics;
+using Quiz.Mobile.Helpers;
+using Quiz.Mobile.Views.Dictionary;
+using Quiz.Mobile.Views.Student;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -17,8 +20,8 @@ namespace Quiz.Mobile.ViewModels
         #endregion
 
         #region Właściwości
-        private string _StudentId;
-        public string StudentId
+        private int _StudentId;
+        public int StudentId
         {
             get => _StudentId;
             set
@@ -43,17 +46,19 @@ namespace Quiz.Mobile.ViewModels
         #endregion
 
         #region Metody
+        //Przekierowanie do edycji
         protected override async Task SaveAndClose()
         {
-            throw new NotImplementedException();
+            var route = $"{nameof(AddStudentPage)}?StudentId={StudentId}";
+            await AppShell.Current.GoToAsync(route);
         }
 
         private async Task LoadStudent()
         {
             try
             {
-                int.TryParse(_StudentId, out var id);
-                Item = await _client.GetItemById<StudentViewModel>(id);
+                //int.TryParse(_StudentId, out var id);
+                Item = await _client.GetItemById<StudentViewModel>(StudentId);
             }
             catch (Exception e)
             {

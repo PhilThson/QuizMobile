@@ -35,8 +35,18 @@
             <Label HorizontalOptions="StartAndExpand"
                    Text="{Binding Item.Branch.Description, StringFormat='Opis dddziału: {0}'}"/>
 
-            <Button Command="{Binding NavigateBackCommand}" Text="Zamknij"
-                    Style="{StaticResource ButtonOutline}"/>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand">
+                <Button Text="Zamknij"
+                    Command="{Binding NavigateBackCommand}" 
+                    Style="{StaticResource ButtonOutline}"
+                    />
+                <Button Text="Edytuj"
+                    Command="{Binding SaveAndCloseCommand}"
+                    Style="{StaticResource ButtonOutline}"
+                    BackgroundColor="{StaticResource SystemIndigoDark}"
+                    />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 

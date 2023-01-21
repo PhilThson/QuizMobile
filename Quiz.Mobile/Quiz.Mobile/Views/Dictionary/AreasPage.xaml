@@ -5,9 +5,7 @@
     x:Class="Quiz.Mobile.Views.Dictionary.AreasPage"
     xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
     xmlns:vm="clr-namespace:Quiz.Mobile.ViewModels"
-    xmlns:shared="clr-namespace:Quiz.Mobile.Shared.ViewModels"
     xmlns:base="clr-namespace:Quiz.Mobile.Views.Base"
-    xmlns:models="clr-namespace:Quiz.Mobile.Models"
     xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
     Title="{Binding Title}"
     x:Name="areasPage"
@@ -19,7 +17,7 @@
         <vm:AreasViewModel/>
     </ContentPage.BindingContext>
 
-     <ContentPage.ToolbarItems>
+    <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddCommand}" >
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="MaterialDesignIcons"
@@ -39,7 +37,11 @@
             ItemSizingStrategy="MeasureAllItems"
             ItemsLayout="VerticalList"
             ItemsSource="{Binding List}"
-            SelectionMode="None"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedArea}"
+            SelectionChangedCommand="{Binding SelectedCommand}"
+            SelectionChangedCommandParameter="{Binding SelectedItem,
+                Source={x:Reference collectionView}}"
             x:Name="collectionView">
 
             <CollectionView.EmptyView>
@@ -77,7 +79,15 @@
                         </SwipeView.LeftItems>
 
                         <base:DictionaryCard/>
-
+                        <!--<SwipeView.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={
+                                    RelativeSource AncestorType={x:Type vm:AreasViewModel}},
+                                    Path=SelectedCommand}"
+                                 CommandParameter="{Binding .}">
+                            </TapGestureRecognizer>
+                        </SwipeView.GestureRecognizers>-->
                     </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

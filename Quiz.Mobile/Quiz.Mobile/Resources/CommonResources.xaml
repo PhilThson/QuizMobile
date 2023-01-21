@@ -80,9 +80,8 @@
         <Setter Property="BorderColor" Value="{AppThemeBinding
                 Dark={StaticResource TextColorDark},
                 Light={StaticResource TextColor}}" />
-        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
     </Style>
-
 
     <!--Dzięki bazowemu stylowi, można zmienić kolor tekstu w jednym miejscu
             - zastosowanie w stylach/motywach-->
@@ -118,7 +117,10 @@
         <Setter Property="Margin" Value="2,0,2,10"/>
         <Setter Property="BackgroundColor" Value="{AppThemeBinding
                     Dark={StaticResource CardBackgroundDark},
-                    Light={StaticResource WindowBackgroundColor}}"/>
+                    Light={StaticResource WindowBackgroundColor}}"/>        
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding
+                    Dark={StaticResource SystemGrayDark},
+                    Light={StaticResource SystemGray2Dark}}"/>
     </Style>
 
     <Style x:Key="BaseDatePicker" TargetType="DatePicker">

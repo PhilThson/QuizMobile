@@ -38,7 +38,8 @@
                 <Entry Text="{Binding LastName}" />
 
                 <Label Text="Pesel:"/>
-                <Entry Text="{Binding PersonalNumber}" Keyboard="Numeric">
+                <Entry Text="{Binding PersonalNumber}"
+                       Keyboard="Numeric" MaxLength="11">
                     <Entry.Behaviors>
                         <behaviors:PersonalNumberValidatorBehavior
                         IsValid="{Binding Source={x:Reference addEmployee},

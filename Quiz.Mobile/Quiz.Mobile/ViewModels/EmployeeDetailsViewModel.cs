@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using Quiz.Mobile.Views.Employee;
 using Xamarin.CommunityToolkit.Extensions;
+using Quiz.Mobile.Views.Student;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -53,9 +54,11 @@ namespace Quiz.Mobile.ViewModels
         #endregion
 
         #region Metody
+        //Przekierowanie do edycji
         protected override async Task SaveAndClose()
         {
-            throw new NotImplementedException();
+            var route = $"{nameof(AddEmployeePage)}?EmployeeId={EmployeeId}";
+            await AppShell.Current.GoToAsync(route);
         }
 
         private async Task LoadEmployee()

@@ -96,15 +96,15 @@ namespace Quiz.Mobile.ViewModels
             }
         }
 
-        protected override async Task Selected(DifficultyViewModel obj)
+        protected override async Task Selected(DifficultyViewModel difficulty)
         {
-            if (obj == null)
+            if (difficulty == null)
                 return;
 
-            await Application.Current.MainPage.DisplayAlert("Wybrano",
-                $"{obj.Name}", "OK");
+            var route = $"{nameof(AddDictionaryPage)}" +
+                $"?ItemType={QuizApiSettings.Difficulties}&ItemId={difficulty.Id}";
 
-            SelectedDifficulty = null;
+            await AppShell.Current.GoToAsync(route);
         }
 
 

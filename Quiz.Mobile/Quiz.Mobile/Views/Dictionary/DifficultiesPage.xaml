@@ -39,13 +39,13 @@
             ItemSizingStrategy="MeasureAllItems"
             ItemsLayout="VerticalList"
             ItemsSource="{Binding List}"
-            SelectionMode="None"
-            x:Name="collectionView"
-            >
-            <!--SelectedItem="{Binding SelectedDifficulty}"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedDifficulty}"
             SelectionChangedCommand="{Binding SelectedCommand}"
             SelectionChangedCommandParameter="{Binding SelectedItem,
-                Source={x:Reference collectionView}}"-->
+                Source={x:Reference collectionView}}"
+            x:Name="collectionView"
+            >
 
             <CollectionView.EmptyView>
                 <StackLayout Padding="12">
