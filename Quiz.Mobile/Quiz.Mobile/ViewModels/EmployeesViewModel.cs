@@ -10,11 +10,12 @@ using Quiz.Mobile.Views.Employee;
 using Quiz.Mobile.Shared.ViewModels;
 using System.Net.Http;
 using Quiz.Mobile.CommunityToolkit.Interfaces;
+using System.Linq;
+using System.Windows.Input;
 
 namespace Quiz.Mobile.ViewModels
 {
-    public class EmployeesViewModel : ItemsCollectionViewModel<EmployeeViewModel>,
-        IDisposable
+    public class EmployeesViewModel : ItemsCollectionViewModel<EmployeeViewModel>
     {
         #region Pola prywatne
         private readonly IHttpClientService _client;
@@ -36,9 +37,10 @@ namespace Quiz.Mobile.ViewModels
         #region Komendy
         //Osobna komenda dla kolekcji typu ListView ze względu na przyjmowany typ
         //object - wynika to z podwójnego wywołania komendy, pierwszy raz z parametrem
-        //EmployeeViewModel, a drugi z eventem ItemSelectedChanged
+        //EmployeeViewModel, a drugi z eventem ItemSelectedChanged (bug Xamarina)
         public IAsyncCommand<object> SelectedEmployeeCommand =>
             _SelectedEmployeeCommand ??= new AsyncCommand<object>(EmployeeSelected);
+
         #endregion
 
         #region Właściwości
@@ -47,6 +49,22 @@ namespace Quiz.Mobile.ViewModels
         {
             get => _SelectedEmployee;
             set => SetProperty(ref _SelectedEmployee, value);
+        }
+
+        //Znacznie prostsza wersja filtrowania
+        private string _FilterText;
+        public string FilterText
+        {
+            get => _FilterText;
+            set
+            {
+                if(value != _FilterText)
+                {
+                    _FilterText = value;
+                    Filter(_FilterText);
+                    OnPropertyChanged();
+                }
+            }
         }
         #endregion
 
@@ -64,8 +82,8 @@ namespace Quiz.Mobile.ViewModels
                 IsBusy = true;
                 await Task.Delay(1000);
                 List.Clear();
-                var employees = await _client.GetAllItems<EmployeeViewModel>();
-                List.AddRange(employees);
+                AllList = await _client.GetAllItems<EmployeeViewModel>();
+                List.AddRange(AllList);
                 IsBusy = false;
                 DependencyService.Get<IToast>()?.MakeToast("Odświeżono");
             }
@@ -100,8 +118,8 @@ namespace Quiz.Mobile.ViewModels
 
         protected override async Task Load()
         {
-            var employees = await _client.GetAllItems<EmployeeViewModel>();
-            List = new ObservableRangeCollection<EmployeeViewModel>(employees);
+            AllList = await _client.GetAllItems<EmployeeViewModel>();
+            List = new ObservableRangeCollection<EmployeeViewModel>(AllList);
         }
 
         private async Task EmployeeSelected(object obj)
@@ -115,12 +133,33 @@ namespace Quiz.Mobile.ViewModels
             SelectedEmployee = null;
         }
 
+        protected override void Filter(string filter)
+        {
+            List.Clear();
+            if (string.IsNullOrEmpty(filter))
+            {
+                List.AddRange(AllList);
+                return;
+            }
+
+            List.AddRange(AllList
+                .Where(e =>
+                    (e.LastName?
+                        .Contains(filter,
+                            StringComparison.InvariantCultureIgnoreCase) ?? false) ||
+                    (e.FirstName?
+                        .Contains(filter,
+                            StringComparison.InvariantCultureIgnoreCase) ?? false)
+                    ));
+        }
+
         public void OnRequestEmployeesRefresh() =>
             this.Refresh().SafeFireAndForget(e => Console.WriteLine(e.Message));
 
-        public void Dispose()
+        public override void Dispose()
         {
             _mediator.RequestEmployeesRefresh -= OnRequestEmployeesRefresh;
+            base.Dispose();
         }
         #endregion
     }

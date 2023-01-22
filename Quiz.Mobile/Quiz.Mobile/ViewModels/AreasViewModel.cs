@@ -83,6 +83,11 @@ namespace Quiz.Mobile.ViewModels
         {
             try
             {
+                var accept = await Application.Current.MainPage.DisplayAlert(
+                    "Usuwanie", "Czy na pewno usunąć obszar zestawu pytań?",
+                    "TAK", "Anuluj");
+                if (!accept)
+                    return;
                 IsBusy = true;
                 await _client.RemoveItemById<AreaViewModel>(obj.Id);
                 IsBusy = false;

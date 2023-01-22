@@ -4,19 +4,22 @@ using Quiz.Mobile.CommunityToolkit;
 using Quiz.Mobile.CommunityToolkit.Commands;
 using Quiz.Mobile.CommunityToolkit.Interfaces;
 using System.Diagnostics;
-using Xamarin.Forms;
 using Quiz.Mobile.Interfaces;
+using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace Quiz.Mobile.ViewModels.Abstract
 {
     public abstract class ItemsCollectionViewModel<T> : BaseViewModel
     {
         #region Pola i komendy
+        private IEnumerable<T> _AllList;
         private ObservableRangeCollection<T> _List;
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand AddCommand { get; }
         public IAsyncCommand<T> RemoveCommand { get; }
         public IAsyncCommand<T> SelectedCommand { get; }
+        public ICommand FilterCommand { get; }
         #endregion
 
         #region Konstruktor
@@ -26,10 +29,12 @@ namespace Quiz.Mobile.ViewModels.Abstract
             AddCommand = new AsyncCommand(Add);
             RemoveCommand = new AsyncCommand<T>(Remove);
             SelectedCommand = new AsyncCommand<T>(Selected);
+            FilterCommand = new Command<string>(Filter);
         }
         #endregion
 
         #region Publiczne pola i właściwości
+        //Lista przechowująca przefiltrowaną kolekcję
         public ObservableRangeCollection<T> List
         {
             get
@@ -46,6 +51,20 @@ namespace Quiz.Mobile.ViewModels.Abstract
             //przypisze wartość do wybranej właściwości oraz rozgłosi zmianę
             set => SetProperty(ref _List, value);
         }
+
+        //Lista przechowująca całą kolekcję
+        public IEnumerable<T> AllList
+        {
+            get => _AllList;
+            set
+            {
+                if(value != _AllList)
+                {
+                    _AllList = value;
+                    //List = new ObservableRangeCollection<T>(_AllList);
+                }
+            }
+        }
         #endregion
 
         #region Deklaracje wymaganych metod
@@ -54,6 +73,10 @@ namespace Quiz.Mobile.ViewModels.Abstract
         protected abstract Task Remove(T obj);
         protected abstract Task Load();
         protected abstract Task Selected(T obj);
+        #endregion
+
+        #region Deklaracje opcjonalnych metod
+        protected virtual void Filter(string filter) { }
         #endregion
     }
 }

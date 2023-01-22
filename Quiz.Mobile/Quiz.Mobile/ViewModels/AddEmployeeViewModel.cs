@@ -29,7 +29,8 @@ namespace Quiz.Mobile.ViewModels
             Item = new CreateEmployeeDto()
             {
                 DateOfBirth = DateTime.Now.Date.AddYears(-20),
-                DateOfEmployment = DateTime.Now.Date
+                DateOfEmployment = DateTime.Now.Date,
+                EmploymentEndDate = DateTime.Now.Date.AddDays(1)
             };
 
             _client = DependencyService.Get<IHttpClientService>();
@@ -96,6 +97,7 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
+
         public decimal Salary
         {
             get => Item.Salary;
@@ -113,6 +115,45 @@ namespace Quiz.Mobile.ViewModels
         {
             get => _IsSalaryValid;
             set => SetProperty(ref _IsSalaryValid, value);
+        }
+
+        public int? DaysOfLeave
+        {
+            get => Item.DaysOfLeave;
+            set
+            {
+                if (value != Item.DaysOfLeave)
+                {
+                    Item.DaysOfLeave = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public double? HourlyRate
+        {
+            get => Item.HourlyRate;
+            set
+            {
+                if (value != Item.HourlyRate)
+                {
+                    Item.HourlyRate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public double? Overtime
+        {
+            get => Item.Overtime;
+            set
+            {
+                if (value != Item.Overtime)
+                {
+                    Item.Overtime = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public string? Email
@@ -178,6 +219,18 @@ namespace Quiz.Mobile.ViewModels
                 if (value != Item.DateOfEmployment)
                 {
                     Item.DateOfEmployment = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public DateTime? EmploymentEndDate
+        {
+            get => Item.EmploymentEndDate;
+            set
+            {
+                if (value != Item.EmploymentEndDate)
+                {
+                    Item.EmploymentEndDate = value;
                     OnPropertyChanged();
                 }
             }
@@ -274,6 +327,10 @@ namespace Quiz.Mobile.ViewModels
             (DateOfEmployment.HasValue) &&
             (DateOfBirth.HasValue) &&
             (DateOfBirth < DateTime.Now.Date) &&
+            ((!DaysOfLeave.HasValue) ? true :
+                (DaysOfLeave <= 500)) &&
+            ((!EmploymentEndDate.HasValue) ? true :
+                (EmploymentEndDate >= DateOfEmployment.Value.Date)) &&
             IsNotBusy
             ;
 

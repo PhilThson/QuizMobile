@@ -5,13 +5,18 @@ using Quiz.Mobile.Interfaces;
 using Quiz.Mobile.CommunityToolkit.Commands;
 using Xamarin.Forms;
 using System.Threading.Tasks;
-using Quiz.Mobile.CommunityToolkit;
 using Quiz.Mobile.Views.Student;
 using Xamarin.CommunityToolkit.Extensions;
+using Command = Quiz.Mobile.CommunityToolkit.Commands.Command;
+using System.Linq;
+using System.Windows.Input;
+using Quiz.Mobile.CommunityToolkit;
+using Quiz.Mobile.CommunityToolkit.Interfaces;
 
 namespace Quiz.Mobile.ViewModels
 {
-    public class StudentsViewModel : ItemsCollectionViewModel<StudentViewModel>
+    public class StudentsViewModel : ItemsCollectionViewModel<StudentViewModel>,
+        IHasCollectionViewModel
     {
         #region Pola prywatne
         private readonly IHttpClientService _client;
@@ -33,6 +38,7 @@ namespace Quiz.Mobile.ViewModels
         #endregion
 
         #region Właściwości i komendy
+        public IHasCollectionView View { get; set; }
 
         private StudentViewModel _SelectedStudent;
         public StudentViewModel SelectedStudent
@@ -43,6 +49,23 @@ namespace Quiz.Mobile.ViewModels
 
         public AsyncCommand<object> FavoriteCommand { get; }
 
+        private string _SearchText;
+        public string SearchText
+        {
+            get => _SearchText;
+            set => SetProperty(ref _SearchText, value);
+        }
+
+        private ICommand _MoveToStartCommand;
+        public ICommand MoveToStartCommand =>
+            _MoveToStartCommand ??=
+                new Command(() => View.CollectionView.ScrollTo(0));
+
+        private IAsyncCommand _LoadMoreCommand;
+        public IAsyncCommand LoadMoreCommand =>
+            _LoadMoreCommand ??=
+                new AsyncCommand(LoadMore);
+
         #endregion
 
         #region Metody
@@ -52,10 +75,10 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 IsBusy = true;
-                await Task.Delay(1000);
+                await Task.Delay(500);
                 List.Clear();
-                var students = await _client.GetAllItems<StudentViewModel>();
-                List.AddRange(students);
+                AllList = await _client.GetAllItems<StudentViewModel>();
+                List.AddRange(AllList.Take(10));
                 IsBusy = false;
                 await Application.Current.MainPage.DisplayToastAsync("Odświeżono");
             }
@@ -85,6 +108,11 @@ namespace Quiz.Mobile.ViewModels
 
         protected override async Task Remove(StudentViewModel student)
         {
+            var accept = await Application.Current.MainPage.DisplayAlert(
+                "Usuwanie", "Czy na pewno usunąć ucznia?", "TAK", "Anuluj");
+            if (!accept)
+                return;
+
             await _client.RemoveItemById<StudentViewModel>(student.Id);
             await Refresh();
             await Task.Delay(1000);
@@ -93,8 +121,8 @@ namespace Quiz.Mobile.ViewModels
 
         protected override async Task Load()
         {
-            var students = await _client.GetAllItems<StudentViewModel>();
-            List = new ObservableRangeCollection<StudentViewModel>(students);
+            AllList = await _client.GetAllItems<StudentViewModel>();
+            List = new CommunityToolkit.ObservableRangeCollection<StudentViewModel>(AllList.Take(10));
         }
 
         protected async Task Favorite(object obj)
@@ -105,6 +133,40 @@ namespace Quiz.Mobile.ViewModels
             await Application.Current.MainPage.DisplayAlert(
                 "Ulubiony", student.FirstName, "OK");
         }
+
+        protected override void Filter(string value)
+        {
+            List.Clear();
+            if (string.IsNullOrEmpty(value))
+            {
+                List.AddRange(AllList);
+                return;
+            }
+
+            List.AddRange(AllList
+                .Where(s =>
+                ($"{s.FirstName} {s.LastName}"
+                    .Contains(value, StringComparison.InvariantCultureIgnoreCase)) ||
+                ($"{s.LastName} {s.FirstName}"
+                    .Contains(value, StringComparison.InvariantCultureIgnoreCase))
+                ));
+        }
+
+        private async Task LoadMore()
+        {
+            IsLoading = true;
+            await Task.Delay(500);
+            if (List.Count >= AllList.Count())
+            {
+                IsLoading = false;
+                return;
+            }
+
+            List.AddRange(AllList.Skip(List.Count).Take(10));
+            IsLoading = false;
+        }
+
+        public bool IsLoading { get; set; } = false;
 
         #endregion
     }

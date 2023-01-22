@@ -26,8 +26,7 @@ namespace Quiz.Mobile.ViewModels
             _client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
             _mediator = Mediator.Instance;
-            _mediator.RequestDictionaryListRefresh += (dictionaryType) =>
-                OnRequestDictionaryListRefresh(dictionaryType);
+            _mediator.RequestDictionaryListRefresh += OnRequestDictionaryListRefresh;
         }
         #endregion
 
@@ -83,6 +82,11 @@ namespace Quiz.Mobile.ViewModels
         {
             try
             {
+                var accept = await Application.Current.MainPage.DisplayAlert(
+                    "Usuwanie", "Czy na pewno usunąć skalę trudności?",
+                    "TAK", "Anuluj");
+                if (!accept)
+                    return;
                 IsBusy = true;
                 await _client.RemoveItemById<DifficultyViewModel>(obj.Id);
                 IsBusy = false;
@@ -112,6 +116,12 @@ namespace Quiz.Mobile.ViewModels
         {
             if (dictionaryType == QuizApiSettings.Difficulties)
                 Refresh().SafeFireAndForget(e => Console.WriteLine(e.Message));
+        }
+
+        public override void Dispose()
+        {
+            _mediator.RequestDictionaryListRefresh -= OnRequestDictionaryListRefresh;
+            base.Dispose();
         }
 
         #endregion

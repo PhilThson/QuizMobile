@@ -30,7 +30,13 @@
                      Command="{Binding AddCommand}"/>
     </ContentPage.ToolbarItems>
 
-    <ListView
+    <StackLayout Orientation="Vertical">
+
+        <SearchBar Placeholder="Wyszukaj pracownika"
+                   Text="{Binding FilterText}"
+                   />
+
+        <ListView
             CachingStrategy="RecycleElement"
             ItemsSource="{Binding List}"
             IsPullToRefreshEnabled="True"
@@ -38,18 +44,18 @@
             RefreshCommand="{Binding RefreshCommand}"
             Style="{StaticResource BaseListView}"
             SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
-        >
-        <ListView.Behaviors>
-            <xct:EventToCommandBehavior
+            >
+            <ListView.Behaviors>
+                <xct:EventToCommandBehavior
                 EventName="ItemSelected"
                 Command="{Binding SelectedEmployeeCommand}"
                 EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
-        </ListView.Behaviors>
+            </ListView.Behaviors>
 
-        <ListView.ItemTemplate>
-            <DataTemplate x:DataType="model:EmployeeViewModel">
-                <ViewCell>
-                    <!--<ViewCell.ContextActions>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:EmployeeViewModel">
+                    <ViewCell>
+                        <!--<ViewCell.ContextActions>
                         <MenuItem Text="Usuń"
                                   Command="{Binding Source={x:Reference employeesPage},
                                   Path=BindingContext.RemoveCommand}"
@@ -57,32 +63,33 @@
                                   IsDestructive="True"
                                   />
                     </ViewCell.ContextActions>-->
-                    <base:PersonCard/>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-        <ListView.Header>
-            <StackLayout Orientation="Horizontal">
-                <Label
+                        <base:PersonCard/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Header>
+                <StackLayout Orientation="Horizontal">
+                    <Label
                     Style="{StaticResource LabelMedium}"
                     Text="Wybierz pracownika, aby wyświetlić szczegóły"
                     FontAttributes="Italic"
                     />
-            </StackLayout>
-        </ListView.Header>
-        <ListView.Footer>
-            <StackLayout Orientation="Horizontal"
+                </StackLayout>
+            </ListView.Header>
+            <ListView.Footer>
+                <StackLayout Orientation="Horizontal"
                          VerticalOptions="CenterAndExpand">
-                <Button
-                    Style="{StaticResource ButtonOutline}"
-                    Text="Odśwież"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="CenterAndExpand"
-                    Command="{Binding RefreshCommand}"
+                    <Button
+                        Style="{StaticResource ButtonOutline}"
+                        Text="Odśwież"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="CenterAndExpand"
+                        Command="{Binding RefreshCommand}"
                     />
-            </StackLayout>
-        </ListView.Footer>
+                </StackLayout>
+            </ListView.Footer>
 
-    </ListView>
+        </ListView>
+    </StackLayout>
 </ContentPage>
 

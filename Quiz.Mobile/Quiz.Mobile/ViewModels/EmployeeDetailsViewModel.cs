@@ -80,9 +80,13 @@ namespace Quiz.Mobile.ViewModels
 
         private async Task RemoveEmployee(int employeeId)
         {
-            IsBusy = true;
             try
             {
+                var accept = await Application.Current.MainPage.DisplayAlert(
+                    "Usuwanie", "Czy na pewno usunąć pracownika?", "TAK", "Anuluj");
+                if (!accept)
+                    return;
+                IsBusy = true;
                 await _client.RemoveItemById<EmployeeViewModel>(employeeId);
                 await Application.Current.MainPage.DisplayToastAsync("Usunięto pracownika");
                 Mediator.Instance.RaiseRequestEmployeesRefresh();

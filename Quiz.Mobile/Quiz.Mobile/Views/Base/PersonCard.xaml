@@ -19,10 +19,10 @@
                 </Image.Source>
             </Image>
             <StackLayout VerticalOptions="Center">
-                <Label Text="{Binding FirstName}"
+                <Label Text="{Binding LastName}"
                         VerticalOptions="Center"
                         FontSize="40"/>
-                <Label Text="{Binding LastName}"
+                <Label Text="{Binding FirstName}"
                         VerticalOptions="Center"
                         FontSize="Large"/>
             </StackLayout>

@@ -75,7 +75,7 @@
                     Command="{Binding SaveAndCloseCommand}"
                     HorizontalOptions="Center"
                     IsEnabled="{Binding CanSaveProp}"
-                    Text="Zarejestruj się"
+                    Text="Zarejestruj"
                     VerticalOptions="CenterAndExpand"
                     Style="{StaticResource ButtonOutline}"/>
             <Button

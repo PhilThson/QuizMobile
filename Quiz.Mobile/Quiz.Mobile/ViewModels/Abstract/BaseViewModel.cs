@@ -12,14 +12,10 @@ using Quiz.Mobile.CommunityToolkit;
 namespace Quiz.Mobile.ViewModels.Abstract
 {
     //klasa bazowego ViewModelu z biblioteki CommunityToolkit
-    public abstract class BaseViewModel : ObservableObject
+    public abstract class BaseViewModel : ObservableObject, IDisposable
     {
         string? title = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
-        /// <value>The title.</value>
         public string? Title
         {
             get => title;
@@ -28,10 +24,6 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         string? subtitle = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the subtitle.
-        /// </summary>
-        /// <value>The subtitle.</value>
         public string? Subtitle
         {
             get => subtitle;
@@ -40,10 +32,6 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         string? icon = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the icon.
-        /// </summary>
-        /// <value>The icon.</value>
         public string? Icon
         {
             get => icon;
@@ -52,10 +40,6 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         bool isBusy;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is busy.
-        /// </summary>
-        /// <value><c>true</c> if this instance is busy; otherwise, <c>false</c>.</value>
         public bool IsBusy
         {
             get => isBusy;
@@ -68,10 +52,6 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         bool isNotBusy = true;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is not busy.
-        /// </summary>
-        /// <value><c>true</c> if this instance is not busy; otherwise, <c>false</c>.</value>
         public bool IsNotBusy
         {
             get => isNotBusy;
@@ -84,10 +64,6 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         bool canLoadMore = true;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance can load more.
-        /// </summary>
-        /// <value><c>true</c> if this instance can load more; otherwise, <c>false</c>.</value>
         public bool CanLoadMore
         {
             get => canLoadMore;
@@ -97,10 +73,6 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         string? header = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the header.
-        /// </summary>
-        /// <value>The header.</value>
         public string? Header
         {
             get => header;
@@ -109,15 +81,13 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         string? footer = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the footer.
-        /// </summary>
-        /// <value>The footer.</value>
         public string? Footer
         {
             get => footer;
             set => SetProperty(ref footer, value);
         }
+
+        public virtual void Dispose() { }
     }
 }
 

@@ -7,6 +7,9 @@ namespace Quiz.Mobile.Shared.ViewModels
     public class EmployeeViewModel : Person
     {
         public decimal Salary { get; set; }
+        public int? DaysOfLeave { get; set; }
+        public double? HourlyRate { get; set; }
+        public double? Overtime { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public JobDto? Job { get; set; }

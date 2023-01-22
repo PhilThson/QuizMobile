@@ -60,6 +60,16 @@
                     </Entry.Behaviors>
                 </Entry>
 
+                <Label Text="Dni urlopu:"/>
+                <Entry Text="{Binding DaysOfLeave}" Keyboard="Numeric"
+                       MaxLength="3"/>
+
+                <Label Text="Wymiar godzinowy:"/>
+                <Entry Text="{Binding HourlyRate}" Keyboard="Numeric"/>
+
+                <Label Text="Nadgodziny:"/>
+                <Entry Text="{Binding Overtime}" Keyboard="Numeric"/>
+
                 <Label Text="Adres e-mail:"/>
                 <Entry Text="{Binding Email}" Keyboard="Email">
                     <Entry.Behaviors>
@@ -90,6 +100,10 @@
 
                 <Label Text="Data zatrudnienia:"/>
                 <DatePicker Date="{Binding DateOfEmployment}"
+                        Format="dd-MM-yyyy"/>
+
+                <Label Text="Data końca zatrudnienia:"/>
+                <DatePicker Date="{Binding EmploymentEndDate}"
                         Format="dd-MM-yyyy"/>
                 <!--MinimumDate=
             MaximumDate=

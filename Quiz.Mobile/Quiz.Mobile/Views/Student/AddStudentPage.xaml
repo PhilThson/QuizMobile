@@ -50,7 +50,7 @@
             <Entry Text="{Binding PlaceOfBirth}" />
 
             <Label Text="Numer orzeczenia:"/>
-            <Entry Text="{Binding DisabilityCert}" />
+            <Entry Text="{Binding DisabilityCert}" MaxLength="15" />
 
             <Label Text="Oddział:"/>
             <Picker Title="Wybierz oddział"
