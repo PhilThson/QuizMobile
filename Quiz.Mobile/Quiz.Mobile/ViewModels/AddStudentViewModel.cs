@@ -10,6 +10,8 @@ using System.Net.Http;
 using Quiz.Mobile.Helpers.Exceptions;
 using Quiz.Mobile.Helpers;
 using Quiz.Mobile.Shared.ViewModels;
+using Quiz.Mobile.Views.Student;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -18,6 +20,7 @@ namespace Quiz.Mobile.ViewModels
     {
         #region Pola prywatne
         private readonly IHttpClientService _client;
+        private readonly IMediator _mediator;
         #endregion
 
         #region Konstruktor
@@ -30,6 +33,7 @@ namespace Quiz.Mobile.ViewModels
             };
 			_client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
+            _mediator = Mediator.Instance;
             this.PropertyChanged +=
                 (_, __) => SaveAndCloseCommand.RaiseCanExecuteChanged();
         }
@@ -170,42 +174,52 @@ namespace Quiz.Mobile.ViewModels
 
         #region Metody
 
+        protected override async Task SaveAndClose()
+        {
+            try
+            {
+                IsBusy = true;
+                if (StudentId == default)
+                    await _client.AddItem(Item);
+                else
+                    await _client.UpdateItem(Item);
+
+                DependencyService.Get<IToast>()?.MakeToast("Poprawnie zapisano ucznia!");
+                _mediator.RaiseRequestStudentsRefresh();
+                await Task.Delay(2000);
+                await Shell.Current.GoToAsync($"//{nameof(StudentsPage)}");
+            }
+            catch (HttpRequestException e)
+            {
+                await Application.Current.MainPage.DisplayToastAsync(
+                    $"Niepowodzenie. Odpowiedź serwera: {e.Message}", 5000);
+            }
+            catch (DataNotFoundException e)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Wystąpił błąd", e.Message, "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
         protected override bool CanSave(object arg) =>
             !string.IsNullOrEmpty(FirstName) &&
             !string.IsNullOrEmpty(LastName) &&
             !string.IsNullOrEmpty(PlaceOfBirth) &&
             !string.IsNullOrEmpty(DisabilityCert) &&
-            DisabilityCert.Length <= 15 && 
+            DisabilityCert.Length <= 15 &&
             _IsPersonalNumberValid &&
             (DateOfBirth.HasValue) &&
             (DateOfBirth < DateTime.Now.Date) &&
             BranchId.HasValue &&
             IsNotBusy;
 
-        protected override async Task SaveAndClose()
-        {
-            try
-            {
-                IsBusy = true;
-                await _client.AddItem<CreateStudentDto>(Item);
-                IsBusy = false;
-                DependencyService.Get<IToast>()?.MakeToast("Poprawnie dodano ucznia!");
-                await Task.Delay(2000);
-                await base.NavigateBack();
-            }
-            catch (HttpRequestException e)
-            {
-                IsBusy = false;
-                DependencyService.Get<IToast>()?.MakeToast(
-                    $"Nie udało się dodać ucznia. Odpowiedź serwera: {e.Message}");
-            }
-            catch (DataNotFoundException e)
-            {
-                IsBusy = false;
-                await Application.Current.MainPage.DisplayAlert(
-                    "Dodawanie", e.Message, "OK");
-            }
-        }
+        #endregion
+
+        #region Pobranie danych
 
         private async Task LoadBranches()
         {

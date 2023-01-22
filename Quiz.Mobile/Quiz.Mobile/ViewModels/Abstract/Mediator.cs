@@ -8,12 +8,7 @@ namespace Quiz.Mobile.ViewModels.Abstract
         private static IMediator _Instance;
         public static IMediator Instance
         {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new Mediator();
-                return _Instance;
-            }
+            get => _Instance ??= new Mediator();
         }
 
         private Mediator()
@@ -21,13 +16,15 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         }
 
-        /// <summary>
-        /// Zdarzenie do wysłania żądania odświeżenia widoku pracowników
-        /// </summary>
         public event Action RequestEmployeesRefresh;
 
         public void RaiseRequestEmployeesRefresh() =>
             RequestEmployeesRefresh?.Invoke();
+
+        public event Action RequestStudentsRefresh;
+
+        public void RaiseRequestStudentsRefresh() =>
+            RequestStudentsRefresh?.Invoke();
 
         public event Action<string> RequestDictionaryListRefresh;
 

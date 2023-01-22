@@ -30,6 +30,7 @@ namespace Quiz.Mobile.ViewModels
                 {
                     _StudentId = value;
                     LoadStudent().SafeFireAndForget(ex => Console.WriteLine(ex));
+                    OnPropertyChanged();
                 }
             }
         }
@@ -58,7 +59,7 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 //int.TryParse(_StudentId, out var id);
-                Item = await _client.GetItemById<StudentViewModel>(StudentId);
+                Item = await _client.GetItemById<StudentViewModel>(_StudentId);
             }
             catch (Exception e)
             {

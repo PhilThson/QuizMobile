@@ -37,14 +37,15 @@
 
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="CenterAndExpand">
-                <Button Text="Zamknij"
+                <!--<Button Text="Zamknij"
                     Command="{Binding NavigateBackCommand}" 
                     Style="{StaticResource ButtonOutline}"
-                    />
+                    />-->
                 <Button Text="Edytuj"
                     Command="{Binding SaveAndCloseCommand}"
                     Style="{StaticResource ButtonOutline}"
                     BackgroundColor="{StaticResource SystemIndigoDark}"
+                    WidthRequest="250"
                     />
             </StackLayout>
         </StackLayout>

@@ -40,20 +40,23 @@
 
             <StackLayout Orientation="Vertical"
                          HorizontalOptions="CenterAndExpand">
-                <Button Text="Zamknij"
+                <!--<Button Text="Zamknij"
                     Command="{Binding NavigateBackCommand}"
                     Style="{StaticResource ButtonOutline}"
-                    />
+                    />-->
                 <Button Text="Edytuj"
                     Command="{Binding SaveAndCloseCommand}"
                     Style="{StaticResource ButtonOutline}"
                     BackgroundColor="{StaticResource SystemIndigoDark}"
+                    WidthRequest="250"
                     />
                 <Button Text="Usuń"
                     Command="{Binding RemoveCommand}"
                     CommandParameter="{Binding Item.Id}"
                     Style="{StaticResource ButtonOutline}"
-                    BackgroundColor="IndianRed"/>
+                    BackgroundColor="IndianRed"
+                    WidthRequest="250"
+                    />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

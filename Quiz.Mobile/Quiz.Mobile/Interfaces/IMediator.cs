@@ -18,6 +18,16 @@ namespace Quiz.Mobile.Interfaces
         void RaiseRequestEmployeesRefresh();
 
         /// <summary>
+        /// Zdarzenie do wysłania żądania odświeżenia widoku uczniów
+        /// </summary>
+        event Action RequestStudentsRefresh;
+
+        /// <summary>
+        /// Metoda do wywołania zdarzenia do zażądania odświeżenia widoku uczniów
+        /// </summary>
+        void RaiseRequestStudentsRefresh();
+
+        /// <summary>
         /// Zdarzenie do wysłania żądania odświeżenia widoku listy słownikowej
         /// </summary>
         event Action<string> RequestDictionaryListRefresh;

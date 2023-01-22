@@ -11,6 +11,7 @@ namespace Quiz.Mobile.Shared.ViewModels
         public string? PhoneNumber { get; set; }
         public JobDto? Job { get; set; }
         public PositionDto? Position { get; set; }
-        public DateTime DateOfEmployment { get; set; }
+        public DateTime? DateOfEmployment { get; set; }
+        public DateTime? EmploymentEndDate { get; set; }
     }
 }

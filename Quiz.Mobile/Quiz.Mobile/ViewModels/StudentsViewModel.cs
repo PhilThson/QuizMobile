@@ -13,15 +13,39 @@ namespace Quiz.Mobile.ViewModels
 {
     public class StudentsViewModel : ItemsCollectionViewModel<StudentViewModel>
     {
+        #region Pola prywatne
         private readonly IHttpClientService _client;
+        private readonly IMediator _mediator;
+        #endregion
 
+        #region Konstruktor
         public StudentsViewModel()
         {
             base.Title = "Wszyscy uczniowie";
             FavoriteCommand = new AsyncCommand<object>(Favorite);
             _client = DependencyService.Get<IHttpClientService>(
                 DependencyFetchTarget.GlobalInstance);
+            _mediator = Mediator.Instance;
+            _mediator.RequestStudentsRefresh +=
+                () => Refresh().SafeFireAndForget(ex =>
+                        Console.WriteLine(ex.Message));
         }
+        #endregion
+
+        #region Właściwości i komendy
+
+        private StudentViewModel _SelectedStudent;
+        public StudentViewModel SelectedStudent
+        {
+            get => _SelectedStudent;
+            set => SetProperty(ref _SelectedStudent, value);
+        }
+
+        public AsyncCommand<object> FavoriteCommand { get; }
+
+        #endregion
+
+        #region Metody
 
         protected async override Task Refresh()
         {
@@ -42,13 +66,6 @@ namespace Quiz.Mobile.ViewModels
                     $"Nie udało się pobrać uczniów. Odpowiedź serwera: {e.Message}",
                     5000);
             }
-        }
-
-        private StudentViewModel _SelectedStudent;
-        public StudentViewModel SelectedStudent
-        {
-            get => _SelectedStudent;
-            set => SetProperty(ref _SelectedStudent, value);
         }
 
         protected override async Task Selected(StudentViewModel student)
@@ -80,16 +97,16 @@ namespace Quiz.Mobile.ViewModels
             List = new ObservableRangeCollection<StudentViewModel>(students);
         }
 
-        public AsyncCommand<object> FavoriteCommand { get; }
-
         protected async Task Favorite(object obj)
         {
             if (obj == null)
                 return;
             var student = obj as StudentViewModel;
             await Application.Current.MainPage.DisplayAlert(
-                "Favorite", student.FirstName, "OK");
+                "Ulubiony", student.FirstName, "OK");
         }
+
+        #endregion
     }
 }
 

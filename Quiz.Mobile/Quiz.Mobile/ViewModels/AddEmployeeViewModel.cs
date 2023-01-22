@@ -10,6 +10,7 @@ using System.Net.Http;
 using Xamarin.CommunityToolkit.Extensions;
 using Quiz.Mobile.Helpers.Exceptions;
 using Quiz.Mobile.Shared.ViewModels;
+using Quiz.Mobile.Views.Employee;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -32,7 +33,7 @@ namespace Quiz.Mobile.ViewModels
             };
 
             _client = DependencyService.Get<IHttpClientService>();
-            _mediator = IMediator.Instance;
+            _mediator = Mediator.Instance;
 
             this.PropertyChanged +=
                 (_, __) => SaveAndCloseCommand.RaiseCanExecuteChanged();
@@ -227,16 +228,7 @@ namespace Quiz.Mobile.ViewModels
             }
         }
 
-        public bool CanSaveProp =>
-            !string.IsNullOrEmpty(FirstName) &&
-            !string.IsNullOrEmpty(LastName) &&
-            _IsPersonalNumberValid &&
-            _IsEmailValid &&
-            _IsSalaryValid &&
-            (DateOfEmployment.HasValue) &&
-            (DateOfBirth.HasValue) &&
-            (DateOfBirth < DateTime.Now.Date) &&
-            IsNotBusy;
+        public bool CanSaveProp => CanSave(null);
 
         #endregion
 
@@ -247,21 +239,25 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 IsBusy = true;
-                await _client.AddItem<CreateEmployeeDto>(Item);
-                DependencyService.Get<IToast>()?.MakeToast("Poprawnie dodano pracownika!");
+                if (Item.Id == default)
+                    await _client.AddItem<CreateEmployeeDto>(Item);
+                else
+                    await _client.UpdateItem<CreateEmployeeDto>(Item);
+
+                DependencyService.Get<IToast>()?.MakeToast("Zapisano pracownika!");
                 _mediator.RaiseRequestEmployeesRefresh();
                 await Task.Delay(2000);
-                await base.NavigateBack();
+                await Shell.Current.GoToAsync($"//{nameof(EmployeesPage)}");
             }
             catch (HttpRequestException e)
             {
-                await Application.Current.MainPage.DisplayAlert("Dodawanie pracownika",
-                    $"Nie udało się dodać pracownika. Odpowiedź serwera: {e.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert(Title,
+                    $"Niepowodzenie. Odpowiedź serwera: {e.Message}", "OK");
             }
             catch (DataNotFoundException e)
             {
                 await Application.Current.MainPage.DisplayAlert(
-                    "Dodawanie", e.Message, "OK");
+                    Title, e.Message, "OK");
             }
             finally
             {
@@ -269,9 +265,21 @@ namespace Quiz.Mobile.ViewModels
             }
         }
 
+        protected override bool CanSave(object arg) =>
+            !string.IsNullOrEmpty(FirstName) &&
+            !string.IsNullOrEmpty(LastName) &&
+            _IsPersonalNumberValid &&
+            _IsEmailValid &&
+            _IsSalaryValid &&
+            (DateOfEmployment.HasValue) &&
+            (DateOfBirth.HasValue) &&
+            (DateOfBirth < DateTime.Now.Date) &&
+            IsNotBusy
+            ;
+
         #endregion
 
-        #region Pobieranie danych słownikowych
+        #region Pobieranie danych
 
         private async Task LoadJobs()
         {
@@ -301,8 +309,6 @@ namespace Quiz.Mobile.ViewModels
                     $"Odpowiedź serwera: {e.Message}");
             }
         }
-
-        protected override bool CanSave(object arg) => CanSaveProp;
 
         private async Task LoadEmployee(int id)
         {
