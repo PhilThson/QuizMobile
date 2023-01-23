@@ -4,8 +4,9 @@
        xmlns:local="clr-namespace:Quiz.Mobile.Views"
        xmlns:employee="clr-namespace:Quiz.Mobile.Views.Employee"
        xmlns:student="clr-namespace:Quiz.Mobile.Views.Student"
+       xmlns:address="clr-namespace:Quiz.Mobile.Views.Address"
        xmlns:dict="clr-namespace:Quiz.Mobile.Views.Dictionary"
-       xmlns:fontAwesome="clr-namespace:Quiz.Mobile.Helpers.Icons"
+       xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
        xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
        xmlns:converters="clr-namespace:Quiz.Mobile.Helpers.Converters"
        Title="Quiz.Mobile"
@@ -139,7 +140,7 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:FontsSolid.Users}"/>
+                             Glyph="{x:Static icons:FontsSolid.Users}"/>
         </FlyoutItem.Icon>
         <ShellContent Title="Pracownicy" Route="EmployeesPage"
                       ContentTemplate="{DataTemplate employee:EmployeesPage}"/>
@@ -151,7 +152,7 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.GraduationCap}"/>
+                             Glyph="{x:Static icons:FontAwesomeIcons.GraduationCap}"/>
         </FlyoutItem.Icon>
         <ShellContent Title="Uczniowie" Route="StudentsPage"
                       ContentTemplate="{DataTemplate student:StudentsPage}"/>
@@ -163,7 +164,7 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.Book}"/>
+                             Glyph="{x:Static icons:FontAwesomeIcons.Book}"/>
         </FlyoutItem.Icon>
         <Tab Title="Obszary">
             <Tab.Icon>
@@ -171,7 +172,7 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:FontsSolid.LayerGroup}"/>
+                             Glyph="{x:Static icons:FontsSolid.LayerGroup}"/>
             </Tab.Icon>
             <ShellContent Title="Obszary zestawów pytań" Route="AreasPage"
                           ContentTemplate="{DataTemplate dict:AreasPage}" />
@@ -182,11 +183,23 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:FontsSolid.ChartLine}"/>
+                             Glyph="{x:Static icons:FontsSolid.ChartLine}"/>
             </Tab.Icon>
             <ShellContent Title="Skale trudności" Route="difficultiesPage"
                           ContentTemplate="{DataTemplate dict:DifficultiesPage}" />
         </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Adresy">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="MaterialDesignIcons"
+                             Color="{AppThemeBinding 
+                                    Dark=White, 
+                                    Light={StaticResource SystemGray5Dark}}"
+                             Glyph="{x:Static icons:MaterialDesignIconFont.Map}"/>
+        </FlyoutItem.Icon>
+        <ShellContent Title="Adresy" Route="AddressesPage"
+                      ContentTemplate="{DataTemplate address:AddressesPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Animation">
@@ -195,7 +208,7 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.Spinner}"/>
+                             Glyph="{x:Static icons:FontAwesomeIcons.Spinner}"/>
         </FlyoutItem.Icon>
         <ShellContent Title="Animation" Route="AnimationPage"
                       ContentTemplate="{DataTemplate local:AnimationPage}"/>
@@ -207,7 +220,7 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:FontsSolid.Gears}"/>
+                             Glyph="{x:Static icons:FontsSolid.Gears}"/>
         </FlyoutItem.Icon>
         <ShellContent
             Title="Ustawienia" Route="SettingsPage"
@@ -236,7 +249,7 @@
                              Color="{AppThemeBinding 
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static fontAwesome:MaterialDesignIconFont.Logout}"/>
+                             Glyph="{x:Static icons:MaterialDesignIconFont.Logout}"/>
         </MenuItem.IconImageSource>
     </MenuItem>
 
@@ -247,7 +260,7 @@
                                     Dark=White, 
                                     Light={StaticResource SystemGray5Dark}}"
                              Glyph="{x:Static
-                                fontAwesome:MaterialDesignIconFont.InformationVariant}"/>
+                                icons:MaterialDesignIconFont.InformationVariant}"/>
         </MenuItem.IconImageSource>
     </MenuItem>
 

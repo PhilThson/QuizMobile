@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Quiz.Mobile.ViewModels;
 using Quiz.Mobile.Views;
+using Quiz.Mobile.Views.Address;
 using Quiz.Mobile.Views.Dictionary;
 using Quiz.Mobile.Views.Employee;
 using Quiz.Mobile.Views.Student;
@@ -21,6 +22,8 @@ namespace Quiz.Mobile
             Routing.RegisterRoute(nameof(AddStudentPage), typeof(AddStudentPage));
             Routing.RegisterRoute(nameof(AddDictionaryPage), typeof(AddDictionaryPage));
             Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
+            Routing.RegisterRoute(nameof(AddAddressPage), typeof(AddAddressPage));
+            Routing.RegisterRoute(nameof(AddressDetailsPage), typeof(AddressDetailsPage));
         }
 
         private async void OnAboutClicked(object sender, EventArgs e)

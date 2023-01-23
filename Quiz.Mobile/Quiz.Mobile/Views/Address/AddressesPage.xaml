@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Address.AddressesPage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
+    xmlns:base="clr-namespace:Quiz.Mobile.Views.Base"
+    x:DataType="viewmodels:AddressesViewModel"
+    x:Name="addresses"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    BackgroundColor="{AppThemeBinding 
+                    Dark={StaticResource WindowBackgroundColorDark}, 
+                    Light={StaticResource WindowBackgroundColor}}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:AddressesViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Dodaj adres" 
+                     Command="{Binding AddCommand}" >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MaterialDesignIcons"
+                                 Glyph="{x:Static icons:MaterialDesignIconFont.Plus}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <StackLayout Orientation="Vertical">
+
+        <SearchBar Placeholder="Wyszukaj adres"
+                   Text="{Binding FilterText}"/>
+        <RefreshView
+            Command="{Binding RefreshCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            >
+
+            <CollectionView
+                BackgroundColor="Transparent"
+                ItemSizingStrategy="MeasureAllItems"
+                ItemsLayout="VerticalList"
+                ItemsSource="{Binding List}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedAddress}"
+                SelectionChangedCommand="{Binding SelectedCommand}"
+                SelectionChangedCommandParameter="{Binding SelectedItem,
+                    Source={x:Reference collectionView}}"
+                x:Name="collectionView"
+                >
+                <CollectionView.EmptyView>
+                    <StackLayout Padding="12">
+                        <Label HorizontalOptions="Center"
+                               Text="Brak adresów do wyświetlenia" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView
+                        android:SwipeView.SwipeTransitionMode="Drag"
+                               BackgroundColor="{AppThemeBinding 
+                                Dark={StaticResource WindowBackgroundColorDark}, 
+                                Light={StaticResource WindowBackgroundColor}}">
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                    BackgroundColor="Red"
+                                    IsDestructive="True"
+                                    Text="Usuń"
+                                    Command="{Binding Source={x:Reference collectionView},
+                                        Path=BindingContext.RemoveCommand}"
+                                    CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
+                                    >
+                                        <SwipeItem.IconImageSource>
+                                            <FontImageSource FontFamily="MaterialDesignIcons"
+                                            Glyph="{x:Static icons:MaterialDesignIconFont.MapMarkerRemove}"
+                                            Color="White"/>
+                                        </SwipeItem.IconImageSource>
+                                    </SwipeItem>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+
+                            <base:AddressCard/>
+
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Header>
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            HorizontalOptions="Center"
+                            FontAttributes="Italic"
+                            Style="{StaticResource LabelMedium}"
+                            Text="Wybierz adres, aby wyświetlić szczegóły" />
+                    </StackLayout>
+                </CollectionView.Header>
+
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
+
+</ContentPage>
+

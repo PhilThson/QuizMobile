@@ -150,7 +150,7 @@ namespace Quiz.Mobile.ViewModels
                 IsBusy = true;
                 Item.PasswordHash = SecurePasswordHasher.Hash(_Password);
                 Item.RoleId = _SelectedRole.Id;
-                await _client.AddItem<CreateUserDto>(Item);
+                await _client.AddItem(Item);
                 await Application.Current.MainPage.DisplayToastAsync(
                     "Poprawnie dodano użytkownika!");
                 await Task.Delay(1000);

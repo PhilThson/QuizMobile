@@ -30,6 +30,11 @@ namespace Quiz.Mobile.ViewModels.Abstract
 
         public void RaiseRequestDictionaryListRefresh(string dictionaryType) =>
             RequestDictionaryListRefresh?.Invoke(dictionaryType);
+
+        public event Action RequestAddressesRefresh;
+
+        public void RaiseRequestAddressesRefresh() =>
+            RequestAddressesRefresh?.Invoke();
     }
 }
 

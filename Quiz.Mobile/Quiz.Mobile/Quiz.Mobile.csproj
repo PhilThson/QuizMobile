@@ -37,9 +37,11 @@
   <ItemGroup>
     <None Remove="Views\Dictionary\" />
     <None Remove="Helpers\Handlers\" />
+    <None Remove="Views\Address\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Dictionary\" />
     <Folder Include="Helpers\Handlers\" />
+    <Folder Include="Views\Address\" />
   </ItemGroup>
 </Project>

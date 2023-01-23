@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Grid
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Base.AddressCard"
+    xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
+    xmlns:models="clr-namespace:Quiz.Mobile.Models"
+    x:DataType="models:Address"
+    Padding="10"
+    >
+
+    <Frame Style="{StaticResource BaseCard}">
+        <StackLayout Orientation="Horizontal">
+            <Image WidthRequest="66">
+                <Image.Source>
+                    <FontImageSource FontFamily="MaterialDesignIcons"
+                        Glyph="{x:Static icons:MaterialDesignIconFont.MapMarker}"
+                        Color="{AppThemeBinding
+                            Dark={StaticResource CardBackground},
+                            Light={StaticResource CardBackgroundDark}}"
+                        />
+                </Image.Source>
+            </Image>
+            <StackLayout VerticalOptions="Center">
+                <Label Text="{Binding Country}"
+                        VerticalOptions="Center"
+                        FontSize="40"/>
+                <Label Text="{Binding City}"
+                        VerticalOptions="Center"
+                        FontSize="Large"/>
+                <Label Text="{Binding Street}"
+                        VerticalOptions="Center"
+                        FontSize="Medium"/>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+
+</Grid>
+

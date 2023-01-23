@@ -37,5 +37,9 @@ namespace Quiz.Mobile.Interfaces
         /// </summary>
         /// <param name="dictionaryType">Typ listy która ma zostać odświeżona.</param>
         void RaiseRequestDictionaryListRefresh(string dictionaryType);
+
+        public event Action RequestAddressesRefresh;
+
+        public void RaiseRequestAddressesRefresh();
     }
 }

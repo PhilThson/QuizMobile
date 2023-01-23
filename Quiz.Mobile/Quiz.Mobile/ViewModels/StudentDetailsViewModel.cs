@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Quiz.Mobile.Helpers;
 using Quiz.Mobile.Views.Dictionary;
 using Quiz.Mobile.Views.Student;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -58,14 +59,18 @@ namespace Quiz.Mobile.ViewModels
         {
             try
             {
-                //int.TryParse(_StudentId, out var id);
+                IsBusy = true;
                 Item = await _client.GetItemById<StudentViewModel>(_StudentId);
             }
             catch (Exception e)
             {
-                DependencyService.Get<IToast>()?
-                    .MakeToast("Nie udało się pobrać ucznia. " +
-                    $"Odpowiedź serwera: {e.Message}");
+                await Application.Current.MainPage.DisplayToastAsync(
+                        "Nie udało się pobrać ucznia. " +
+                    $"Odpowiedź serwera: {e.Message}", 5000);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

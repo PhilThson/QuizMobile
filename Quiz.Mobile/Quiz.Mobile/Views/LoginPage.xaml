@@ -47,6 +47,7 @@
                    Placeholder="Wprowadź hasło"/>
 
             <Button Text="Zaloguj"
+                    Style="{StaticResource LoginButton}"
                     IsEnabled="{Binding CanLogin}"
                     Command="{Binding LoginCommand}"/>
             <!--Clicked="Button_Clicked"-->

@@ -4,6 +4,8 @@
     x:Class="Quiz.Mobile.Views.Employee.AddEmployeePage"
     xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
     xmlns:behaviors="clr-namespace:Quiz.Mobile.Helpers.Behaviors"
+    xmlns:converters="clr-namespace:Quiz.Mobile.Helpers.Converters"
+    xmlns:dtos="clr-namespace:Quiz.Mobile.Shared.DTOs"
     Title="{Binding Title}"
     x:DataType="viewmodels:AddEmployeeViewModel"
     Shell.PresentationMode="Animated"
@@ -81,21 +83,28 @@
 
                 <Label Text="Numer telefonu:"/>
                 <Entry Text="{Binding PhoneNumber}"
-                   Placeholder="000-000-000"
-                   Keyboard="Telephone"/>
+                       Placeholder="000-000-000"
+                       Keyboard="Telephone"
+                       MaxLength="11">
+                    <Entry.Behaviors>
+                        <behaviors:PhoneNumberValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addEmployee},
+                            Path=BindingContext.IsPhoneNumberValid}"/>
+                    </Entry.Behaviors>
+                </Entry>
 
                 <Label Text="Etat:"/>
                 <Picker Title="Etat"
                     ItemsSource="{Binding Jobs}"
-                    SelectedIndex="{Binding JobId}"
-                    ItemDisplayBinding="{Binding Name}"
+                    SelectedIndex="{Binding SelectedJobIndex}"
+                    ItemDisplayBinding="{Binding Description}"
                     />
 
                 <Label Text="Stanowisko:"/>
                 <Picker Title="Stanowisko"
                     ItemsSource="{Binding Positions}"
-                    SelectedIndex="{Binding PositionId}"
-                    ItemDisplayBinding="{Binding Name}"
+                    SelectedIndex="{Binding SelectedPositionIndex}"
+                    ItemDisplayBinding="{Binding Description}"
                     />
 
                 <Label Text="Data zatrudnienia:"/>
@@ -105,9 +114,31 @@
                 <Label Text="Data końca zatrudnienia:"/>
                 <DatePicker Date="{Binding EmploymentEndDate}"
                         Format="dd-MM-yyyy"/>
-                <!--MinimumDate=
-            MaximumDate=
-            Format="D"-->
+
+                <StackLayout IsVisible="{Binding EmployeeId,
+                            Converter={converters:IntToVisibilityConverter}}">
+                    <Label
+                        Style="{StaticResource LabelMedium}"
+                        Text="Lista adresów pracownika"
+                        FontAttributes="Italic"/>
+                    <StackLayout BindableLayout.ItemsSource="{Binding Addresses}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="dtos:AddressDto">
+                                <Label Text="{Binding .,
+                                Converter={converters:AddressToStringConverter}}"
+                                   Style="{StaticResource LabelSmall}"
+                                   Margin="0,5"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                    <Button
+                         Style="{StaticResource SmallButtonOutline}"
+                         Text="Dodaj adres"
+                         HorizontalOptions="CenterAndExpand"
+                         VerticalOptions="CenterAndExpand"
+                         Command="{Binding Source={x:Reference addEmployee},
+                                  Path=BindingContext.AddAddressCommand}}"/>
+                </StackLayout>
             </StackLayout>
         </ScrollView>
 

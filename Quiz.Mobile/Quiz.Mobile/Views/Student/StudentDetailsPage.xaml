@@ -21,6 +21,7 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
+
         <StackLayout Padding="20">
             <Label Text="{Binding Item.FirstName, StringFormat='Imię: {0}'}"
                    HorizontalOptions="Center"
@@ -35,19 +36,18 @@
             <Label HorizontalOptions="StartAndExpand"
                    Text="{Binding Item.Branch.Description, StringFormat='Opis dddziału: {0}'}"/>
 
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="CenterAndExpand">
-                <!--<Button Text="Zamknij"
-                    Command="{Binding NavigateBackCommand}" 
-                    Style="{StaticResource ButtonOutline}"
-                    />-->
-                <Button Text="Edytuj"
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center" />
+
+            <Button Text="Edytuj"
                     Command="{Binding SaveAndCloseCommand}"
                     Style="{StaticResource ButtonOutline}"
                     BackgroundColor="{StaticResource SystemIndigoDark}"
-                    WidthRequest="250"
-                    />
-            </StackLayout>
+                    WidthRequest="250" />
+
         </StackLayout>
     </ContentPage.Content>
 

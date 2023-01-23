@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Quiz.Mobile.Helpers;
 using Quiz.Mobile.Shared.ViewModels;
 
@@ -21,6 +22,7 @@ namespace Quiz.Mobile.Shared.DTOs
         //[Required]
         public DateTime? DateOfEmployment { get; set; }
         public DateTime? EmploymentEndDate { get; set; }
+        public List<int> AddressesIds { get; set; }
 
         public static explicit operator CreateEmployeeDto(EmployeeViewModel employeeVM)
         {

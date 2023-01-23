@@ -23,6 +23,15 @@ namespace Quiz.Mobile.ViewModels
         private IAsyncCommand<int> _RemoveCommand;
         #endregion
 
+        #region Konstruktor
+        public EmployeeDetailsViewModel()
+        {
+            Item = new EmployeeViewModel();
+            Title = "Szczegóły pracownika";
+            _client = DependencyService.Get<IHttpClientService>();
+        }
+        #endregion
+
         #region Właściwości
         private string _EmployeeId;
         public string EmployeeId
@@ -37,15 +46,13 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
-        #endregion
 
-        #region Konstruktor
-        public EmployeeDetailsViewModel()
-		{
-            Item = new EmployeeViewModel();
-            Title = "Szczegóły pracownika";
-            _client = DependencyService.Get<IHttpClientService>();
-		}
+        private bool _HasAddress;
+        public bool HasAddress
+        {
+            get => _HasAddress;
+            set => SetProperty(ref _HasAddress, value);
+        }
         #endregion
 
         #region Komendy
@@ -65,14 +72,23 @@ namespace Quiz.Mobile.ViewModels
         {
             try
             {
+                IsBusy = true;
                 int.TryParse(_EmployeeId, out var id);
                 Item = await _client.GetItemById<EmployeeViewModel>(id);
+                if (Item.Addresses?.Count > 0)
+                    HasAddress = true;
             }
             catch (Exception e)
             {
-                DependencyService.Get<IToast>()?
-                    .MakeToast("Nie udało się pobrać pracownika. " +
-                    $"Odpowiedź serwera: {e.Message}");
+                await Application.Current.MainPage.DisplayAlert(
+                    "Błąd",
+                    "Nie udało się pobrać pracownika. " +
+                    $"Odpowiedź serwera: {e.Message}",
+                    "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

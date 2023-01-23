@@ -163,8 +163,6 @@ namespace Quiz.Mobile.ViewModels
                     Title = "Edycja ucznia";
                     LoadStudent(_StudentId).SafeFireAndForget(
                         ex => Console.WriteLine(ex.Message));
-
-                    OnPropertyChanged();
                 }
             }
         }
@@ -179,7 +177,7 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 IsBusy = true;
-                if (StudentId == default)
+                if (Item.Id == default)
                     await _client.AddItem(Item);
                 else
                     await _client.UpdateItem(Item);
@@ -240,6 +238,7 @@ namespace Quiz.Mobile.ViewModels
         {
             try
             {
+                IsBusy = true;
                 var studentFromDb = await _client.GetItemById<StudentViewModel>(id);
                 Item = (CreateStudentDto)studentFromDb;
                 foreach (var prop in Item.GetType().GetProperties())
@@ -251,7 +250,10 @@ namespace Quiz.Mobile.ViewModels
                     "Edycja",
                     $"Nie udało się załadować ucznia. '{e.Message}'",
                     "OK");
-                return;
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

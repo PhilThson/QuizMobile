@@ -19,5 +19,6 @@ namespace Quiz.Mobile.Helpers
         public static string Difficulties { get; } = "skaleTrudnosci";
         public static string Roles { get; set; } = "role";
         public static string Users { get; set; } = "uzytkownicy";
+        public static string Addresses { get; set; } = "adresy";
     }
 }

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:behaviors="clr-namespace:Quiz.Mobile.Helpers.Behaviors"
+    x:Class="Quiz.Mobile.Views.Address.AddAddressPage"
+    Title="{Binding Title}"
+    x:DataType="viewmodels:AddAddressViewModel"
+    Shell.PresentationMode="Animated"
+    x:Name="addAddress"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
+
+    <ContentPage.BindingContext>
+        <viewmodels:AddAddressViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+        <Style TargetType="Entry" BasedOn="{StaticResource BaseEntry}"/>
+    </ContentPage.Resources>
+
+    <StackLayout Padding="20">
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <Label Text="Państwo:"/>
+                <Entry Text="{Binding Country}"
+                       Placeholder="Podaj państwo"
+                       MaxLength="64"/>
+
+                <Label Text="Miejscowość:"/>
+                <Entry Text="{Binding City}"
+                       Placeholder="Podaj miejscowość"
+                       MaxLength="128"/>
+
+                <Label Text="Ulica:"/>
+                <Entry Text="{Binding Street}"
+                       MaxLength="128"/>
+
+                <Label Text="Numer domu:"/>
+                <Entry Text="{Binding HouseNumber}"
+                       Placeholder="Podaj numer domu"
+                       MaxLength="6"/>
+
+                <Label Text="Numer mieszkania:"/>
+                <Entry Text="{Binding FlatNumber}"
+                       MaxLength="6"/>
+
+                <Label Text="Kod pocztowy:"/>
+                <Entry Text="{Binding PostalCode}"
+                       Placeholder="np. 00-000"
+                       MaxLength="6">
+                    <Entry.Behaviors>
+                        <behaviors:PostalCodeValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addAddress},
+                            Path=BindingContext.IsPostalCodeValid}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </StackLayout>
+        </ScrollView>
+
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="CenterAndExpand">
+            <Button
+                Padding="20,0"
+                Command="{Binding SaveAndCloseCommand}"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding CanSaveProp}"
+                Text="Zapisz"
+                VerticalOptions="CenterAndExpand"
+                Style="{StaticResource ButtonOutline}"/>
+            <Button
+                Padding="20,0"
+                Command="{Binding NavigateBackCommand}"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsNotBusy}"
+                Text="Powrót"
+                VerticalOptions="CenterAndExpand"
+                Style="{StaticResource ButtonOutline}"/>
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>
+

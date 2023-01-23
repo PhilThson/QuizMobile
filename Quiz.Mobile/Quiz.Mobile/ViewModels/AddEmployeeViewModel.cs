@@ -11,10 +11,17 @@ using Xamarin.CommunityToolkit.Extensions;
 using Quiz.Mobile.Helpers.Exceptions;
 using Quiz.Mobile.Shared.ViewModels;
 using Quiz.Mobile.Views.Employee;
+using System.Collections.Generic;
+using Quiz.Mobile.CommunityToolkit.Interfaces;
+using Quiz.Mobile.CommunityToolkit.Commands;
+using Quiz.Mobile.Models;
+using Quiz.Mobile.Views.Address;
+using System.Linq;
 
 namespace Quiz.Mobile.ViewModels
 {
     [QueryProperty(nameof(EmployeeId), nameof(EmployeeId))]
+    [QueryProperty(nameof(CreatedAddressId), nameof(CreatedAddressId))]
     public class AddEmployeeViewModel : SingleItemViewModel<CreateEmployeeDto>
     {
         #region Pola prywatne
@@ -187,28 +194,31 @@ namespace Quiz.Mobile.ViewModels
                 }
             }
         }
-        public byte? JobId
+        private bool _IsPhoneNumberValid = false;
+        public bool IsPhoneNumberValid
         {
-            get => Item.JobId;
+            get => _IsPhoneNumberValid;
+            set => SetProperty(ref _IsPhoneNumberValid, value);
+        }
+
+        private byte? _SelectedJobIndex;
+        public byte? SelectedJobIndex
+        {
+            get => _SelectedJobIndex;
             set
             {
-                if (value != Item.JobId)
-                {
-                    Item.JobId = value;
-                    OnPropertyChanged();
-                }
+                SetProperty(ref _SelectedJobIndex, value);
+                Item.JobId = Jobs[_SelectedJobIndex.Value].Id;
             }
         }
-        public byte? PositionId
+        private byte? _SelectedPositionIndex;
+        public byte? SelectedPositionIndex
         {
-            get => Item.PositionId;
+            get => _SelectedPositionIndex;
             set
             {
-                if (value != Item.PositionId)
-                {
-                    Item.PositionId = value;
-                    OnPropertyChanged();
-                }
+                SetProperty(ref _SelectedPositionIndex, value);
+                Item.PositionId = Positions[_SelectedPositionIndex.Value].Id;
             }
         }
         public DateTime? DateOfEmployment
@@ -263,26 +273,65 @@ namespace Quiz.Mobile.ViewModels
             set => SetProperty(ref _Postions, value);
         }
 
+        #endregion
+
+        #region Właściwości adresu
+
+        private ObservableRangeCollection<AddressDto> _Addresses;
+        public ObservableRangeCollection<AddressDto> Addresses =>
+            _Addresses ??= new ObservableRangeCollection<AddressDto>();
+
+        #endregion
+
+        #region Właściwości nawigacyjne
+
         private int _EmployeeId;
         public int EmployeeId
         {
             get => _EmployeeId;
             set
             {
-                if(value != _EmployeeId)
+                if (value != _EmployeeId)
                 {
                     _EmployeeId = value;
                     Title = "Edycja pracownika";
-                    LoadEmployee(_EmployeeId).SafeFireAndForget(
+                    LoadEmployee().SafeFireAndForget(
                         ex => Console.WriteLine(ex.Message));
-
+                    //bo binduje sie na widoku
                     OnPropertyChanged();
+                }
+            }
+        }
+
+        private int _CreatedAddressId;
+        public int CreatedAddressId
+        {
+            get => _CreatedAddressId;
+            set
+            {
+                if(value != _CreatedAddressId)
+                {
+                    _CreatedAddressId = value;
+                    LoadCreatedAddress().SafeFireAndForget(ex =>
+                        Console.WriteLine(ex.Message));
                 }
             }
         }
 
         public bool CanSaveProp => CanSave(null);
 
+        #endregion
+
+        #region Komendy
+        private IAsyncCommand _AddAddressCommand;
+        public IAsyncCommand AddAddressCommand =>
+            _AddAddressCommand ??= new AsyncCommand(AddAddress);
+
+        private async Task AddAddress()
+        {
+            var route = $"{nameof(AddAddressPage)}?IsForEmployee=1";
+            await AppShell.Current.GoToAsync(route);
+        }
         #endregion
 
         #region Metody
@@ -293,13 +342,16 @@ namespace Quiz.Mobile.ViewModels
             {
                 IsBusy = true;
                 if (Item.Id == default)
-                    await _client.AddItem<CreateEmployeeDto>(Item);
+                {
+                    Item.AddressesIds = new List<int>(Addresses.Select(a => a.Id));
+                    await _client.AddItem(Item);
+                }
                 else
-                    await _client.UpdateItem<CreateEmployeeDto>(Item);
+                    await _client.UpdateItem(Item);
 
                 DependencyService.Get<IToast>()?.MakeToast("Zapisano pracownika!");
-                _mediator.RaiseRequestEmployeesRefresh();
                 await Task.Delay(2000);
+                _mediator.RaiseRequestEmployeesRefresh();
                 await Shell.Current.GoToAsync($"//{nameof(EmployeesPage)}");
             }
             catch (HttpRequestException e)
@@ -324,6 +376,8 @@ namespace Quiz.Mobile.ViewModels
             _IsPersonalNumberValid &&
             _IsEmailValid &&
             _IsSalaryValid &&
+            ((string.IsNullOrEmpty(PhoneNumber)) ? true :
+                _IsPhoneNumberValid) &&
             (DateOfEmployment.HasValue) &&
             (DateOfBirth.HasValue) &&
             (DateOfBirth < DateTime.Now.Date) &&
@@ -367,12 +421,15 @@ namespace Quiz.Mobile.ViewModels
             }
         }
 
-        private async Task LoadEmployee(int id)
+        private async Task LoadEmployee()
         {
             try
             {
-                var employeeFromDb = await _client.GetItemById<EmployeeViewModel>(id);
+                IsBusy = true;
+                var employeeFromDb =
+                    await _client.GetItemById<EmployeeViewModel>(_EmployeeId);
                 Item = (CreateEmployeeDto)employeeFromDb;
+                Addresses.AddRange(employeeFromDb.Addresses);
                 foreach (var prop in Item.GetType().GetProperties())
                     OnPropertyChanged(prop.Name);
             }
@@ -382,8 +439,32 @@ namespace Quiz.Mobile.ViewModels
                     "Edycja",
                     $"Nie udało się załadować pracownika. '{e.Message}'",
                     "OK");
-                return;
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task LoadCreatedAddress()
+        {
+            try
+            {
+                IsBusy = true;
+                var addressFromDb =
+                    await _client.GetItemById<AddressDto>(_CreatedAddressId);
+                Addresses.Add(addressFromDb);
+            }
+            catch(Exception e)
+            {
+                DependencyService.Get<IToast>()?.MakeToast(
+                    $"Nie udało się pobrać utworzonego adresu. '{e.Message}'");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using Quiz.Mobile.Shared.DTOs;
 using Quiz.Mobile.Models;
+using System.Collections.Generic;
 
 namespace Quiz.Mobile.Shared.ViewModels
 {
@@ -16,5 +17,6 @@ namespace Quiz.Mobile.Shared.ViewModels
         public PositionDto? Position { get; set; }
         public DateTime? DateOfEmployment { get; set; }
         public DateTime? EmploymentEndDate { get; set; }
+        public List<AddressDto> Addresses { get; set; }
     }
 }

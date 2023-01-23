@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Address.AddressDetailsPage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    x:DataType="viewmodels:AddressDetailsViewModel"
+    Shell.PresentationMode="Animated"
+    Title="{Binding Title}"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
+
+    <ContentPage.BindingContext>
+        <viewmodels:AddressDetailsViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}">
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+
+        <StackLayout Padding="20">
+            <Label Text="{Binding Item.Country, StringFormat='Kraj: {0}'}"
+                   HorizontalOptions="CenterAndExpand" />
+            <Label Text="{Binding Item.City, StringFormat='Miejscowość: {0}'}"
+                   HorizontalOptions="CenterAndExpand" />
+            <Label Text="{Binding Item.Street, StringFormat='Ulica: {0}'}"
+                   HorizontalOptions="CenterAndExpand" />
+            <Label Text="{Binding Item.HouseNumber, StringFormat='Numer domu: {0}'}"
+                   HorizontalOptions="StartAndExpand" />
+            <Label Text="{Binding Item.FlatNumber, StringFormat='Numer mieszkania: {0}'}"
+                   HorizontalOptions="StartAndExpand"/>
+            <Label Text="{Binding Item.PostalCode, StringFormat='Kod pocztowy: {0}'}"
+                   HorizontalOptions="StartAndExpand"/>
+
+            <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    VerticalOptions="Center" />
+
+            <Button Text="Edytuj"
+                    Command="{Binding SaveAndCloseCommand}"
+                    Style="{StaticResource ButtonOutline}"
+                    BackgroundColor="{StaticResource SystemIndigoDark}" />
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>
+

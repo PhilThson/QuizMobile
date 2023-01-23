@@ -11,6 +11,7 @@ using Quiz.Mobile.Helpers.Exceptions;
 using Quiz.Mobile.Interfaces;
 using Quiz.Mobile.Shared.ViewModels;
 using Quiz.Mobile.Shared.DTOs;
+using System.Linq;
 
 namespace Quiz.Mobile.Services
 {
@@ -106,7 +107,7 @@ namespace Quiz.Mobile.Services
             }
         }
 
-        public async Task AddItem<T>(T item, string dict = null)
+        public async Task<object> AddItem<T>(T item, string dict = null)
         {
             //Ze względu na wykorzystanie jednego Dto'sa do tworzenia
             //Areas oraz Difficulties, to w parametrze jest przekazywany endpoint
@@ -122,9 +123,16 @@ namespace Quiz.Mobile.Services
                 Encoding.UTF8, "application/json");
             var response = await Client.PostAsync(endpoint, dataToSend);
             var content = await response.Content.ReadAsStringAsync();
-
             if (!response.IsSuccessStatusCode)
                 throw new HttpRequestException(content);
+
+            //var objectWithId = JsonConvert.DeserializeObject<IHasId>(content);
+            //Drugi sposób na wyciągnięcie identyfikatora utworzonego zasobu
+            if (!int.TryParse(response.Headers.Location.Segments.Last(), out int objectId))
+                throw new DataNotFoundException(
+                    "Nie udało się odczytać identyfikatora utworzonego obiektu");
+
+            return objectId;
         }
 
         public async Task UpdateItem<T>(T item, string dict = null)
@@ -162,7 +170,8 @@ namespace Quiz.Mobile.Services
                 { typeof(AreaViewModel), QuizApiSettings.Areas },
                 { typeof(RoleDto), QuizApiSettings.Roles },
                 { typeof(UserDto), QuizApiSettings.Users },
-                { typeof(CreateUserDto), QuizApiSettings.Users }
+                { typeof(CreateUserDto), QuizApiSettings.Users },
+                { typeof(AddressDto), QuizApiSettings.Addresses }
             };
 
         #endregion
