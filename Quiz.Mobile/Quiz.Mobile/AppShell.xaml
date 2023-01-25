@@ -202,18 +202,6 @@
                       ContentTemplate="{DataTemplate address:AddressesPage}"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="Animation">
-        <FlyoutItem.Icon>
-            <FontImageSource FontFamily="FAB"
-                             Color="{AppThemeBinding 
-                                    Dark=White, 
-                                    Light={StaticResource SystemGray5Dark}}"
-                             Glyph="{x:Static icons:FontAwesomeIcons.Spinner}"/>
-        </FlyoutItem.Icon>
-        <ShellContent Title="Animation" Route="AnimationPage"
-                      ContentTemplate="{DataTemplate local:AnimationPage}"/>
-    </FlyoutItem>
-
     <FlyoutItem Title="Ustawienia">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FS"

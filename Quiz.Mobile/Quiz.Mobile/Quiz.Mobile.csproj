@@ -20,9 +20,6 @@
     <Compile Update="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\AnimationPage.xaml.cs">
-      <DependentUpon>AnimationPage.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\CustomFont.ttf" />

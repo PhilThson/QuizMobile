@@ -24,7 +24,7 @@
         <Style TargetType="Picker" BasedOn="{StaticResource BasePicker}"/>
     </ContentPage.Resources>
 
-    <Grid Padding="15" Margin="0,50">
+    <Grid Grid.Row="0" Padding="15" Margin="0,50">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="100"/>
@@ -87,12 +87,16 @@
                     VerticalOptions="CenterAndExpand"
                     Style="{StaticResource ButtonOutline}"/>
         </StackLayout>
-        <ActivityIndicator Grid.Row="0"
-            HorizontalOptions="Center"
-            IsRunning="{Binding IsBusy}"
-            IsVisible="{Binding IsBusy}"
-            VerticalOptions="Center"
-            Color="{StaticResource Primary}"/>
+        <Label Grid.Row="0"
+               FontFamily="FAB"
+               Text="{x:Static fonts:FontAwesomeIcons.Spinner}"
+               x:Name="LabelLoad"
+               FontSize="80"
+               Style="{StaticResource LabelLarge}"
+               HorizontalOptions="Center"
+               IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center"
+            />
     </Grid>
 </ContentPage>
 

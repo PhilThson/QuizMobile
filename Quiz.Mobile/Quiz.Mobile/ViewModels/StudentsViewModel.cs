@@ -12,6 +12,7 @@ using System.Linq;
 using System.Windows.Input;
 using Quiz.Mobile.CommunityToolkit;
 using Quiz.Mobile.CommunityToolkit.Interfaces;
+using Xamarin.Essentials;
 
 namespace Quiz.Mobile.ViewModels
 {

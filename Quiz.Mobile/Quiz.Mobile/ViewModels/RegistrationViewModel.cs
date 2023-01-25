@@ -10,27 +10,36 @@ using Xamarin.CommunityToolkit.Extensions;
 using System.Net.Http;
 using System.Linq;
 using Quiz.Mobile.Helpers;
+using Xamarin.Essentials;
+using Quiz.Mobile.Views;
 
 namespace Quiz.Mobile.ViewModels
 {
-	public class RegistrationViewModel : SingleItemViewModel<CreateUserDto>
+	public class RegistrationViewModel : SingleItemViewModel<CreateUserDto>,
+        IHasLabelViewModel
     {
 		#region Pola prywatne
 		private readonly IHttpClientService _client;
-		#endregion
+        private readonly Animation rotation;
+        #endregion
 
-		#region Konstruktor
-		public RegistrationViewModel()
+        #region Konstruktor
+        public RegistrationViewModel()
 		{
             Item = new CreateUserDto();
 			_client = DependencyService.Get<IHttpClientService>(
 				DependencyFetchTarget.GlobalInstance);
             this.PropertyChanged += (_, __) =>
                 SaveAndCloseCommand.RaiseCanExecuteChanged();
-		}
+            this.PropertyChanged += OnIsBusyChanged;
+            rotation = new Animation(v =>
+                View.Label.Rotation = v, 0, 360, Easing.Linear);
+        }
         #endregion
 
         #region Właściwości
+        public IHasLabelView View { get; set; }
+
         public string FirstName
         {
             get => Item.FirstName;
@@ -148,6 +157,7 @@ namespace Quiz.Mobile.ViewModels
             try
             {
                 IsBusy = true;
+                await Task.Delay(2000);
                 Item.PasswordHash = SecurePasswordHasher.Hash(_Password);
                 Item.RoleId = _SelectedRole.Id;
                 await _client.AddItem(Item);
@@ -181,6 +191,25 @@ namespace Quiz.Mobile.ViewModels
                 .Where(p => p.PropertyType == typeof(string)))
                     prop.SetValue(this, string.Empty);
             SelectedRole = null;
+        }
+
+        private void OnIsBusyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(this.IsBusy))
+            {
+                if (this.IsBusy)
+                    rotation.Commit(View, "rotate", 16, 1000, Easing.Linear,
+                        (v, c) => View.Label.Rotation = 0,
+                        () => true);
+                else
+                    View.AbortAnimation("rotate");
+            }
+        }
+
+        public override void Dispose()
+        {
+            this.PropertyChanged -= OnIsBusyChanged;
+            base.Dispose();
         }
 
         #endregion
