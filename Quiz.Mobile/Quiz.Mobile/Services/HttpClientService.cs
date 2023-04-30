@@ -27,7 +27,7 @@ namespace Quiz.Mobile.Services
             {
                 if (_client == null)
                 {
-                    var url = $"{QuizApiSettings.Host}{QuizApiSettings.MainController}/";
+                    var url = $"{QuizApiSettings.Host}";
                     _client = new HttpClient
                     {
                         BaseAddress = new Uri(url)
@@ -169,8 +169,9 @@ namespace Quiz.Mobile.Services
                 { typeof(DifficultyViewModel), QuizApiSettings.Difficulties },
                 { typeof(AreaViewModel), QuizApiSettings.Areas },
                 { typeof(RoleDto), QuizApiSettings.Roles },
-                { typeof(UserDto), QuizApiSettings.Users },
-                { typeof(CreateUserDto), QuizApiSettings.Users },
+                { typeof(UserDto), QuizApiSettings.UserController },
+                { typeof(SimpleUserDto), QuizApiSettings.UserByEmail },
+                { typeof(CreateUserDto), QuizApiSettings.UserController },
                 { typeof(AddressDto), QuizApiSettings.Addresses }
             };
 

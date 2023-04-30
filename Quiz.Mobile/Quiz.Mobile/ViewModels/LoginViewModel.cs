@@ -81,7 +81,7 @@ namespace Quiz.Mobile.ViewModels
                 if (Email != "Test" && Password != "123")
                 {
                     IsBusy = true;
-                    var userDto = await _client.GetItemByKey<UserDto>(
+                    var userDto = await _client.GetItemByKey<SimpleUserDto>(
                         nameof(Email).ToLower(), _Email);
 
                     if (!SecurePasswordHasher.Verify(_Password, userDto.PasswordHash))
@@ -97,7 +97,8 @@ namespace Quiz.Mobile.ViewModels
             }
             catch (HttpRequestException e)
             {
-                await Application.Current.MainPage.DisplayToastAsync(e.Message, 5000);
+                await Application.Current.MainPage.DisplayToastAsync(
+                    $"Wystąpił błąd komunikacji z API: {e.Message}", 5000);
             }
             catch (Exception e)
             {
