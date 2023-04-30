@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"      
+    mc:Ignorable="d"
+    x:Class="Quiz.Mobile.Views.LoginPage"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{AppThemeBinding 
+        Dark={StaticResource WindowBackgroundColorDark}, 
+        Light={StaticResource WindowBackgroundColor}}"
+    >
+
+    <ContentPage.BindingContext>
+        <viewmodels:LoginViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+        <Style TargetType="Entry" BasedOn="{StaticResource BaseEntry}"/>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <Frame BackgroundColor="{AppThemeBinding 
+                        Dark={StaticResource CardBackgroundDark}, 
+                        Light={StaticResource CardBackground}}"
+                   Padding="20"
+                   Margin="0,50"
+                   CornerRadius="5">
+            <Label Text="Logowanie" 
+                       HorizontalTextAlignment="Center" 
+                       TextColor="#323130"
+                       FontSize="36"/>
+        </Frame>
+        <StackLayout Padding="40"
+                     VerticalOptions="Center"
+                     HorizontalOptions="FillAndExpand">
+            <Label Text="E-mail:"/>
+            <Entry Placeholder="np. jan.kowalski@edu.pl"
+                   Text="{Binding Email}"/>
+
+            <Label Text="Hasło:"/>
+            <Entry IsPassword="True"
+                   Text="{Binding Password}"
+                   Placeholder="Wprowadź hasło"/>
+
+            <Button Text="Zaloguj"
+                    Style="{StaticResource LoginButton}"
+                    IsEnabled="{Binding CanLogin}"
+                    Command="{Binding LoginCommand}"/>
+            <!--Clicked="Button_Clicked"-->
+            <Button Text="Zarejestruj"
+                    BackgroundColor="{StaticResource SystemIndigoDark}"
+                    Command="{Binding RegisterCommand}"/>
+
+        </StackLayout>
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="{StaticResource Primary}"/>
+    </StackLayout>
+</ContentPage>

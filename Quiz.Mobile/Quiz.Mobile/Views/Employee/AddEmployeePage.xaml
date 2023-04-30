@@ -1,0 +1,172 @@
+﻿<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Employee.AddEmployeePage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:behaviors="clr-namespace:Quiz.Mobile.Helpers.Behaviors"
+    xmlns:converters="clr-namespace:Quiz.Mobile.Helpers.Converters"
+    xmlns:dtos="clr-namespace:Quiz.Mobile.Shared.DTOs"
+    Title="{Binding Title}"
+    x:DataType="viewmodels:AddEmployeeViewModel"
+    Shell.PresentationMode="Animated"
+    x:Name="addEmployee"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
+    <!--Modal - pojawienie sie strony od dołu na całej powierzchni, zamiast jako kolejnej strony
+        Animated - pojawienie się 'wewnątrz' np. zakładki -->
+
+    <ContentPage.BindingContext>
+        <viewmodels:AddEmployeeViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+        <Style TargetType="Entry" BasedOn="{StaticResource BaseEntry}"/>
+        <Style TargetType="DatePicker" BasedOn="{StaticResource BaseDatePicker}"/>
+        <Style TargetType="Picker" BasedOn="{StaticResource BasePicker}"/>
+    </ContentPage.Resources>
+
+    <StackLayout Padding="20">
+        <!--Zgodnie z dokumentacją zagnieżdżony ScrollView w tym przypadku
+        musi mieć parametr VerticalOptions na FillAndExpand-->
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <Label Text="Imię:"/>
+                <Entry Text="{Binding FirstName}" />
+
+                <Label Text="Nazwisko:"/>
+                <Entry Text="{Binding LastName}" />
+
+                <Label Text="Pesel:"/>
+                <Entry Text="{Binding PersonalNumber}"
+                       Keyboard="Numeric" MaxLength="11">
+                    <Entry.Behaviors>
+                        <behaviors:PersonalNumberValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addEmployee},
+                            Path=BindingContext.IsPersonalNumberValid}"/>
+                    </Entry.Behaviors>
+                </Entry>
+
+                <Label Text="Data urodzenia:"/>
+                <DatePicker Date="{Binding DateOfBirth}"
+                        Format="dd-MM-yyyy"/>
+
+                <Label Text="Wynagrodzenie brutto:"/>
+                <Entry Text="{Binding Salary}" Keyboard="Numeric">
+                    <Entry.Behaviors>
+                        <behaviors:SalaryValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addEmployee},
+                            Path=BindingContext.IsSalaryValid}"/>
+                    </Entry.Behaviors>
+                </Entry>
+
+                <Label Text="Dni urlopu:"/>
+                <Entry Text="{Binding DaysOfLeave}" Keyboard="Numeric"
+                       MaxLength="3"/>
+
+                <Label Text="Wymiar godzinowy:"/>
+                <Entry Text="{Binding HourlyRate}" Keyboard="Numeric"/>
+
+                <Label Text="Nadgodziny:"/>
+                <Entry Text="{Binding Overtime}" Keyboard="Numeric"/>
+
+                <Label Text="Adres e-mail:"/>
+                <Entry Text="{Binding Email}" Keyboard="Email">
+                    <Entry.Behaviors>
+                        <behaviors:EmailValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addEmployee},
+                            Path=BindingContext.IsEmailValid}"/>
+                    </Entry.Behaviors>
+                </Entry>
+
+                <Label Text="Numer telefonu:"/>
+                <Entry Text="{Binding PhoneNumber}"
+                       Placeholder="000-000-000"
+                       Keyboard="Telephone"
+                       MaxLength="11">
+                    <Entry.Behaviors>
+                        <behaviors:PhoneNumberValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addEmployee},
+                            Path=BindingContext.IsPhoneNumberValid}"/>
+                    </Entry.Behaviors>
+                </Entry>
+
+                <Label Text="Etat:"/>
+                <Picker Title="Etat"
+                    ItemsSource="{Binding Jobs}"
+                    SelectedIndex="{Binding SelectedJobIndex}"
+                    ItemDisplayBinding="{Binding Description}"
+                    />
+
+                <Label Text="Stanowisko:"/>
+                <Picker Title="Stanowisko"
+                    ItemsSource="{Binding Positions}"
+                    SelectedIndex="{Binding SelectedPositionIndex}"
+                    ItemDisplayBinding="{Binding Description}"
+                    />
+
+                <Label Text="Data zatrudnienia:"/>
+                <DatePicker Date="{Binding DateOfEmployment}"
+                        Format="dd-MM-yyyy"/>
+
+                <Label Text="Data końca zatrudnienia:"/>
+                <DatePicker Date="{Binding EmploymentEndDate}"
+                        Format="dd-MM-yyyy"/>
+
+                <StackLayout IsVisible="{Binding EmployeeId,
+                            Converter={converters:IntToVisibilityConverter}}">
+                    <Label
+                        Style="{StaticResource LabelMedium}"
+                        Text="Lista adresów pracownika"
+                        FontAttributes="Italic"/>
+                    <StackLayout BindableLayout.ItemsSource="{Binding Addresses}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="dtos:AddressDto">
+                                <Label Text="{Binding .,
+                                Converter={converters:AddressToStringConverter}}"
+                                   Style="{StaticResource LabelSmall}"
+                                   Margin="0,5"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                    <Button
+                         Style="{StaticResource SmallButtonOutline}"
+                         Text="Dodaj adres"
+                         HorizontalOptions="CenterAndExpand"
+                         VerticalOptions="CenterAndExpand"
+                         Command="{Binding Source={x:Reference addEmployee},
+                                  Path=BindingContext.AddAddressCommand}}"/>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="CenterAndExpand">
+            <Button
+                Padding="20,0"
+                Command="{Binding SaveAndCloseCommand}"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding CanSaveProp}"
+                Text="Zapisz"
+                VerticalOptions="CenterAndExpand"
+                Style="{StaticResource ButtonOutline}"/>
+            <Button
+                Padding="20,0"
+                Command="{Binding NavigateBackCommand}"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsNotBusy}"
+                Text="Powrót"
+                VerticalOptions="CenterAndExpand"
+                Style="{StaticResource ButtonOutline}"/>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>
+

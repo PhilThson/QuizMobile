@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Student.AddStudentPage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:behaviors="clr-namespace:Quiz.Mobile.Helpers.Behaviors"
+    Title="{Binding Title}"
+    x:DataType="viewmodels:AddStudentViewModel"
+    Shell.PresentationMode="Animated"
+    x:Name="addStudent"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
+    <ContentPage.BindingContext>
+        <viewmodels:AddStudentViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+        <Style TargetType="Entry" BasedOn="{StaticResource BaseEntry}"/>
+        <Style TargetType="DatePicker" BasedOn="{StaticResource BaseDatePicker}"/>
+        <Style TargetType="Picker" BasedOn="{StaticResource BasePicker}"/>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <StackLayout Padding="15">
+            <Label Text="Imię:"/>
+            <Entry Text="{Binding FirstName}" />
+
+            <Label Text="Nazwisko:"/>
+            <Entry Text="{Binding LastName}" />
+
+            <Label Text="Pesel:"/>
+            <Entry Text="{Binding PersonalNumber, Mode=TwoWay}"
+                   Keyboard="Numeric" MaxLength="11">
+                <Entry.Behaviors>
+                    <behaviors:PersonalNumberValidatorBehavior
+                        IsValid="{Binding Source={x:Reference addStudent},
+                            Path=BindingContext.IsPersonalNumberValid}"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Label Text="Data urodzenia:"/>
+            <DatePicker Date="{Binding DateOfBirth}"
+                        Format="dd-MM-yyyy" />
+
+            <Label Text="Miejsce urodzenia:"/>
+            <Entry Text="{Binding PlaceOfBirth}" />
+
+            <Label Text="Numer orzeczenia:"/>
+            <Entry Text="{Binding DisabilityCert}" MaxLength="15" />
+
+            <Label Text="Oddział:"/>
+            <Picker Title="Wybierz oddział"
+                    ItemsSource="{Binding Branches}"
+                    ItemDisplayBinding="{Binding Description}"
+                    SelectedIndex="{Binding BranchId}"
+                    />
+
+        </StackLayout>
+
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="CenterAndExpand">
+            <Button
+                Padding="20,0"
+                Command="{Binding SaveAndCloseCommand}"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsValidForm}"
+                Text="Zapisz"
+                VerticalOptions="FillAndExpand"
+                Style="{StaticResource ButtonOutline}"/>
+            <Button
+                Padding="20,0"
+                Command="{Binding NavigateBackCommand}"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsNotBusy}"
+                Text="Powrót"
+                VerticalOptions="FillAndExpand"
+                Style="{StaticResource ButtonOutline}"/>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>
+

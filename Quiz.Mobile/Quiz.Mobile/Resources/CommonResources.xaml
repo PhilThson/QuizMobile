@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Resources.CommonResources">
+
+    <Color x:Key="Primary">#2196F3</Color>
+    <Color x:Key="TextColor">#000000</Color>
+    <Color x:Key="TextColorDark">White</Color>
+
+    <Color x:Key="WindowBackgroundColor">#f2f2f7</Color>
+    <Color x:Key="WindowBackgroundColorDark">Black</Color>
+
+    <Color x:Key="CardBackground">White</Color>
+    <Color x:Key="CardBackgroundDark">#1C1C1E</Color>
+
+    <Color x:Key="SystemBlue">#007AFF</Color>
+    <Color x:Key="SystemGreen">#CDE990</Color>
+    <Color x:Key="SystemIndigo">#5856D6</Color>
+    <Color x:Key="SystemOrange">#FF9500</Color>
+    <Color x:Key="SystemPink">#FF2D55</Color>
+    <Color x:Key="SystemPurple">#AF52DE</Color>
+    <Color x:Key="SystemRed">#FF3B30</Color>
+    <Color x:Key="SystemTeal">#5AC8FA</Color>
+    <Color x:Key="SystemYellow">#FFCC00</Color>
+
+    <Color x:Key="SystemGray">#8E8E93</Color>
+    <Color x:Key="SystemGray2">#AEAEB2</Color>
+    <Color x:Key="SystemGray3">#C7C7CC</Color>
+    <Color x:Key="SystemGray4">#D1D1D6</Color>
+    <Color x:Key="SystemGray5">#E5E5EA</Color>
+    <Color x:Key="SystemGray6">#F2F2F7</Color>
+
+    <Color x:Key="SystemBlueDark">#0A84FF</Color>
+    <Color x:Key="SystemGreenDark">#AACB73</Color>
+    <Color x:Key="SystemIndigoDark">#5E5CE6</Color>
+    <Color x:Key="SystemOrangeDark">#FF9F0A</Color>
+    <Color x:Key="SystemPinkDark">#FF375F</Color>
+    <Color x:Key="SystemPurpleDark">#BF5AF2</Color>
+    <Color x:Key="SystemRedDark">#FF453A</Color>
+    <Color x:Key="SystemTealDark">#64D2FF</Color>
+    <Color x:Key="SystemYellowDark">#FFD60A</Color>
+
+    <Color x:Key="SystemGrayDark">#8E8E93</Color>
+    <Color x:Key="SystemGray2Dark">#636366</Color>
+    <Color x:Key="SystemGray3Dark">#484848</Color>
+    <Color x:Key="SystemGray4Dark">#3A3A3C</Color>
+    <Color x:Key="SystemGray5Dark">#2C2C2E</Color>
+    <Color x:Key="SystemGray6Dark">#1C1C1E</Color>
+
+    <Style x:Key="BaseListView" TargetType="ListView">
+        <Setter Property="HasUnevenRows" Value="True"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="SeparatorVisibility" Value="None"/>
+        <Setter Property="RefreshControlColor"
+                        Value="{StaticResource SystemOrange}"/>
+    </Style>
+
+    <!--można ustalić wartość w zależności od platformy-->
+    <Style x:Key="BaseCard" TargetType="Frame">
+        <Setter Property="HasShadow"
+                        Value="{OnPlatform Android=true, iOS=false, Default=true}"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding
+                    Dark={StaticResource CardBackgroundDark},
+                    Light={StaticResource CardBackground}}"/>
+    </Style>
+
+    <Style x:Key="LoginButton" TargetType="Button">
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="#332196F3" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BaseButton" TargetType="Button">
+        <Setter Property="TextColor" Value="{AppThemeBinding
+                Dark={StaticResource TextColorDark},
+                Light={StaticResource TextColor}}" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding
+                Dark={StaticResource TextColorDark},
+                Light={StaticResource TextColor}}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+    </Style>
+
+    <Style x:Key="ButtonOutline" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="WidthRequest" Value="150" />
+        <Setter Property="HeightRequest" Value="{OnPlatform iOS=30, Android=40}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="#332196F3" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SmallButtonOutline" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="Padding" Value="20,0"/>
+        <Setter Property="TextColor" Value="Black"/>
+        <Setter Property="HeightRequest" Value="{OnPlatform iOS=30, Android=35}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource SystemGreenDark}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource SystemGreen}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+
+    <!--Dzięki bazowemu stylowi, można zmienić kolor tekstu w jednym miejscu
+            - zastosowanie w stylach/motywach-->
+    <Style x:Key="BaseLabel" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding
+                    Dark={StaticResource TextColorDark},
+                    Light={StaticResource TextColor}}"/>
+    </Style>
+
+    <Style x:Key="LabelMicro" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontSize" Value="Micro"/>
+    </Style>
+    <Style x:Key="LabelSmall" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontSize" Value="Small"/>
+    </Style>
+
+    <Style x:Key="LabelMedium" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontSize" Value="Medium"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+    </Style>
+
+    <!--Tworzenie stylu na podstawie inngeo-->
+    <Style x:Key="LabelLarge" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontSize" Value="Large"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="BaseEntry" TargetType="Entry">
+        <Setter Property="FontSize" Value="Medium"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+                    Dark={StaticResource TextColorDark},
+                    Light={StaticResource TextColor}}"/>
+        <Setter Property="Margin" Value="2,0,2,10"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+                    Dark={StaticResource CardBackgroundDark},
+                    Light={StaticResource WindowBackgroundColor}}"/>
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding
+                    Dark={StaticResource SystemGrayDark},
+                    Light={StaticResource SystemGray2Dark}}"/>
+    </Style>
+
+    <Style x:Key="BaseDatePicker" TargetType="DatePicker">
+        <Setter Property="TextColor" Value="{AppThemeBinding
+                    Dark={StaticResource TextColorDark},
+                    Light={StaticResource TextColor}}"/>
+        <Setter Property="Margin" Value="2,0,2,10"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+                    Dark={StaticResource CardBackgroundDark},
+                    Light={StaticResource WindowBackgroundColor}}"/>
+    </Style>
+
+    <Style x:Key="BasePicker" TargetType="Picker">
+        <Setter Property="TextColor" Value="{AppThemeBinding
+                    Dark={StaticResource TextColorDark},
+                    Light={StaticResource TextColor}}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+                    Dark={StaticResource CardBackgroundDark},
+                    Light={StaticResource WindowBackgroundColor}}"/>
+    </Style>
+
+    <!--Trzeba odwzorować backslash, który w code-behind można by podać w stringu-->
+    <x:String x:Key="Rotate">&#xf2f1;</x:String>
+    <x:String x:Key="Gears">&#xf085;</x:String>
+
+</ResourceDictionary>

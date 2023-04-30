@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <Compile Update="Views\RegistrationPage.xaml.cs">
+      <DependentUpon>RegistrationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\CustomFont.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\fa-brands-400.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\fa-regular-400.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\fa-solid-900.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\Solid-900.otf" />
+    <EmbeddedResource Include="Resources\Fonts\materialdesignicons-webfont.ttf" />
+    <EmbeddedResource Include="Resources\Images\school.png" />
+    <EmbeddedResource Include="Resources\Images\school_about.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\Dictionary\" />
+    <None Remove="Helpers\Handlers\" />
+    <None Remove="Views\Address\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Dictionary\" />
+    <Folder Include="Helpers\Handlers\" />
+    <Folder Include="Views\Address\" />
+  </ItemGroup>
+</Project>

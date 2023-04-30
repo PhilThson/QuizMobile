@@ -1,0 +1,31 @@
+﻿<Grid
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Base.PersonCard"
+    xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
+    xmlns:models="clr-namespace:Quiz.Mobile.Models"
+    x:DataType="models:Person"
+    Padding="10">
+    <Frame Style="{StaticResource BaseCard}">
+        <StackLayout Orientation="Horizontal">
+            <Image WidthRequest="66">
+                <Image.Source>
+                    <FontImageSource FontFamily="MaterialDesignIcons"
+                        Glyph="{x:Static icons:MaterialDesignIconFont.Account}"
+                        Color="{AppThemeBinding
+                            Dark={StaticResource CardBackground},
+                            Light={StaticResource CardBackgroundDark}}"
+                        />
+                </Image.Source>
+            </Image>
+            <StackLayout VerticalOptions="Center">
+                <Label Text="{Binding LastName}"
+                        VerticalOptions="Center"
+                        FontSize="40"/>
+                <Label Text="{Binding FirstName}"
+                        VerticalOptions="Center"
+                        FontSize="Large"/>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</Grid>

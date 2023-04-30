@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Employee.EmployeeDetailsPage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:dtos="clr-namespace:Quiz.Mobile.Shared.DTOs"
+    xmlns:converters="clr-namespace:Quiz.Mobile.Helpers.Converters"
+    x:DataType="viewmodels:EmployeeDetailsViewModel"
+    Shell.PresentationMode="Animated"
+    Title="{Binding Title}"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
+    <ContentPage.BindingContext>
+        <viewmodels:EmployeeDetailsViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelMedium}"/>
+    </ContentPage.Resources>
+
+    <StackLayout Padding="20">
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <Label Text="{Binding Item.FirstName, StringFormat='Imię: {0}'}"
+                   HorizontalOptions="Center" />
+                <Label Text="{Binding Item.LastName, StringFormat='Nazwisko: {0}'}"
+                   HorizontalOptions="Center" Margin="0,5"/>
+                <Label HorizontalOptions="StartAndExpand"
+                   Text="{Binding Item.PersonalNumber, StringFormat='PESEL: {0}'}"
+                   Margin="0,5"/>
+                <Label HorizontalOptions="StartAndExpand"
+                   Text="{Binding Item.Email, StringFormat='E-mail: {0}'}"
+                   Margin="0,5"/>
+
+                <StackLayout IsVisible="{Binding HasAddress}">
+                    <Label
+                        Style="{StaticResource LabelMedium}"
+                        Text="Lista adresów pracownika:"
+                        FontAttributes="Italic"/>
+                    <StackLayout BindableLayout.ItemsSource="{Binding Item.Addresses}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="dtos:AddressDto">
+                                <Label Text="{Binding .,
+                                Converter={converters:AddressToStringConverter}}"
+                                   Style="{StaticResource LabelSmall}"
+                                   Margin="0,5"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+
+        <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    VerticalOptions="Center" />
+
+        <StackLayout Orientation="Vertical"
+                         HorizontalOptions="CenterAndExpand">
+            <Button Text="Edytuj"
+                    Command="{Binding SaveAndCloseCommand}"
+                    Style="{StaticResource ButtonOutline}"
+                    BackgroundColor="{StaticResource SystemIndigoDark}"
+                    WidthRequest="250"
+                    />
+            <Button Text="Usuń"
+                    Command="{Binding RemoveCommand}"
+                    CommandParameter="{Binding Item.Id}"
+                    Style="{StaticResource ButtonOutline}"
+                    BackgroundColor="IndianRed"
+                    WidthRequest="250"
+                    />
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>
+

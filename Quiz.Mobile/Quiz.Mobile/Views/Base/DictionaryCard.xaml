@@ -1,0 +1,21 @@
+﻿<Grid
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Base.DictionaryCard"
+    xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
+    xmlns:models="clr-namespace:Quiz.Mobile.Models"
+    x:DataType="models:DictionaryItem"
+    Padding="10">
+    <Frame Style="{StaticResource BaseCard}">
+        <StackLayout Orientation="Horizontal">
+            <StackLayout VerticalOptions="Center">
+                <Label Text="{Binding Name}"
+                        VerticalOptions="Center"
+                        FontSize="40"/>
+                <Label Text="{Binding Description}"
+                        VerticalOptions="Center"
+                        FontSize="Large"/>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</Grid>

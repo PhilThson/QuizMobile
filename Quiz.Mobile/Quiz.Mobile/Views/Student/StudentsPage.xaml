@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Quiz.Mobile.Views.Student.StudentsPage"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels" 
+    xmlns:base="clr-namespace:Quiz.Mobile.Views.Base"
+    xmlns:icons="clr-namespace:Quiz.Mobile.Helpers.Icons"
+    xmlns:converters="clr-namespace:Quiz.Mobile.Helpers.Converters"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="viewmodels:StudentsViewModel"
+    Title="{Binding Title}"
+    x:Name="students"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    BackgroundColor="{AppThemeBinding 
+                    Dark={StaticResource WindowBackgroundColorDark}, 
+                    Light={StaticResource WindowBackgroundColor}}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:StudentsViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Dodaj ucznia" 
+                     Command="{Binding AddCommand}" >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MaterialDesignIcons"
+                                 Glyph="{x:Static icons:MaterialDesignIconFont.Plus}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <StackLayout Orientation="Vertical">
+
+        <SearchBar Placeholder="Wyszukaj ucznia"
+                   >
+            <!--Przecwiczenie wlasnego konwertera EventToCommand-->
+            <SearchBar.Behaviors>
+                <xct:EventToCommandBehavior
+                    EventName="TextChanged"
+                    Command="{Binding FilterCommand}"
+                    EventArgsConverter="{converters:TextChangedEventArgsConverter}"
+                />
+            </SearchBar.Behaviors>
+        </SearchBar>
+
+        <RefreshView
+            Command="{Binding RefreshCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            >
+
+            <CollectionView
+                BackgroundColor="Transparent"
+                ItemSizingStrategy="MeasureAllItems"
+                ItemsLayout="VerticalList"
+                ItemsSource="{Binding List}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedStudent}"
+                SelectionChangedCommand="{Binding SelectedCommand}"
+                SelectionChangedCommandParameter="{Binding SelectedItem,
+                    Source={x:Reference collectionView}}"
+                RemainingItemsThreshold="1"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                x:Name="collectionView"
+                >
+                <CollectionView.EmptyView>
+                    <StackLayout Padding="12">
+                        <Label HorizontalOptions="Center" Text="Brak uczniów do wyświetlenia" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView
+                        android:SwipeView.SwipeTransitionMode="Drag"
+                               BackgroundColor="{AppThemeBinding 
+                                Dark={StaticResource WindowBackgroundColorDark}, 
+                                Light={StaticResource WindowBackgroundColor}}">
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                    BackgroundColor="Red"
+                                    IsDestructive="True"
+                                    Text="Usuń"
+                                    Command="{Binding Source={x:Reference collectionView},
+                                        Path=BindingContext.RemoveCommand}"
+                                    CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
+                                    >
+                                        <SwipeItem.IconImageSource>
+                                            <FontImageSource FontFamily="MaterialDesignIcons"
+                                            Glyph="{x:Static icons:MaterialDesignIconFont.AccountMinusOutline}"
+                                            Color="White"/>
+                                        </SwipeItem.IconImageSource>
+                                    </SwipeItem>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <!--Wykorzystanie wcześniej przygotowanego grida!-->
+                            <base:PersonCard/>
+
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Header>
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                        HorizontalOptions="Center"
+                        FontAttributes="Italic"
+                        Style="{StaticResource LabelMedium}"
+                        Text="Wybierz ucznia, aby wyświetlić szczegóły" />
+                    </StackLayout>
+                </CollectionView.Header>
+                <CollectionView.Footer>
+                    <Grid HorizontalOptions="CenterAndExpand" >
+                        <ActivityIndicator
+                            HorizontalOptions="Center"
+                            IsRunning="{Binding IsLoading}"
+                            IsVisible="{Binding IsLoading}"
+                            VerticalOptions="Center" />
+                        <Button
+                            Style="{StaticResource ButtonOutline}"
+                            Command="{Binding MoveToStartCommand}"
+                            IsVisible="{Binding IsLoading,
+                                Converter={converters:InvertedBoolConverter}}"
+                            Margin="5,2"
+                            Text="Idź do góry" />
+                        <!--<Button
+                        Style="{StaticResource ButtonOutline}"
+                        Command="{Binding ClearCommand}"
+                        Text="Wyczyść" />-->
+                    </Grid>
+                </CollectionView.Footer>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
+</ContentPage>

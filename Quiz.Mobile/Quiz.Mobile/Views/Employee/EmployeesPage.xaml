@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="Quiz.Mobile.Views.Employee.EmployeesPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Quiz.Mobile.ViewModels"
+    xmlns:base="clr-namespace:Quiz.Mobile.Views.Base"
+    xmlns:model="clr-namespace:Quiz.Mobile.Shared.ViewModels"
+    x:DataType="viewmodels:EmployeesViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="{Binding Title}"
+    x:Name="employeesPage"
+    BackgroundColor="{AppThemeBinding
+        Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}"
+    >
+
+    <ContentPage.BindingContext>
+        <viewmodels:EmployeesViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Dodaj pracownika"
+                     Command="{Binding AddCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <StackLayout Orientation="Vertical">
+
+        <SearchBar Placeholder="Wyszukaj pracownika"
+                   Text="{Binding FilterText}"
+                   />
+
+        <ListView
+            CachingStrategy="RecycleElement"
+            ItemsSource="{Binding List}"
+            IsPullToRefreshEnabled="True"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            RefreshCommand="{Binding RefreshCommand}"
+            Style="{StaticResource BaseListView}"
+            SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
+            >
+            <ListView.Behaviors>
+                <xct:EventToCommandBehavior
+                EventName="ItemSelected"
+                Command="{Binding SelectedEmployeeCommand}"
+                EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
+            </ListView.Behaviors>
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:EmployeeViewModel">
+                    <ViewCell>
+                        <!--<ViewCell.ContextActions>
+                        <MenuItem Text="Usuń"
+                                  Command="{Binding Source={x:Reference employeesPage},
+                                  Path=BindingContext.RemoveCommand}"
+                                  CommandParameter="{Binding .}"
+                                  IsDestructive="True"
+                                  />
+                    </ViewCell.ContextActions>-->
+                        <base:PersonCard/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Header>
+                <StackLayout Orientation="Horizontal">
+                    <Label
+                    Style="{StaticResource LabelMedium}"
+                    Text="Wybierz pracownika, aby wyświetlić szczegóły"
+                    FontAttributes="Italic"
+                    />
+                </StackLayout>
+            </ListView.Header>
+            <ListView.Footer>
+                <StackLayout Orientation="Horizontal"
+                         VerticalOptions="CenterAndExpand">
+                    <Button
+                        Style="{StaticResource ButtonOutline}"
+                        Text="Odśwież"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="CenterAndExpand"
+                        Command="{Binding RefreshCommand}"
+                    />
+                </StackLayout>
+            </ListView.Footer>
+
+        </ListView>
+    </StackLayout>
+</ContentPage>
+
