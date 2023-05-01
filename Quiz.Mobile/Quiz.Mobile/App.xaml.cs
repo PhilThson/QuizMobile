@@ -25,6 +25,9 @@ namespace Quiz.Mobile
             //nadpisanie motywu zgodnie z preferencjami
             TheTheme.SetTheme();
 
+            // wyczyszczenie SecureStorage
+            SecureStorage.RemoveAll();
+
             MainPage = new AppShell();
         }
 

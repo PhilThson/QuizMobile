@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Quiz.Mobile.Shared.DTOs;
 
 namespace Quiz.Mobile.Interfaces
 {
@@ -12,5 +13,6 @@ namespace Quiz.Mobile.Interfaces
         Task RemoveItemById<T>(object id);
         Task<object> AddItem<T>(T item, string dict = null);
         Task UpdateItem<T>(T item, string dict = null);
+        Task<IEnumerable<string>> Login(string encryptedUser);
     }
 }
