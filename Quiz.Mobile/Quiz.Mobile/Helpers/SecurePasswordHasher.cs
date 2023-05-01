@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Quiz.Mobile.Shared.DTOs;
+using System;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Quiz.Mobile.Helpers
 {
@@ -88,6 +91,28 @@ namespace Quiz.Mobile.Helpers
                     return false;
             }
             return true;
+        }
+
+        public static string Encrypt(SimpleUserDto userDto)
+        {
+            var key = Encoding.UTF8.GetBytes(QuizApiSettings.QuizApiKey);
+            using (var aes = Aes.Create())
+            {
+                aes.Key = key;
+                //generowanie wektora inicjalizującego
+                aes.GenerateIV();
+                //pobranie wektora inicjalizującego
+                var iv = aes.IV;
+                using (var encryptor = aes.CreateEncryptor())
+                {
+                    var plainBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userDto));
+                    var cipherBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
+                    var cipherText = Convert.ToBase64String(cipherBytes);
+                    var ivText = Convert.ToBase64String(iv);
+
+                    return $"{ivText}:{cipherText}";
+                }
+            }
         }
     }
 }

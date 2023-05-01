@@ -13,6 +13,6 @@ namespace Quiz.Mobile.Interfaces
         Task RemoveItemById<T>(object id);
         Task<object> AddItem<T>(T item, string dict = null);
         Task UpdateItem<T>(T item, string dict = null);
-        Task<IEnumerable<string>> Login(SimpleUserDto simpleUser);
+        Task<IEnumerable<string>> Login(string encryptedUser);
     }
 }

@@ -13,6 +13,9 @@ using Quiz.Mobile.Helpers;
 using Quiz.Mobile.Helpers.Exceptions;
 using Xamarin.Essentials;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -94,7 +97,9 @@ namespace Quiz.Mobile.ViewModels
                         Password = Password 
                     };
 
-                    var cookie = await _client.Login(simpleUserDto);
+                    var encrypted = SecurePasswordHasher.Encrypt(simpleUserDto);
+
+                    var cookie = await _client.Login(encrypted);
                     await SecureStorage.SetAsync(QuizApiSettings.QuizUserKey, cookie.First());
                 }
 

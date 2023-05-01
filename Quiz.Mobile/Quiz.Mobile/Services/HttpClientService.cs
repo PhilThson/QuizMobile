@@ -35,6 +35,7 @@ namespace Quiz.Mobile.Services
                     _client.DefaultRequestHeaders.Accept.Clear();
                     _client.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
+                    _client.Timeout = TimeSpan.FromSeconds(30);
                 }
                 return _client;
             }
@@ -138,11 +139,11 @@ namespace Quiz.Mobile.Services
                 throw new HttpRequestException(content);
         }
 
-        public async Task<IEnumerable<string>> Login(SimpleUserDto simpleUser)
+        public async Task<IEnumerable<string>> Login(string encryptedUser)
         {
             var endpoint = await GetUrl(typeof(SimpleUserDto));
 
-            var dataToSend = new StringContent(JsonConvert.SerializeObject(simpleUser),
+            var dataToSend = new StringContent(JsonConvert.SerializeObject(encryptedUser),
                 Encoding.UTF8, "application/json");
 
             var response = await Client.PostAsync(endpoint, dataToSend);
