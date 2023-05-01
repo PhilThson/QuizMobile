@@ -19,8 +19,13 @@ namespace Quiz.Mobile.Helpers
         public static string Branches { get; } = $"{MainController}/oddzialy";
         public static string Areas { get; } = $"{MainController}/obszary";
         public static string Difficulties { get; } = $"{MainController}/skaleTrudnosci";
+        public static string Addresses { get; set; } = $"{MainController}/adresy";
+
         public static string Roles { get; set; } = $"{UserController}/roles";
         public static string UserByEmail { get; set; } = $"{UserController}/byEmail";
-        public static string Addresses { get; set; } = $"{MainController}/adresy";
+        public static string Login { get; set; } = $"{UserController}/login";
+
+        //
+        public static string QuizUserKey { get; } = "quiz-user";
     }
 }

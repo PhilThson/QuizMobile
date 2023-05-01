@@ -1,8 +1,5 @@
 ﻿using Quiz.Mobile.Views;
-using Quiz.Mobile.Views.Employee;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 using Quiz.Mobile.ViewModels.Abstract;
 using Quiz.Mobile.Shared.DTOs;
@@ -14,6 +11,8 @@ using System.Net.Http;
 using Xamarin.CommunityToolkit.Extensions;
 using Quiz.Mobile.Helpers;
 using Quiz.Mobile.Helpers.Exceptions;
+using Xamarin.Essentials;
+using System.Linq;
 
 namespace Quiz.Mobile.ViewModels
 {
@@ -81,11 +80,22 @@ namespace Quiz.Mobile.ViewModels
                 if (Email != "Test" && Password != "123")
                 {
                     IsBusy = true;
-                    var userDto = await _client.GetItemByKey<SimpleUserDto>(
-                        nameof(Email).ToLower(), _Email);
+                    //var userDto = await _client.GetItemByKey<UserSimpleDataDto>(
+                    //    nameof(Email).ToLower(), _Email);
 
-                    if (!SecurePasswordHasher.Verify(_Password, userDto.PasswordHash))
-                        throw new DataValidationException("Niepoprawne hasło.");
+                    //if (!SecurePasswordHasher.Verify(_Password, userDto.PasswordHash))
+                    //    throw new DataValidationException("Niepoprawne hasło.");
+
+                    // zmiana implementacji - uwierzytelnianie po stronie Rest API
+
+                    var simpleUserDto = new SimpleUserDto 
+                    { 
+                        Email = Email, 
+                        Password = Password 
+                    };
+
+                    var cookie = await _client.Login(simpleUserDto);
+                    await SecureStorage.SetAsync(QuizApiSettings.QuizUserKey, cookie.First());
                 }
 
                 await Application.Current.MainPage.DisplayToastAsync("Zalogowano!");

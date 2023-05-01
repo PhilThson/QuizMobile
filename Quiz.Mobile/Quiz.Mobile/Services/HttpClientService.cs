@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -12,6 +11,7 @@ using Quiz.Mobile.Interfaces;
 using Quiz.Mobile.Shared.ViewModels;
 using Quiz.Mobile.Shared.DTOs;
 using System.Linq;
+using Xamarin.Essentials;
 
 namespace Quiz.Mobile.Services
 {
@@ -52,8 +52,7 @@ namespace Quiz.Mobile.Services
 
         public async Task<List<T>> GetAllItems<T>()
         {
-            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-                throw new DataNotFoundException();
+            var endpoint = await GetUrl(typeof(T));
 
             var response = await Client.GetAsync(endpoint);
             var content = await response.Content.ReadAsStringAsync();
@@ -65,8 +64,7 @@ namespace Quiz.Mobile.Services
 
         public async Task<T> GetItemById<T>(object id)
         {
-            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-                throw new DataNotFoundException();
+            var endpoint = await GetUrl(typeof(T));
 
             var url = $"{endpoint}/{id}";
             var response = await Client.GetAsync(url);
@@ -79,8 +77,7 @@ namespace Quiz.Mobile.Services
 
         public async Task<T> GetItemByKey<T>(string key, string value)
         {
-            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-                throw new DataNotFoundException();
+            var endpoint = await GetUrl(typeof(T));
 
             var url = $"{endpoint}?{key}={value}";
             var response = await Client.GetAsync(url);
@@ -93,8 +90,7 @@ namespace Quiz.Mobile.Services
 
         public async Task RemoveItemById<T>(object id)
         {
-            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-                throw new DataNotFoundException();
+            var endpoint = await GetUrl(typeof(T));
 
             var url = $"{endpoint}/{id}";
             var response = await Client.DeleteAsync(url);
@@ -111,13 +107,7 @@ namespace Quiz.Mobile.Services
         {
             //Ze względu na wykorzystanie jednego Dto'sa do tworzenia
             //Areas oraz Difficulties, to w parametrze jest przekazywany endpoint
-            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-            {
-                if (!string.IsNullOrEmpty(dict))
-                    endpoint = dict;
-                else
-                    throw new DataNotFoundException();
-            }
+            var endpoint = await GetUrl(typeof(T), dict);
 
             var dataToSend = new StringContent(JsonConvert.SerializeObject(item),
                 Encoding.UTF8, "application/json");
@@ -137,13 +127,7 @@ namespace Quiz.Mobile.Services
 
         public async Task UpdateItem<T>(T item, string dict = null)
         {
-            if (!endpoints.TryGetValue(typeof(T), out string endpoint))
-            {
-                if (!string.IsNullOrEmpty(dict))
-                    endpoint = dict;
-                else
-                    throw new DataNotFoundException();
-            }
+            var endpoint = await GetUrl(typeof(T), dict);
 
             var dataToSend = new StringContent(JsonConvert.SerializeObject(item),
                 Encoding.UTF8, "application/json");
@@ -154,7 +138,45 @@ namespace Quiz.Mobile.Services
                 throw new HttpRequestException(content);
         }
 
+        public async Task<IEnumerable<string>> Login(SimpleUserDto simpleUser)
+        {
+            var endpoint = await GetUrl(typeof(SimpleUserDto));
+
+            var dataToSend = new StringContent(JsonConvert.SerializeObject(simpleUser),
+                Encoding.UTF8, "application/json");
+
+            var response = await Client.PostAsync(endpoint, dataToSend);
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException(content);
+
+            var cookie = response.Headers.First(h => h.Key == "Set-Cookie").Value;
+            return cookie;
+        }
+
         #region Metody prywatne
+
+        private async Task<string> GetUrl(Type objectType, string dict = null)
+        {
+            if (!endpoints.TryGetValue(objectType, out string endpoint))
+            {
+                if (!string.IsNullOrEmpty(dict))
+                    endpoint = dict;
+                else
+                    throw new DataNotFoundException(
+                        "Nie udało się odnaleźć endpointu dla obiektu o zadanym typie " +
+                        $"{objectType}");
+            }
+
+            var cookie = await SecureStorage.GetAsync(QuizApiSettings.QuizUserKey);
+            if (!string.IsNullOrEmpty(cookie))
+            {
+                Client.DefaultRequestHeaders.Add("Cookie", cookie);
+            }
+
+            return endpoint;
+        }
 
         private Dictionary<Type, string> GetEndpointsDictionary() =>
             new Dictionary<Type, string>
@@ -170,7 +192,8 @@ namespace Quiz.Mobile.Services
                 { typeof(AreaViewModel), QuizApiSettings.Areas },
                 { typeof(RoleDto), QuizApiSettings.Roles },
                 { typeof(UserDto), QuizApiSettings.UserController },
-                { typeof(SimpleUserDto), QuizApiSettings.UserByEmail },
+                { typeof(SimpleUserDto), QuizApiSettings.Login },
+                { typeof(UserSimpleDataDto), QuizApiSettings.UserByEmail },
                 { typeof(CreateUserDto), QuizApiSettings.UserController },
                 { typeof(AddressDto), QuizApiSettings.Addresses }
             };
